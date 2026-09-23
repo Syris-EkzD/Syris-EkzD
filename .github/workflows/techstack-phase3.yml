@@ -1,0 +1,174 @@
+name: Add Backend and API Hotbar Icons
+on:
+  push:
+    paths:
+      - ".github/workflows/techstack-phase3.yml"
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install Pillow==11.3.0
+      - name: Add centered phase-three icons without changing anything else
+        run: |
+          python - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont, ImageChops, ImageColor
+          import subprocess
+          from pathlib import Path
+          from collections import Counter
+          
+          path = Path("assets/techstack-level-loop.gif")
+          expected_sha = "5bbe9f1dcae356da5dfdb5c05a1c340a9b4629c3"
+          actual_sha = subprocess.check_output(["git","hash-object",str(path)],text=True).strip()
+          assert actual_sha == expected_sha, f"Unexpected existing GIF SHA: {actual_sha}"
+          gif = Image.open(path)
+          assert gif.size == (1068, 368) and gif.n_frames == 45, "Unexpected GIF baseline; refusing to alter."
+          original = []
+          durations = []
+          for i in range(gif.n_frames):
+              gif.seek(i)
+              original.append(gif.convert("RGB").copy())
+              durations.append(gif.info.get("duration", 600))
+          assert all(ms == 600 for ms in durations), "Unexpected timing; refusing to alter."
+          
+          # Verified slot interiors: x=186..241, 266..325, ... 826..885.
+          # A 44px icon centered at x=214 + 80*i, y=282 clears all
+          # regular slot dividers AND the larger animated selection border.
+          centers = [(214 + 80 * i, 282) for i in range(9)]
+          font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+          def tile():
+              return Image.new("RGBA", (22, 22), (0, 0, 0, 0))
+          def txt(icon, text, size=12, fill="white", offset=(0, 0)):
+              d = ImageDraw.Draw(icon)
+              font = ImageFont.truetype(font_path, size)
+              bbox = d.textbbox((0, 0), text, font=font)
+              x = (22 - (bbox[2] - bbox[0])) // 2 - bbox[0] + offset[0]
+              y = (22 - (bbox[3] - bbox[1])) // 2 - bbox[1] + offset[1]
+              mask = Image.new("L", (22,22))
+              ImageDraw.Draw(mask).text((x,y), text, font=font, fill=255)
+              mask = mask.point(lambda v: 255 if v >= 128 else 0)
+              icon.paste(ImageColor.getrgb(fill) + (255,), (0,0,22,22), mask)
+          def icon_for(lang):
+              im = tile()
+              d = ImageDraw.Draw(im)
+              if lang == "Node.js":
+                  # Node's green hexagonal JS badge.
+                  d.polygon([(11,1),(20,6),(20,16),(11,21),(2,16),(2,6)],fill="#43853d")
+                  d.polygon([(11,3),(18,7),(18,15),(11,19)],fill="#68a063")
+                  txt(im,"JS",10,"#ffffff")
+              elif lang == "Express.js":
+                  # Minimal, monochrome Express mark.
+                  d.rounded_rectangle((1,3,20,18),radius=3,fill="#e6e6e6")
+                  txt(im,"ex",13,"#252525")
+              elif lang == "REST API":
+                  # API resource braces on a teal tile.
+                  d.rounded_rectangle((1,1,20,20),radius=2,fill="#087e8b")
+                  txt(im,"API",8,"#ffffff")
+                  d.line([(3,6),(3,16)],fill="#b6ffed",width=1)
+                  d.line([(19,6),(19,16)],fill="#b6ffed",width=1)
+              elif lang == "ASP.NET Core":
+                  # ASP.NET/Core purple .NET mark.
+                  d.rounded_rectangle((1,1,20,20),radius=3,fill="#512bd4")
+                  txt(im,".NET",8,"#ffffff")
+                  d.line([(4,16),(18,16)],fill="#a88bff",width=1)
+              elif lang == "JWT":
+                  # JWT's compact multi-color radial key mark.
+                  d.rectangle((10,2,12,9),fill="#e857b3")
+                  d.rectangle((10,14,12,21),fill="#70db5c")
+                  d.rectangle((2,10,9,12),fill="#00c6ec")
+                  d.rectangle((14,10,21,12),fill="#f0b34f")
+                  d.line([(5,5),(17,17)],fill="#b2a5f8",width=2)
+                  d.line([(17,5),(5,17)],fill="#ef6c5d",width=2)
+                  d.rectangle((9,9,13,13),fill="#ffffff")
+              elif lang == "OAuth 2.0":
+                  # Lock/key: delegated authorization.
+                  d.arc((5,1,17,14),180,360,fill="#8dc4f4",width=3)
+                  d.rounded_rectangle((4,9,18,20),radius=2,fill="#2477bc")
+                  d.ellipse((10,12,12,14),fill="#ffffff")
+                  d.rectangle((10,14,12,17),fill="#ffffff")
+              elif lang == "OpenID Connect":
+                  # OpenID: orange identity mark plus dark-blue arc.
+                  d.ellipse((3,5,18,20),outline="#f7941d",width=3)
+                  d.arc((9,1,21,13),205,345,fill="#305a89",width=2)
+                  d.rectangle((10,1,13,16),fill="#f7941d")
+                  d.rectangle((7,16,16,19),fill="#f7941d")
+              elif lang == "WebSockets":
+                  # Two-directional, persistent socket communication.
+                  d.rounded_rectangle((1,3,20,18),radius=3,fill="#1767aa")
+                  d.line([(3,8),(18,8)],fill="#ffffff",width=2)
+                  d.polygon([(15,5),(20,8),(15,11)],fill="#ffffff")
+                  d.line([(19,14),(4,14)],fill="#a6e5ff",width=2)
+                  d.polygon([(7,11),(2,14),(7,17)],fill="#a6e5ff")
+              elif lang == "GraphQL":
+                  # GraphQL's six-node magenta network.
+                  d.line([(11,2),(19,7),(19,16),(11,20),(3,16),(3,7),(11,2)],
+                         fill="#e535ab",width=2)
+                  d.line([(11,2),(3,16)],fill="#e535ab",width=2)
+                  d.line([(11,2),(19,16)],fill="#e535ab",width=2)
+                  d.line([(3,7),(19,16)],fill="#e535ab",width=2)
+                  d.line([(19,7),(3,16)],fill="#e535ab",width=2)
+                  for x,y in [(11,2),(19,7),(19,16),(11,20),(3,16),(3,7)]:
+                      d.rectangle((x-1,y-1,x+1,y+1),fill="#ffffff")
+              return im.resize((44,44),Image.Resampling.NEAREST)
+
+          langs = ["Node.js","Express.js","REST API","ASP.NET Core","JWT","OAuth 2.0","OpenID Connect","WebSockets","GraphQL"]
+          icons = [icon_for(name) for name in langs]
+          # Keep ALL 99 original RGB colors exactly. Add only icon colors; do
+          # not allow GIF quantization to repaint any pixel outside the icons.
+          palette_colors = set()
+          for frame in original:
+              palette_colors.update(color for count, color in frame.getcolors(1068*368))
+          for icon in icons:
+              palette_colors.update((r,g,b) for r,g,b,a in icon.getdata() if a)
+          assert len(palette_colors) <= 256, f"Need {len(palette_colors)} colors; exact color preservation unavailable"
+          colors = sorted(palette_colors)
+          lut = {c: i for i,c in enumerate(colors)}
+          rgb_palette = [n for c in colors for n in c] + [0] * (768 - len(colors)*3)
+          
+          out = []
+          for frame_index, old in enumerate(original):
+              canvas = old.copy()
+              if 18 <= frame_index < 27:  # ONLY level 20: backend and APIs.
+                  for (cx, cy), ico in zip(centers, icons):
+                      canvas.paste(ico, (cx-22, cy-22), ico)
+              indexed = Image.new("P", gif.size)
+              indexed.putpalette(rgb_palette)
+              indexed.putdata([lut[pixel] for pixel in canvas.getdata()])
+              out.append(indexed)
+          
+          tmp = path.with_name("techstack-level-loop-backend-icons.tmp.gif")
+          out[0].save(tmp, save_all=True, append_images=out[1:], duration=durations,
+                      loop=gif.info.get("loop", 0), disposal=2, optimize=False)
+          
+          # Re-decode final GIF and prove no existing animation, HUD border,
+          # background, digits, or later technology phase was repainted.
+          check = Image.open(tmp)
+          assert check.size == gif.size and check.n_frames == 45
+          for i, old in enumerate(original):
+              check.seek(i)
+              assert check.info.get("duration") == durations[i], f"Timing changed in frame {i}"
+              diff = ImageChops.difference(old, check.convert("RGB"))
+              if 18 <= i < 27:
+                  d = ImageDraw.Draw(diff)
+                  for cx,cy in centers:
+                      d.rectangle((cx-22,cy-22,cx+21,cy+21), fill=(0,0,0))
+              assert diff.getbbox() is None, f"Unrequested pixels changed in frame {i}"
+          tmp.replace(path)
+          print("PASS: 9 centered backend/API pixel-art icons in frames 18-26 (level 20) only.")
+          print("PASS: all 45 frames, 600ms timing and every pixel outside level 20 icon boxes unchanged.")
+          print("Palette colors:",len(colors),"File bytes:",path.stat().st_size)
+          PY
+      - name: Commit only techstack GIF
+        run: |
+          git add -- assets/techstack-level-loop.gif
+          git diff --cached --quiet && { echo 'No changes'; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat(profile): add backend and API icons to techstack hotbar"
+          git push
