@@ -1,68 +1,76 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
-  <title id="title">EkzD's About Me terminal</title>
-  <desc id="desc">The ekzdfetch command types into a Linux-style terminal. An S logo and EkzD's personal information then appear together.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">EkzD's ekzdfetch About Me terminal</title>
+  <desc id="desc">A neofetch-inspired dark Linux terminal. The command ekzdfetch types out, then a large three-dimensional ASCII letter S appears beside EkzD's personal information and a terminal color palette.</desc>
   <defs>
     <style><![CDATA[
-      .mono {font-family:"DejaVu Sans Mono","Consolas","Menlo",monospace;}
-      .prompt {font-size:23px;}
-      .field {font-size:22px;fill:#89b4fa;font-weight:600;}
-      .value {font-size:22px;fill:#cdd6f4;}
+      .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, Menlo, monospace; }
+      .prompt { font-size: 22px; font-weight: 600; }
+      .ascii { font-size: 22px; font-weight: 700; }
+      .details { font-size: 21px; }
     ]]></style>
-    <clipPath id="command-reveal">
-      <rect x="605" y="83" width="0" height="31">
-        <animate attributeName="width" values="0;13;26;39;52;65;78;91;104;117" keyTimes="0;0.111;0.222;0.333;0.444;0.555;0.666;0.777;0.888;1" calcMode="discrete" dur="1.7s" begin="0.35s" fill="freeze"/>
-      </rect>
-    </clipPath>
+    <clipPath id="command-typing"><rect x="252" y="13" width="0" height="38">
+      <animate attributeName="width" values="0;13;26;39;52;65;78;91;104;117" keyTimes="0;0.111;0.222;0.333;0.444;0.555;0.666;0.777;0.888;1" calcMode="discrete" dur="1.7s" begin="0.35s" fill="freeze"/>
+    </rect></clipPath>
   </defs>
-  <rect width="1200" height="500" fill="#11111b"/>
-  <rect x="26" y="20" width="1148" height="460" rx="16" fill="#1e1e2e" stroke="#45475a" stroke-width="2"/>
-  <path d="M42 20H1158Q1174 20 1174 36V68H26V36Q26 20 42 20Z" fill="#181825"/>
-  <line x1="26" y1="68" x2="1174" y2="68" stroke="#45475a"/>
-  <circle cx="54" cy="44" r="7" fill="#f38ba8"/>
-  <circle cx="80" cy="44" r="7" fill="#f9e2af"/>
-  <circle cx="106" cy="44" r="7" fill="#a6e3a1"/>
-  <text x="600" y="49" class="mono" text-anchor="middle" font-size="17" fill="#a6adc8">ekzd@github: ~</text>
-  <text x="405" y="109" class="mono prompt"><tspan fill="#a6e3a1">ekzd</tspan><tspan fill="#cdd6f4">@github</tspan><tspan fill="#89b4fa">:~</tspan><tspan fill="#a6e3a1">$</tspan></text>
-  <text x="605" y="109" class="mono prompt" fill="#cdd6f4" clip-path="url(#command-reveal)">ekzdfetch</text>
-  <rect x="605" y="86" width="12" height="26" fill="#cdd6f4">
-    <animate attributeName="x" values="605;618;631;644;657;670;683;696;709;722" keyTimes="0;0.111;0.222;0.333;0.444;0.555;0.666;0.777;0.888;1" calcMode="discrete" dur="1.7s" begin="0.35s" fill="freeze"/>
+  <rect width="1200" height="600" fill="#1a1821"/>
+  <!-- Terminal prompt. Only the command types, then the entire output appears. -->
+  <text x="20" y="41" class="mono prompt"><tspan fill="#b4befe">ekzd</tspan><tspan fill="#89dceb">@github</tspan><tspan fill="#cdd6f4">:~$</tspan></text>
+  <text x="252" y="41" class="mono prompt" fill="#cdd6f4" clip-path="url(#command-typing)">ekzdfetch</text>
+  <rect x="252" y="16" width="12" height="28" fill="#cdd6f4">
+    <animate attributeName="x" values="252;265;278;291;304;317;330;343;356;369" keyTimes="0;0.111;0.222;0.333;0.444;0.555;0.666;0.777;0.888;1" calcMode="discrete" dur="1.7s" begin="0.35s" fill="freeze"/>
     <animate attributeName="opacity" values="1;0;1" dur=".9s" repeatCount="indefinite"/>
   </rect>
   <g opacity="0">
-    <animate attributeName="opacity" from="0" to="1" dur=".01s" begin="2.2s" fill="freeze"/>
-    <line x1="365" y1="135" x2="365" y2="447" stroke="#45475a"/>
-    <!-- ASCII-drawn 3D S; the original terminal and its animation are unchanged. -->
-    <g aria-label="Three-dimensional ASCII letter S">
-      <g transform="translate(6 7)" fill="#6c647b">
-        <text x="64" y="185" class="mono" font-size="21" xml:space="preserve">    _________</text>
-        <text x="64" y="211" class="mono" font-size="21" xml:space="preserve">   /  ______/|</text>
-        <text x="64" y="237" class="mono" font-size="21" xml:space="preserve">  /  /______|/</text>
-        <text x="64" y="263" class="mono" font-size="21" xml:space="preserve">  \______  \\</text>
-        <text x="64" y="289" class="mono" font-size="21" xml:space="preserve">   ______/  /|</text>
-        <text x="64" y="315" class="mono" font-size="21" xml:space="preserve">  /________/ /</text>
-        <text x="64" y="341" class="mono" font-size="21" xml:space="preserve">  |________|/</text>
-      </g>
-      <g fill="#e6dfcf">
-        <text x="64" y="185" class="mono" font-size="21" xml:space="preserve">    _________</text>
-        <text x="64" y="211" class="mono" font-size="21" xml:space="preserve">   /  ______/|</text>
-        <text x="64" y="237" class="mono" font-size="21" xml:space="preserve">  /  /______|/</text>
-        <text x="64" y="263" class="mono" font-size="21" xml:space="preserve">  \______  \\</text>
-        <text x="64" y="289" class="mono" font-size="21" xml:space="preserve">   ______/  /|</text>
-        <text x="64" y="315" class="mono" font-size="21" xml:space="preserve">  /________/ /</text>
-        <text x="64" y="341" class="mono" font-size="21" xml:space="preserve">  |________|/</text>
-      </g>
+    <animate attributeName="opacity" from="0" to="1" dur=".01s" begin="2.15s" fill="freeze"/>
+    <!-- The logo is entirely composed of monospace s and M characters, not blocks or image pixels. -->
+    <g aria-label="Three-dimensional ASCII S logo">
+      <text x="39" y="113" class="mono ascii" xml:space="preserve">       <tspan fill="#ff8ea4">ssssssssssss</tspan>         </text>
+      <text x="39" y="135" class="mono ascii" xml:space="preserve">    <tspan fill="#ff8ea4">ssssssssssssssssss</tspan>      </text>
+      <text x="39" y="157" class="mono ascii" xml:space="preserve">  <tspan fill="#ff8ea4">ssss</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#b6b1c0">MMMMMMMM</tspan><tspan fill="#f38ba8">sssssss</tspan>    </text>
+      <text x="39" y="179" class="mono ascii" xml:space="preserve"> <tspan fill="#ff8ea4">sssss</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#b6b1c0">MMMM</tspan>        <tspan fill="#f38ba8">ssssss</tspan><tspan fill="#b6b1c0">M</tspan>  </text>
+      <text x="39" y="201" class="mono ascii" xml:space="preserve"> <tspan fill="#ff8ea4">sssss</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#b6b1c0">MM</tspan>            <tspan fill="#b6b1c0">MMMMMM</tspan> </text>
+      <text x="39" y="223" class="mono ascii" xml:space="preserve">  <tspan fill="#ff8ea4">ssss</tspan><tspan fill="#f38ba8">sss</tspan>                   </text>
+      <text x="39" y="245" class="mono ascii" xml:space="preserve">   <tspan fill="#ff8ea4">ssssssssss</tspan>               </text>
+      <text x="39" y="267" class="mono ascii" xml:space="preserve">     <tspan fill="#b6b1c0">M</tspan><tspan fill="#ff8ea4">ssssssssssss</tspan>          </text>
+      <text x="39" y="289" class="mono ascii" xml:space="preserve">        <tspan fill="#b6b1c0">MM</tspan><tspan fill="#f38ba8">ssssss</tspan><tspan fill="#dc708c">sssss</tspan>       </text>
+      <text x="39" y="311" class="mono ascii" xml:space="preserve">            <tspan fill="#b6b1c0">MM</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#dc708c">sssss</tspan><tspan fill="#b6b1c0">MM</tspan>     </text>
+      <text x="39" y="333" class="mono ascii" xml:space="preserve">               <tspan fill="#f38ba8">s</tspan><tspan fill="#dc708c">sssss</tspan><tspan fill="#b6b1c0">MM</tspan>     </text>
+      <text x="39" y="355" class="mono ascii" xml:space="preserve"><tspan fill="#f38ba8">ssssss</tspan>         <tspan fill="#f38ba8">s</tspan><tspan fill="#dc708c">sssss</tspan><tspan fill="#b6b1c0">MM</tspan>     </text>
+      <text x="39" y="377" class="mono ascii" xml:space="preserve"> <tspan fill="#f38ba8">ssssss</tspan><tspan fill="#b6b1c0">M</tspan>      <tspan fill="#f38ba8">ssssss</tspan><tspan fill="#b6b1c0">MMM</tspan>     </text>
+      <text x="39" y="399" class="mono ascii" xml:space="preserve">  <tspan fill="#f38ba8">sssssssssssssssss</tspan><tspan fill="#b6b1c0">MMM</tspan>      </text>
+      <text x="39" y="421" class="mono ascii" xml:space="preserve">    <tspan fill="#b6b1c0">M</tspan><tspan fill="#f38ba8">ssssssssssss</tspan><tspan fill="#b6b1c0">MMMM</tspan>       </text>
+      <text x="39" y="443" class="mono ascii" xml:space="preserve">       <tspan fill="#b6b1c0">MMMMMMMMMMMM</tspan>         </text>
     </g>
-    <text x="198" y="366" class="mono" text-anchor="middle" font-size="17" fill="#a6adc8">EkzD</text>
-    <text x="405" y="157" class="mono" font-weight="700" font-size="25" fill="#cba6f7">ekzd<tspan fill="#cdd6f4">@github</tspan></text>
-    <line x1="405" y1="170" x2="547" y2="170" stroke="#cba6f7" stroke-width="2"/>
-    <text x="405" y="216" class="mono field">User</text><text x="553" y="216" class="mono value">: EkzD</text>
-    <text x="405" y="248" class="mono field">Role</text><text x="553" y="248" class="mono value">: BSIT Student</text>
-    <text x="405" y="280" class="mono field">Location</text><text x="553" y="280" class="mono value">: Bohol, Philippines</text>
-    <text x="405" y="312" class="mono field">Focus</text><text x="553" y="312" class="mono value">: Software Development</text>
-    <text x="405" y="344" class="mono field">Interests</text><text x="553" y="344" class="mono value">: Linux, Databases, Self-Hosting</text>
-    <text x="405" y="376" class="mono field">Building</text><text x="553" y="376" class="mono value">: Software that makes work less annoying</text>
-    <text x="405" y="408" class="mono field">Offline</text><text x="553" y="408" class="mono value">: Doomscrolling</text>
-    <text x="405" y="440" class="mono field">Status</text><text x="553" y="440" class="mono value">: Still trying to automate everything</text>
-    <g transform="translate(405 452)"><rect x="0" y="0" width="19" height="13" fill="#45475a"/><rect x="26" y="0" width="19" height="13" fill="#f38ba8"/><rect x="52" y="0" width="19" height="13" fill="#fab387"/><rect x="78" y="0" width="19" height="13" fill="#f9e2af"/><rect x="104" y="0" width="19" height="13" fill="#a6e3a1"/><rect x="130" y="0" width="19" height="13" fill="#89dceb"/><rect x="156" y="0" width="19" height="13" fill="#89b4fa"/><rect x="182" y="0" width="19" height="13" fill="#cba6f7"/></g>
+    <text x="528" y="101" class="mono" font-size="23" font-weight="700" fill="#f38ba8">ekzd<tspan fill="#cdd6f4">@github</tspan></text>
+    <text x="528" y="125" class="mono" font-size="21" fill="#cdd6f4">----------------</text>
+      <text x="528" y="156" class="mono details"><tspan fill="#f38ba8" font-weight="700">User:</tspan><tspan fill="#cdd6f4"> EkzD</tspan></text>
+      <text x="528" y="187" class="mono details"><tspan fill="#f38ba8" font-weight="700">Role:</tspan><tspan fill="#cdd6f4"> BSIT Student</tspan></text>
+      <text x="528" y="218" class="mono details"><tspan fill="#f38ba8" font-weight="700">Location:</tspan><tspan fill="#cdd6f4"> Bohol, Philippines</tspan></text>
+      <text x="528" y="249" class="mono details"><tspan fill="#f38ba8" font-weight="700">Focus:</tspan><tspan fill="#cdd6f4"> Software Development</tspan></text>
+      <text x="528" y="280" class="mono details"><tspan fill="#f38ba8" font-weight="700">Interests:</tspan><tspan fill="#cdd6f4"> Linux, Databases, Self-Hosting</tspan></text>
+      <text x="528" y="311" class="mono details"><tspan fill="#f38ba8" font-weight="700">Building:</tspan><tspan fill="#cdd6f4"> Software that makes work less annoying</tspan></text>
+      <text x="528" y="342" class="mono details"><tspan fill="#f38ba8" font-weight="700">Offline:</tspan><tspan fill="#cdd6f4"> Doomscrolling</tspan></text>
+      <text x="528" y="373" class="mono details"><tspan fill="#f38ba8" font-weight="700">Status:</tspan><tspan fill="#cdd6f4"> Still trying to automate everything</tspan></text>
+    <!-- Classic two-line neofetch terminal palette. -->
+      <rect x="528" y="413" width="30" height="25" fill="#45475a"/>
+      <rect x="558" y="413" width="30" height="25" fill="#f38ba8"/>
+      <rect x="588" y="413" width="30" height="25" fill="#a6e3a1"/>
+      <rect x="618" y="413" width="30" height="25" fill="#f9e2af"/>
+      <rect x="648" y="413" width="30" height="25" fill="#89b4fa"/>
+      <rect x="678" y="413" width="30" height="25" fill="#cba6f7"/>
+      <rect x="708" y="413" width="30" height="25" fill="#89dceb"/>
+      <rect x="738" y="413" width="30" height="25" fill="#cdd6f4"/>
+      <rect x="528" y="439" width="30" height="25" fill="#585b70"/>
+      <rect x="558" y="439" width="30" height="25" fill="#eba0ac"/>
+      <rect x="588" y="439" width="30" height="25" fill="#94e2d5"/>
+      <rect x="618" y="439" width="30" height="25" fill="#fab387"/>
+      <rect x="648" y="439" width="30" height="25" fill="#74c7ec"/>
+      <rect x="678" y="439" width="30" height="25" fill="#b4befe"/>
+      <rect x="708" y="439" width="30" height="25" fill="#89dceb"/>
+      <rect x="738" y="439" width="30" height="25" fill="#f5e0dc"/>
+    <text x="20" y="557" class="mono prompt"><tspan fill="#b4befe">ekzd</tspan><tspan fill="#89dceb">@github</tspan><tspan fill="#cdd6f4">:~$</tspan></text>
+    <rect x="252" y="532" width="12" height="28" fill="none" stroke="#cdd6f4" stroke-width="2">
+      <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+    </rect>
   </g>
 </svg>
