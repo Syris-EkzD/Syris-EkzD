@@ -1,17 +1,27 @@
-<div align="center">
+# Hi, I'm EkzD 👋
 
-<img src="./assets/autumn-desk.svg" width="100%" alt="EkzD — a warm autumn coding desk. Developer in progress, based in the Philippines. A laptop, books, a steaming mug, and leaves outside the window." />
+**BSIT student · Software developer · Bohol, Philippines**
 
-<br>
+I enjoy building practical software and figuring out how things work, from full-stack applications and offline-first mobile apps to academic automation and developer tooling. I also spend a fair amount of time on Linux and self-hosted services.
 
-<img src="./assets/about-autumn.svg" width="100%" alt="About EkzD: I'm a BSIT student from Bohol, Philippines. I like software that solves real problems, from offline-first task apps and school automation to full-stack web projects and developer tools. When I'm away from the keyboard, I enjoy reading, gaming, and tinkering with Linux. I'm good at turning small annoyances into side projects." />
+Outside of development, I'm usually gaming or reading.
 
-<br>
+## Tech stack
 
-<img src="./assets/toolbox-autumn.svg" width="100%" alt="My toolbox. Languages: Python, TypeScript, JavaScript, Dart, Kotlin, C and C sharp. Frontend and mobile: React, Next.js, Vite, Tailwind CSS, Flutter, HTML and CSS. Backend and data: Node.js, Express, PostgreSQL, SQLite and Prisma. Tools and infrastructure: Git, GitHub, Linux, Ubuntu, Docker and VS Code. These are technologies I've used across my projects, not a claim of mastery." />
+These are technologies I've worked with across my projects.
 
-<br>
+**Languages**
 
-<img src="./assets/footer-autumn.svg" width="100%" alt="Thanks for stopping by. A little code, a little curiosity, and one more thing to learn." />
+<img src="https://skillicons.dev/icons?i=python,ts,js,dart,kotlin,c,cs" alt="Python, TypeScript, JavaScript, Dart, Kotlin, C, C#" />
 
-</div>
+**Frontend & mobile**
+
+<img src="https://skillicons.dev/icons?i=react,nextjs,vite,tailwind,flutter,html,css" alt="React, Next.js, Vite, Tailwind CSS, Flutter, HTML, CSS" />
+
+**Backend & databases**
+
+<img src="https://skillicons.dev/icons?i=nodejs,express,postgres,sqlite,prisma" alt="Node.js, Express, PostgreSQL, SQLite, Prisma" />
+
+**Tools & infrastructure**
+
+<img src="https://skillicons.dev/icons?i=git,github,linux,ubuntu,docker,vscode" alt="Git, GitHub, Linux, Ubuntu, Docker, VS Code" />
