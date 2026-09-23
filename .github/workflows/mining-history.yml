@@ -8,7 +8,7 @@ on:
     paths:
       - "scripts/mining_history.py"
       - "scripts/mining_history_textures.json"
-      - ".github/workflows/mining-history.yml"
+      - "scripts/mining_history_miner_assets/**"
 
 permissions:
   contents: write
@@ -27,15 +27,15 @@ jobs:
       - name: Install image renderer
         run: python -m pip install Pillow==11.3.0
 
-      - name: Render GitHub contribution wall
+      - name: Render animated Minecraft contribution mine
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USER: ${{ github.repository_owner }}
         run: python scripts/mining_history.py
 
-      - name: Commit only the generated mining wall
+      - name: Commit only the animated mining wall
         run: |
-          git add -- assets/mining-history.png
+          git add -- assets/mining-history.gif
           if git diff --cached --quiet; then
             echo "Contribution wall is already up to date."
             exit 0
