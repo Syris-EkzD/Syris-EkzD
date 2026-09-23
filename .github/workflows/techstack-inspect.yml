@@ -1,0 +1,44 @@
+name: Inspect Techstack HUD
+on:
+  push:
+    paths:
+      - ".github/workflows/techstack-inspect.yml"
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install Pillow==11.3.0
+      - name: Inspect existing GIF without changing it
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from collections import Counter
+          p='assets/techstack-level-loop.gif'
+          im=Image.open(p)
+          print('SIZE',im.size,'FRAMES',im.n_frames,'DURATION',im.info.get('duration'))
+          a=im.convert('RGB'); w,h=a.size
+          print('TOP_COLORS',Counter(a.getdata()).most_common(15))
+          print('ROW SIGNATURES')
+          for y in range(0,h,max(1,h//28)):
+              line=[a.getpixel((x,y)) for x in range(0,w,max(1,w//64))]
+              count=Counter(line)
+              print(y, count.most_common(4))
+          print('ASCII PREVIEW: 90 COLS x 40 ROWS')
+          small=a.resize((90,40))
+          chars=' .:-=+*#%@'
+          import colorsys
+          for y in range(40):
+              s=''
+              for x in range(90):
+                  r,g,b=small.getpixel((x,y))
+                  k=int((.2126*r+.7152*g+.0722*b)/256*len(chars))
+                  s+=chars[min(k,len(chars)-1)]
+              print(f'{y:02}',s)
+          print('FRAME_DURATIONS',[(i,im.seek(i) or im.info.get('duration')) for i in range(min(im.n_frames,12))])
+          PY
