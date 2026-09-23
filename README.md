@@ -10,25 +10,11 @@ I enjoy understanding how things work beyond the UI—especially databases, Linu
 
 ---
 
-### 🛠️ Tech stack
+### 🧰 Tool Box
 
-<sub>Technologies I've used in my projects.</sub>
-
-**Languages**
-
-<img src="https://skillicons.dev/icons?i=python,ts,js,dart,kotlin,c,cs" alt="Python, TypeScript, JavaScript, Dart, Kotlin, C and C sharp" />
-
-**Frontend & mobile**
-
-<img src="https://skillicons.dev/icons?i=react,nextjs,vite,tailwind,flutter,html,css" alt="React, Next.js, Vite, Tailwind CSS, Flutter, HTML and CSS" />
-
-**Backend & databases**
-
-<img src="https://skillicons.dev/icons?i=nodejs,express,postgres,sqlite,prisma" alt="Node.js, Express, PostgreSQL, SQLite and Prisma" />
-
-**Tools & infrastructure**
-
-<img src="https://skillicons.dev/icons?i=git,github,linux,ubuntu,docker,vscode" alt="Git, GitHub, Linux, Ubuntu, Docker and VS Code" />
+<div align="center">
+  <img src="./assets/toolbox-hotbar.gif" width="100%" alt="Animated Minecraft-style tech toolbox: Python, Git, GitHub, React, PostgreSQL, TypeScript, Flutter, Tux for Linux, and Docker. The hotbar selection moves right every half-second; one heart empties and one armor icon fills from right to left with each move." />
+</div>
 
 ---
 
