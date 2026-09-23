@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/mining-history.gif" width="100%" alt="Animated Mining History: the past 365 days of qualifying GitHub contributions appear as Minecraft deepslate ore blocks, with inactive days shown as plain deepslate. Steve walks left to right, mines each active column until its ore becomes deepslate, exits the mine, and loops with the ores restored." />
+  <img src="./assets/commit-city.png" width="100%" alt="Commit City: a minimal isometric 365-day GitHub contribution map. Each day is one plot; empty lots mark inactive days, and taller plain buildings indicate more contributions. The activity overview appears in the header above the city." />
 </div>
 
 ---
