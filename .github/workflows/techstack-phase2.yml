@@ -54,74 +54,74 @@ jobs:
               ImageDraw.Draw(mask).text((x,y), text, font=font, fill=255)
               mask = mask.point(lambda v: 255 if v >= 128 else 0)
               icon.paste(ImageColor.getrgb(fill) + (255,), (0,0,22,22), mask)
-          def icon_for(lang):
-    im = tile()
-    d = ImageDraw.Draw(im)
-    if lang == "HTML5":
-        # Orange HTML5 shield and white 5.
-        d.polygon([(2,1),(20,1),(18,18),(11,21),(4,18)], fill="#e44d26")
-        d.polygon([(11,3),(18,3),(16,17),(11,19)], fill="#f16529")
-        txt(im, "5", 14, "#ffffff")
-    elif lang == "CSS3":
-        # Blue CSS shield, visually paired with HTML5.
-        d.polygon([(2,1),(20,1),(18,18),(11,21),(4,18)], fill="#264de4")
-        d.polygon([(11,3),(18,3),(16,17),(11,19)], fill="#2965f1")
-        txt(im, "3", 14, "#ffffff")
-    elif lang == "Tailwind":
-        # Two teal/cyan flowing waves.
-        d.polygon([(1,9),(5,5),(9,4),(13,6),(16,9),(19,9),(21,7),
-                   (19,12),(16,14),(12,13),(9,10),(6,9),(3,11)], fill="#38bdf8")
-        d.polygon([(1,15),(5,11),(9,10),(13,12),(16,15),(19,15),(21,13),
-                   (19,18),(16,20),(12,19),(9,16),(6,15),(3,17)], fill="#06b6d4")
-    elif lang == "Vite":
-        # Purple geometric V with lightning yellow bolt.
-        d.polygon([(1,3),(11,5),(21,3),(13,20),(9,20)], fill="#9a66ff")
-        d.polygon([(1,3),(11,6),(11,19),(9,20)], fill="#646cff")
-        d.polygon([(12,1),(7,11),(12,11),(10,21),(18,8),(13,8),(16,1)],
-                  fill="#ffdb47")
-    elif lang == "React":
-        # Cyan atom orbit, drawn at native pixel size.
-        for box in ((1,7,21,15),(4,1,18,21)):
-            d.ellipse(box, outline="#61dafb", width=2)
-        d.line([(2,3),(20,19)], fill="#61dafb", width=2)
-        d.line([(2,19),(20,3)], fill="#61dafb", width=2)
-        d.ellipse((9,9,13,13), fill="#d8f8ff")
-    elif lang == "React Router":
-        # Three coral route nodes connected by a white routing path.
-        d.line([(5,6),(11,11),(17,16)], fill="#ffffff", width=3)
-        d.ellipse((1,2,8,9), fill="#f44250")
-        d.ellipse((8,8,15,15), fill="#ffffff")
-        d.ellipse((14,13,21,20), fill="#f44250")
-        d.ellipse((10,10,13,13), fill="#f44250")
-    elif lang == "Next.js":
-        # Black round mark with the familiar angular N.
-        d.ellipse((1,1,20,20), fill="#101010", outline="#ffffff", width=1)
-        d.line([(6,16),(6,6),(16,16),(16,6)], fill="#ffffff", width=2)
-        d.line([(12,11),(18,18)], fill="#919191", width=1)
-    elif lang == "Flutter":
-        # Layered Flutter chevrons.
-        d.polygon([(3,12),(14,1),(20,1),(9,12)], fill="#54c5f8")
-        d.polygon([(3,13),(9,13),(19,3),(19,9),(10,18)], fill="#24a5df")
-        d.polygon([(9,13),(14,13),(20,19),(15,21)], fill="#0a659b")
-        d.polygon([(10,12),(15,7),(20,7),(15,12)], fill="#9ee8ff")
-    elif lang == "Android SDK":
-        # Android robot icon: antennae, head, body, arms and feet.
-        green = "#3ddc84"
-        d.line([(6,2),(9,6)], fill=green, width=2)
-        d.line([(16,2),(13,6)], fill=green, width=2)
-        d.pieslice((3,3,19,15), 180, 360, fill=green)
-        d.rectangle((3,11,19,16), fill=green)
-        d.rounded_rectangle((4,15,18,19), radius=2, fill=green)
-        d.rounded_rectangle((0,10,3,17), radius=1, fill=green)
-        d.rounded_rectangle((19,10,22,17), radius=1, fill=green)
-        d.rectangle((6,18,8,21), fill=green)
-        d.rectangle((14,18,16,21), fill=green)
-        d.point((8,9), fill="#162920")
-        d.point((15,9), fill="#162920")
-    return im.resize((44, 44), Image.Resampling.NEAREST)
+                    def icon_for(lang):
+              im = tile()
+              d = ImageDraw.Draw(im)
+              if lang == "HTML5":
+                  # Orange HTML5 shield and white 5.
+                  d.polygon([(2,1),(20,1),(18,18),(11,21),(4,18)], fill="#e44d26")
+                  d.polygon([(11,3),(18,3),(16,17),(11,19)], fill="#f16529")
+                  txt(im, "5", 14, "#ffffff")
+              elif lang == "CSS3":
+                  # Blue CSS shield, visually paired with HTML5.
+                  d.polygon([(2,1),(20,1),(18,18),(11,21),(4,18)], fill="#264de4")
+                  d.polygon([(11,3),(18,3),(16,17),(11,19)], fill="#2965f1")
+                  txt(im, "3", 14, "#ffffff")
+              elif lang == "Tailwind":
+                  # Two teal/cyan flowing waves.
+                  d.polygon([(1,9),(5,5),(9,4),(13,6),(16,9),(19,9),(21,7),
+                             (19,12),(16,14),(12,13),(9,10),(6,9),(3,11)], fill="#38bdf8")
+                  d.polygon([(1,15),(5,11),(9,10),(13,12),(16,15),(19,15),(21,13),
+                             (19,18),(16,20),(12,19),(9,16),(6,15),(3,17)], fill="#06b6d4")
+              elif lang == "Vite":
+                  # Purple geometric V with lightning yellow bolt.
+                  d.polygon([(1,3),(11,5),(21,3),(13,20),(9,20)], fill="#9a66ff")
+                  d.polygon([(1,3),(11,6),(11,19),(9,20)], fill="#646cff")
+                  d.polygon([(12,1),(7,11),(12,11),(10,21),(18,8),(13,8),(16,1)],
+                            fill="#ffdb47")
+              elif lang == "React":
+                  # Cyan atom orbit, drawn at native pixel size.
+                  for box in ((1,7,21,15),(4,1,18,21)):
+                      d.ellipse(box, outline="#61dafb", width=2)
+                  d.line([(2,3),(20,19)], fill="#61dafb", width=2)
+                  d.line([(2,19),(20,3)], fill="#61dafb", width=2)
+                  d.ellipse((9,9,13,13), fill="#d8f8ff")
+              elif lang == "React Router":
+                  # Three coral route nodes connected by a white routing path.
+                  d.line([(5,6),(11,11),(17,16)], fill="#ffffff", width=3)
+                  d.ellipse((1,2,8,9), fill="#f44250")
+                  d.ellipse((8,8,15,15), fill="#ffffff")
+                  d.ellipse((14,13,21,20), fill="#f44250")
+                  d.ellipse((10,10,13,13), fill="#f44250")
+              elif lang == "Next.js":
+                  # Black round mark with the familiar angular N.
+                  d.ellipse((1,1,20,20), fill="#101010", outline="#ffffff", width=1)
+                  d.line([(6,16),(6,6),(16,16),(16,6)], fill="#ffffff", width=2)
+                  d.line([(12,11),(18,18)], fill="#919191", width=1)
+              elif lang == "Flutter":
+                  # Layered Flutter chevrons.
+                  d.polygon([(3,12),(14,1),(20,1),(9,12)], fill="#54c5f8")
+                  d.polygon([(3,13),(9,13),(19,3),(19,9),(10,18)], fill="#24a5df")
+                  d.polygon([(9,13),(14,13),(20,19),(15,21)], fill="#0a659b")
+                  d.polygon([(10,12),(15,7),(20,7),(15,12)], fill="#9ee8ff")
+              elif lang == "Android SDK":
+                  # Android robot icon: antennae, head, body, arms and feet.
+                  green = "#3ddc84"
+                  d.line([(6,2),(9,6)], fill=green, width=2)
+                  d.line([(16,2),(13,6)], fill=green, width=2)
+                  d.pieslice((3,3,19,15), 180, 360, fill=green)
+                  d.rectangle((3,11,19,16), fill=green)
+                  d.rounded_rectangle((4,15,18,19), radius=2, fill=green)
+                  d.rounded_rectangle((0,10,3,17), radius=1, fill=green)
+                  d.rounded_rectangle((19,10,22,17), radius=1, fill=green)
+                  d.rectangle((6,18,8,21), fill=green)
+                  d.rectangle((14,18,16,21), fill=green)
+                  d.point((8,9), fill="#162920")
+                  d.point((15,9), fill="#162920")
+              return im.resize((44, 44), Image.Resampling.NEAREST)
 
-langs = ["HTML5", "CSS3", "Tailwind", "Vite", "React", "React Router", "Next.js", "Flutter", "Android SDK"]
-icons = [icon_for(name) for name in langs]
+          langs = ["HTML5", "CSS3", "Tailwind", "Vite", "React", "React Router", "Next.js", "Flutter", "Android SDK"]
+          icons = [icon_for(name) for name in langs]
 # Keep ALL 99 original RGB colors exactly. Add only icon colors; do
           # not allow GIF quantization to repaint any pixel outside the icons.
           palette_colors = set()
