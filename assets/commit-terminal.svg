@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="188" viewBox="0 0 920 188" role="img" aria-label="Decorative terminal-style illustration showing a git branch and the words build, test, fix, repeat">
+<rect width="920" height="188" rx="18" fill="#2A211E"/>
+<rect x="2" y="2" width="916" height="184" rx="16" fill="none" stroke="#A7734B" stroke-width="3"/>
+<rect x="3" y="3" width="914" height="32" rx="15" fill="#583C2D"/>
+<rect x="3" y="21" width="914" height="15" fill="#583C2D"/>
+<circle cx="27" cy="20" r="5" fill="#DB8761"/><circle cx="47" cy="20" r="5" fill="#E0AE68"/><circle cx="67" cy="20" r="5" fill="#82956D"/>
+<text x="460" y="24" text-anchor="middle" font-family="monospace" font-size="13" fill="#E8CA9E">~/ekzd — terminal</text>
+<text x="28" y="66" font-family="monospace" font-size="16" fill="#E9AD70">$ git log --oneline</text>
+<path d="M 43 91 V 155 M 43 118 Q 43 137 67 137 H 88" stroke="#C58A5A" stroke-width="3" fill="none"/>
+<circle cx="43" cy="92" r="5" fill="#E8CA9E"/><circle cx="43" cy="115" r="5" fill="#E8CA9E"/><circle cx="89" cy="137" r="5" fill="#82956D"/><circle cx="43" cy="155" r="5" fill="#E8CA9E"/>
+<text x="108" y="97" font-family="monospace" font-size="17" fill="#F3DDC3">build something useful</text>
+<text x="108" y="121" font-family="monospace" font-size="17" fill="#D7B08C">test it, break it, learn</text>
+<text x="108" y="145" font-family="monospace" font-size="17" fill="#B1C39B">fix it &amp; ship it</text>
+<text x="108" y="169" font-family="monospace" font-size="17" fill="#D7B08C">repeat ☕</text>
+<path d="M 676 68 h 183 v 84 h -183 z" fill="#3E302A" stroke="#81563E" stroke-width="2"/>
+<text x="690" y="91" font-family="monospace" font-size="13" fill="#E9AD70">> status</text>
+<text x="690" y="113" font-family="monospace" font-size="13" fill="#E8CA9E">still building</text>
+<text x="690" y="135" font-family="monospace" font-size="13" fill="#B1C39B">● online</text>
+</svg>
