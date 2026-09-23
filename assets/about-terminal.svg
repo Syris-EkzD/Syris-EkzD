@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
+  <title id="title">EkzD's About Me terminal</title>
+  <desc id="desc">The ekzdfetch command types into a Linux-style terminal. An S logo and EkzD's personal information then appear together.</desc>
+  <defs>
+    <style><![CDATA[
+      .mono {font-family:"DejaVu Sans Mono","Consolas","Menlo",monospace;}
+      .prompt {font-size:23px;}
+      .field {font-size:22px;fill:#89b4fa;font-weight:600;}
+      .value {font-size:22px;fill:#cdd6f4;}
+    ]]></style>
+    <clipPath id="command-reveal">
+      <rect x="605" y="83" width="0" height="31">
+        <animate attributeName="width" values="0;13;26;39;52;65;78;91;104;117" keyTimes="0;0.111;0.222;0.333;0.444;0.555;0.666;0.777;0.888;1" calcMode="discrete" dur="1.7s" begin="0.35s" fill="freeze"/>
+      </rect>
+    </clipPath>
+  </defs>
+  <rect width="1200" height="500" fill="#11111b"/>
+  <rect x="26" y="20" width="1148" height="460" rx="16" fill="#1e1e2e" stroke="#45475a" stroke-width="2"/>
+  <path d="M42 20H1158Q1174 20 1174 36V68H26V36Q26 20 42 20Z" fill="#181825"/>
+  <line x1="26" y1="68" x2="1174" y2="68" stroke="#45475a"/>
+  <circle cx="54" cy="44" r="7" fill="#f38ba8"/>
+  <circle cx="80" cy="44" r="7" fill="#f9e2af"/>
+  <circle cx="106" cy="44" r="7" fill="#a6e3a1"/>
+  <text x="600" y="49" class="mono" text-anchor="middle" font-size="17" fill="#a6adc8">ekzd@github: ~</text>
+  <text x="405" y="109" class="mono prompt"><tspan fill="#a6e3a1">ekzd</tspan><tspan fill="#cdd6f4">@github</tspan><tspan fill="#89b4fa">:~</tspan><tspan fill="#a6e3a1">$</tspan></text>
+  <text x="605" y="109" class="mono prompt" fill="#cdd6f4" clip-path="url(#command-reveal)">ekzdfetch</text>
+  <rect x="605" y="86" width="12" height="26" fill="#cdd6f4">
+    <animate attributeName="x" values="605;618;631;644;657;670;683;696;709;722" keyTimes="0;0.111;0.222;0.333;0.444;0.555;0.666;0.777;0.888;1" calcMode="discrete" dur="1.7s" begin="0.35s" fill="freeze"/>
+    <animate attributeName="opacity" values="1;0;1" dur=".9s" repeatCount="indefinite"/>
+  </rect>
+  <g opacity="0">
+    <animate attributeName="opacity" from="0" to="1" dur=".01s" begin="2.2s" fill="freeze"/>
+    <line x1="365" y1="135" x2="365" y2="447" stroke="#45475a"/>
+    <g transform="translate(128 190)">
+  <g fill="#777189"><rect x="28" y="8" width="20" height="20"/><rect x="48" y="8" width="20" height="20"/><rect x="68" y="8" width="20" height="20"/><rect x="88" y="8" width="20" height="20"/><rect x="108" y="8" width="20" height="20"/><rect x="8" y="28" width="20" height="20"/><rect x="28" y="28" width="20" height="20"/><rect x="108" y="28" width="20" height="20"/><rect x="128" y="28" width="20" height="20"/><rect x="8" y="48" width="20" height="20"/><rect x="28" y="48" width="20" height="20"/><rect x="28" y="68" width="20" height="20"/><rect x="48" y="68" width="20" height="20"/><rect x="68" y="68" width="20" height="20"/><rect x="88" y="68" width="20" height="20"/><rect x="108" y="68" width="20" height="20"/><rect x="108" y="88" width="20" height="20"/><rect x="128" y="88" width="20" height="20"/><rect x="8" y="108" width="20" height="20"/><rect x="28" y="108" width="20" height="20"/><rect x="108" y="108" width="20" height="20"/><rect x="128" y="108" width="20" height="20"/><rect x="28" y="128" width="20" height="20"/><rect x="48" y="128" width="20" height="20"/><rect x="68" y="128" width="20" height="20"/><rect x="88" y="128" width="20" height="20"/><rect x="108" y="128" width="20" height="20"/></g>
+  <g fill="#d9d2c1"><rect x="20" y="0" width="20" height="20"/><rect x="40" y="0" width="20" height="20"/><rect x="60" y="0" width="20" height="20"/><rect x="80" y="0" width="20" height="20"/><rect x="100" y="0" width="20" height="20"/><rect x="0" y="20" width="20" height="20"/><rect x="20" y="20" width="20" height="20"/><rect x="100" y="20" width="20" height="20"/><rect x="120" y="20" width="20" height="20"/><rect x="0" y="40" width="20" height="20"/><rect x="20" y="40" width="20" height="20"/><rect x="20" y="60" width="20" height="20"/><rect x="40" y="60" width="20" height="20"/><rect x="60" y="60" width="20" height="20"/><rect x="80" y="60" width="20" height="20"/><rect x="100" y="60" width="20" height="20"/><rect x="100" y="80" width="20" height="20"/><rect x="120" y="80" width="20" height="20"/><rect x="0" y="100" width="20" height="20"/><rect x="20" y="100" width="20" height="20"/><rect x="100" y="100" width="20" height="20"/><rect x="120" y="100" width="20" height="20"/><rect x="20" y="120" width="20" height="20"/><rect x="40" y="120" width="20" height="20"/><rect x="60" y="120" width="20" height="20"/><rect x="80" y="120" width="20" height="20"/><rect x="100" y="120" width="20" height="20"/></g>
+  <g fill="#f4ead8"><rect x="20" y="0" width="20" height="4"/><rect x="40" y="0" width="20" height="4"/><rect x="60" y="0" width="20" height="4"/><rect x="80" y="0" width="20" height="4"/><rect x="100" y="0" width="20" height="4"/><rect x="0" y="20" width="20" height="4"/><rect x="20" y="20" width="20" height="4"/><rect x="100" y="20" width="20" height="4"/><rect x="120" y="20" width="20" height="4"/><rect x="0" y="40" width="20" height="4"/><rect x="20" y="40" width="20" height="4"/><rect x="20" y="60" width="20" height="4"/><rect x="40" y="60" width="20" height="4"/><rect x="60" y="60" width="20" height="4"/><rect x="80" y="60" width="20" height="4"/><rect x="100" y="60" width="20" height="4"/><rect x="100" y="80" width="20" height="4"/><rect x="120" y="80" width="20" height="4"/><rect x="0" y="100" width="20" height="4"/><rect x="20" y="100" width="20" height="4"/><rect x="100" y="100" width="20" height="4"/><rect x="120" y="100" width="20" height="4"/><rect x="20" y="120" width="20" height="4"/><rect x="40" y="120" width="20" height="4"/><rect x="60" y="120" width="20" height="4"/><rect x="80" y="120" width="20" height="4"/><rect x="100" y="120" width="20" height="4"/></g>
+</g>
+    <text x="198" y="366" class="mono" text-anchor="middle" font-size="17" fill="#a6adc8">EkzD</text>
+    <text x="405" y="157" class="mono" font-weight="700" font-size="25" fill="#cba6f7">ekzd<tspan fill="#cdd6f4">@github</tspan></text>
+    <line x1="405" y1="170" x2="547" y2="170" stroke="#cba6f7" stroke-width="2"/>
+    <text x="405" y="216" class="mono field">User</text><text x="553" y="216" class="mono value">: EkzD</text>
+    <text x="405" y="248" class="mono field">Role</text><text x="553" y="248" class="mono value">: BSIT Student</text>
+    <text x="405" y="280" class="mono field">Location</text><text x="553" y="280" class="mono value">: Bohol, Philippines</text>
+    <text x="405" y="312" class="mono field">Focus</text><text x="553" y="312" class="mono value">: Software Development</text>
+    <text x="405" y="344" class="mono field">Interests</text><text x="553" y="344" class="mono value">: Linux, Databases, Self-Hosting</text>
+    <text x="405" y="376" class="mono field">Building</text><text x="553" y="376" class="mono value">: Software that makes work less annoying</text>
+    <text x="405" y="408" class="mono field">Offline</text><text x="553" y="408" class="mono value">: Doomscrolling</text>
+    <text x="405" y="440" class="mono field">Status</text><text x="553" y="440" class="mono value">: Still trying to automate everything</text>
+    <g transform="translate(405 452)"><rect x="0" y="0" width="19" height="13" fill="#45475a"/><rect x="26" y="0" width="19" height="13" fill="#f38ba8"/><rect x="52" y="0" width="19" height="13" fill="#fab387"/><rect x="78" y="0" width="19" height="13" fill="#f9e2af"/><rect x="104" y="0" width="19" height="13" fill="#a6e3a1"/><rect x="130" y="0" width="19" height="13" fill="#89dceb"/><rect x="156" y="0" width="19" height="13" fill="#89b4fa"/><rect x="182" y="0" width="19" height="13" fill="#cba6f7"/></g>
+  </g>
+</svg>

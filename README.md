@@ -4,9 +4,9 @@
 
 ### Hey, I'm EkzD! 👋
 
-I'm a BSIT student from **Bohol, Philippines**, and I like building software that makes everyday tasks a little easier. I've worked on full-stack web apps, offline-first mobile tools, academic automation, and developer workflows.
-
-I enjoy understanding how things work beyond the UI—especially databases, Linux, and self-hosted services.
+<div align="center">
+  <img src="./assets/about-terminal.svg" width="100%" alt="Animated terminal: ekzd@github:~$ ekzdfetch. A three-dimensional block S appears beside EkzD's profile: BSIT student from Bohol, Philippines, focused on software development; interested in Linux, databases, and self-hosting; building software that makes work less annoying; offline: doomscrolling; status: still trying to automate everything." />
+</div>
 
 ---
 
