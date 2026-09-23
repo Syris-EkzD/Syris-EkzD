@@ -1,0 +1,45 @@
+name: Update Commit City
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 16 * * *"
+  push:
+    paths:
+      - "scripts/commit_city.py"
+      - ".github/workflows/commit-city.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  update-commit-city:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install image renderer
+        run: python -m pip install Pillow==11.3.0
+
+      - name: Render Commit City from GitHub contributions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.repository_owner }}
+        run: python scripts/commit_city.py
+
+      - name: Commit only the generated city image
+        run: |
+          git add -- assets/commit-city.png
+          if git diff --cached --quiet; then
+            echo "Commit City image is already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(profile): refresh commit city"
+          git push
