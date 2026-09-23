@@ -18,7 +18,7 @@ jobs:
       - name: Add centered programming language icons without changing anything else
         run: |
           python - <<'PY'
-          from PIL import Image, ImageDraw, ImageFont, ImageChops
+          from PIL import Image, ImageDraw, ImageFont, ImageChops, ImageColor
           from pathlib import Path
           from collections import Counter
           
@@ -46,7 +46,10 @@ jobs:
               bbox = d.textbbox((0, 0), text, font=font)
               x = (22 - (bbox[2] - bbox[0])) // 2 - bbox[0] + offset[0]
               y = (22 - (bbox[3] - bbox[1])) // 2 - bbox[1] + offset[1]
-              d.text((x, y), text, font=font, fill=fill)
+              mask = Image.new("L", (22,22))
+              ImageDraw.Draw(mask).text((x,y), text, font=font, fill=255)
+              mask = mask.point(lambda v: 255 if v >= 128 else 0)
+              icon.paste(ImageColor.getrgb(fill) + (255,), (0,0,22,22), mask)
           def icon_for(lang):
               im = tile(); d = ImageDraw.Draw(im)
               if lang == "C":
