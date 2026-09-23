@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/autumn-game.svg" width="100%" alt="A simple autumn pixel-farm scene. Leaves sweep past a wooden sign, revealing EkzD." />
+  <img src="./assets/dialogue-typewriter.gif" width="100%" alt="A pixel-art dialogue box with a blank portrait slot and the name EkzD. The greeting types itself: Hi I am EkzD. A Filipino BSIT student. Welcome to my GitHub Profile." />
 </div>
 
 ### Hey, I'm EkzD! 👋
