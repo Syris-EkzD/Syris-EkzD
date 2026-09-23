@@ -54,7 +54,7 @@ jobs:
               ImageDraw.Draw(mask).text((x,y), text, font=font, fill=255)
               mask = mask.point(lambda v: 255 if v >= 128 else 0)
               icon.paste(ImageColor.getrgb(fill) + (255,), (0,0,22,22), mask)
-                    def icon_for(lang):
+          def icon_for(lang):
               im = tile()
               d = ImageDraw.Draw(im)
               if lang == "HTML5":
@@ -122,7 +122,7 @@ jobs:
 
           langs = ["HTML5", "CSS3", "Tailwind", "Vite", "React", "React Router", "Next.js", "Flutter", "Android SDK"]
           icons = [icon_for(name) for name in langs]
-# Keep ALL 99 original RGB colors exactly. Add only icon colors; do
+          # Keep ALL 99 original RGB colors exactly. Add only icon colors; do
           # not allow GIF quantization to repaint any pixel outside the icons.
           palette_colors = set()
           for frame in original:
