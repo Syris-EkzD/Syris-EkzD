@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/autumn-header.svg" width="100%" alt="EkzD — software developer and BSIT student. Minimal autumn landscape in warm earth tones." />
+  <img src="./assets/autumn-game.svg" width="100%" alt="A simple autumn pixel-farm scene. Leaves sweep past a wooden sign, revealing EkzD." />
 </div>
 
 ### Hey, I'm EkzD! 👋
@@ -29,14 +29,6 @@ I enjoy understanding how things work beyond the UI—especially databases, Linu
 **Tools & infrastructure**
 
 <img src="https://skillicons.dev/icons?i=git,github,linux,ubuntu,docker,vscode" alt="Git, GitHub, Linux, Ubuntu, Docker and VS Code" />
-
----
-
-### 📈 GitHub activity
-
-<div align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=Syris-EkzD&amp;bg_color=2c2523&amp;color=f3ddc3&amp;line=c88a58&amp;point=eed0a3&amp;area=true&amp;area_color=9c6948&amp;hide_border=true&amp;hide_title=true&amp;days=31" width="100%" alt="GitHub contribution activity over the last 31 days" />
-</div>
 
 ---
 
