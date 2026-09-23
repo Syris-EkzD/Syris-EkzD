@@ -10,10 +10,8 @@ I enjoy understanding how things work beyond the UI—especially databases, Linu
 
 ---
 
-### 🧰 Tool Box
-
 <div align="center">
-  <img src="./assets/toolbox-hotbar.gif" width="100%" alt="Animated Minecraft-style tech toolbox: Python, Git, GitHub, React, PostgreSQL, TypeScript, Flutter, Tux for Linux, and Docker. The hotbar selection moves right every half-second; one heart empties and one armor icon fills from right to left with each move." />
+  <img src="./assets/techstack-level-loop.gif" width="100%" alt="Animated Minecraft-style TECHSTACK HUD. Every half-second, the selection moves one of nine empty hotbar slots to the right, one heart empties from right to left, one armor icon fills from right to left, and the XP bar gains ten percent. The animation repeats across four stages labeled level 0, 10, 20, and 30." />
 </div>
 
 ---
