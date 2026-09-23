@@ -16,6 +16,12 @@
 
 ---
 
+<div align="center">
+  <img src="./assets/mining-history.png" width="100%" alt="Mining History: an automatically refreshed Minecraft deepslate mining wall showing the past 365 days of qualifying GitHub contributions. Each day is one block; ores show daily activity level, with thresholds in the legend." />
+</div>
+
+---
+
 ### 🎮 Beyond the code
 
 Gaming and reading are my usual downtime. I also enjoy tinkering with my Linux setup and figuring out small ways to make my workflow better.
