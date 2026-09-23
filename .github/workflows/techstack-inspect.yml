@@ -24,6 +24,20 @@ jobs:
           print('SIZE',im.size,'FRAMES',im.n_frames,'DURATION',im.info.get('duration'))
           a=im.convert('RGB'); w,h=a.size
           print('TOP_COLORS',Counter(a.getdata()).most_common(15))
+          allcolors=set()
+          for j in range(im.n_frames):
+              im.seek(j);allcolors.update(im.convert('RGB').getdata())
+          print('ALL_FRAMES_COLOR_COUNT',len(allcolors),'FIRST_FRAME_COLOR_COUNT',len(set(a.getdata())))
+          for y in [246,253,263,273,283,293,305,314,320]:
+              runs=[]
+              px=a.load(); start=145; last=px[start,y]
+              for x in range(146,929):
+                  value=px[x,y]
+                  if value!=last:
+                      if x-start>=4:runs.append((start,x-1,last))
+                      start=x;last=value
+              print('RUNS Y',y,runs[:55])
+          print('SLOT_CENTERS',[(x,a.getpixel((x,280))) for x in [198,282,366,450,534,618,702,786,870]])
           print('ROW SIGNATURES')
           for y in range(0,h,max(1,h//28)):
               line=[a.getpixel((x,y)) for x in range(0,w,max(1,w//64))]
