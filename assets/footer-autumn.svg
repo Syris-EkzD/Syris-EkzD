@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="225" viewBox="0 0 960 225" role="img" aria-label="Thanks for stopping by. A little code, a little curiosity, and one more thing to learn. A retro autumn terminal and falling leaves.">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#51362A"/><stop offset="1" stop-color="#2A211E"/></linearGradient></defs>
+<rect width="960" height="225" rx="22" fill="url(#bg)"/>
+<rect x="8" y="8" width="944" height="209" rx="18" fill="none" stroke="#AE7950" stroke-width="2"/>
+<rect x="35" y="31" width="14" height="14" fill="#D6A36A"/><rect x="53" y="31" width="14" height="14" fill="#BB6E46"/><rect x="71" y="31" width="14" height="14" fill="#819067"/>
+<rect x="35" y="58" width="890" height="1" fill="#80543D"/>
+<text x="480" y="111" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="36" font-weight="700" fill="#F9E6C8">thanks for stopping by.</text>
+<text x="480" y="157" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="24" fill="#E2BA90">a little code, a little curiosity, and one more thing to learn.</text>
+<text x="480" y="194" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="18" fill="#A7B48A">ekzd@home:~$ █</text>
+<path d="M 878 72 C 889 65 900 66 902 81 C 916 91 907 106 892 101 C 880 113 867 105 874 91 C 865 82 866 73 878 72Z" fill="#C9824B"/>
+<path d="M 888 78 L 892 114" stroke="#725039" stroke-width="2"/>
+<path d="M 61 130 C 72 121 82 129 77 140 C 83 151 72 160 62 153 C 48 159 44 145 54 138 C 48 128 55 122 61 130Z" fill="#A4754C"/>
+<path d="M 64 132 L 65 164" stroke="#725039" stroke-width="2"/>
+</svg>
