@@ -41,51 +41,6 @@ I'm interested in web, mobile, and game development, with a growing curiosity ab
 **Tools & infrastructure**  
 ![Git, GitHub, Linux, Ubuntu, Docker, VS Code](https://skillicons.dev/icons?i=git,github,linux,ubuntu,docker,vscode)
 
-### 🚀 Featured projects
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-**📋 [Kedis](https://github.com/Syris-EkzD/Kedis)**
-
-An offline-first Android task manager with categories, an interactive home-screen widget, and local storage.
-
-<sub>Flutter · Dart · Kotlin · SQLite</sub>
-
-</td>
-<td width="50%" valign="top">
-
-**🤖 [Canvas Guardian](https://github.com/Syris-EkzD/Canvas-Guardian)**
-
-A self-hosted Canvas LMS monitor with Telegram alerts and Google Calendar deadline syncing.
-
-<sub>Node.js · SQLite · REST APIs · Ubuntu</sub>
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-**⚙️ [EkzD Harness](https://github.com/Syris-EkzD/EkzD)**
-
-A development harness for scoped, verifiable AI-assisted work with portable task handoffs and maintainer acceptance.
-
-<sub>Python · Git · Linux</sub>
-
-</td>
-<td width="50%" valign="top">
-
-**🏆 [NOSAS](https://github.com/Syris-EkzD/Nosas)**
-
-An esports tournament registration app with team rosters, separate backend services, and sandbox checkout.
-
-<sub>React · TypeScript · Express · PostgreSQL · Docker</sub>
-
-</td>
-</tr>
-</table>
-
 ### 🕹️ The arcade
 
 > Every developer deserves a little room to play.
