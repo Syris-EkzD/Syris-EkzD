@@ -1,92 +1,88 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=220&color=gradient&customColorList=6,11,20,24&text=EkzD&fontColor=fffaf0&fontAlignY=38&desc=BSIT%20student%20%20%E2%80%A2%20%20software%20developer%20in%20progress%20%20%E2%80%A2%20%20cozy%20builder&descAlignY=58&descSize=18" alt="EkzD banner" />
+<img src="./assets/autumn-desk.svg" width="100%" alt="An autumn coding desk with a laptop, a steaming mug, books, plants, and falling leaves outside the window. EkzD — developer in progress." />
 
-# hey, i'm EkzD 👋
+<br>
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=18&pause=2200&color=C47A44&center=true&vCenter=true&width=700&lines=building+practical+software;automating+the+annoying+stuff;learning+web%2C+mobile%2C+and+more" alt="Typing intro" />
+**hey, i'm EkzD.** 👋
 
-<p>
-  <img src="https://img.shields.io/badge/BSIT%20Student-8C5A3C?style=for-the-badge&logoColor=FFF8F0&labelColor=B56B45&color=8C5A3C" alt="BSIT Student" />
-  <img src="https://img.shields.io/badge/Philippines-C97C4A?style=for-the-badge&logoColor=FFF8F0&labelColor=D99A6C&color=C97C4A" alt="Philippines" />
-  <img src="https://img.shields.io/badge/Practical%20Builder-6F4E37?style=for-the-badge&logoColor=FFF8F0&labelColor=A56A43&color=6F4E37" alt="Practical Builder" />
-</p>
+a BSIT student from the Philippines who enjoys building useful software,<br>
+automating the annoying stuff, and figuring out how things work.
 
-<p>
-  <img src="https://komarev.com/ghpvc/?username=Syris-EkzD&style=for-the-badge&color=B56B45&label=COZY+VISITS" alt="Profile views" />
-</p>
+<br>
 
-</div>
-
----
-
-### 🍂 about me
-
-I'm a BSIT student from the Philippines who likes building software that actually feels useful. I enjoy making practical tools, automating repetitive work, and learning how systems fit together behind the scenes.
-
-Most of what I do lives somewhere around **web development**, **mobile development**, **automation**, and **developer workflows**. I also like Linux, self-hosting, and the kind of side quests that somehow turn into full projects.
-
-> warm drink nearby, editor open, bug probably waiting.
-
----
-
-### 🪵 working style
-
-- build things that solve a real problem first
-- keep the workflow simple before making it clever
-- learn by shipping, breaking, fixing, and refining
-- aim for software that feels clean, useful, and maintainable
-
----
-
-### 🧰 toolbox
-
-<div align="center">
-
-#### languages
-<img src="https://skillicons.dev/icons?i=python,ts,js,dart,kotlin,c,cs" alt="Languages" />
-
-#### frontend & mobile
-<img src="https://skillicons.dev/icons?i=react,nextjs,vite,tailwind,flutter,html,css" alt="Frontend and mobile" />
-
-#### backend & data
-<img src="https://skillicons.dev/icons?i=nodejs,express,postgres,sqlite,prisma" alt="Backend and data" />
-
-#### tools & infrastructure
-<img src="https://skillicons.dev/icons?i=git,github,linux,ubuntu,docker,vscode" alt="Tools and infrastructure" />
+<img src="https://img.shields.io/badge/BSIT%20STUDENT-6B4837?style=for-the-badge&labelColor=2A211E&color=AD704A" alt="BSIT student" />
+<img src="https://img.shields.io/badge/PHILIPPINES-6B4837?style=for-the-badge&labelColor=2A211E&color=C18C55" alt="Based in the Philippines" />
+<img src="https://img.shields.io/badge/LINUX%20%26%20COFFEE-6B4837?style=for-the-badge&labelColor=2A211E&color=7F8A62" alt="Linux and coffee" />
 
 </div>
 
----
+<br>
 
-### ☕ current vibe
+### 🍁 a little about me
+
+I like software that solves a real problem. My work spans **full-stack web apps, offline-first mobile apps, academic automation, and developer tooling**. Outside of writing code, you'll probably find me reading, gaming, or tinkering with my Linux setup.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <strong>☕ what I enjoy building</strong><br><br>
+      Practical apps that make everyday tasks easier.<br><br>
+      Automation that saves a few extra clicks.<br><br>
+      Tools with thoughtful workflows and clean interfaces.
+    </td>
+    <td width="50%" valign="top">
+      <strong>🪵 how I like to work</strong><br><br>
+      Start with the problem, not the feature list.<br><br>
+      Keep things understandable and maintainable.<br><br>
+      Build, test, break, learn, repeat.
+    </td>
+  </tr>
+</table>
+
+<br>
+
+### 🧰 my toolbox
 
 <div align="center">
 
-| cozy dev card | details |
-|---|---|
-| 🍁 focus | practical software, automation, and maintainable systems |
-| ☕ environment | linux machine, music on, probably too many tabs open |
-| 🎮 off-hours | gaming, reading, and random side quests |
-| 🌙 energy | calm chaos, but functional |
+**languages**
+
+<img src="https://skillicons.dev/icons?i=python,ts,js,dart,kotlin,c,cs&theme=light" alt="Python, TypeScript, JavaScript, Dart, Kotlin, C and C sharp" />
+
+<br><br>
+
+**frontend & mobile**
+
+<img src="https://skillicons.dev/icons?i=react,nextjs,vite,tailwind,flutter,html,css&theme=light" alt="React, Next.js, Vite, Tailwind CSS, Flutter, HTML and CSS" />
+
+<br><br>
+
+**backend & databases**
+
+<img src="https://skillicons.dev/icons?i=nodejs,express,postgres,sqlite,prisma&theme=light" alt="Node.js, Express, PostgreSQL, SQLite and Prisma" />
+
+<br><br>
+
+**tools & infrastructure**
+
+<img src="https://skillicons.dev/icons?i=git,github,linux,ubuntu,docker,vscode&theme=light" alt="Git, GitHub, Linux, Ubuntu, Docker and VS Code" />
 
 </div>
 
----
+<br>
 
-### 📊 github snapshot
-
-<div align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=Syris-EkzD&show_icons=true&hide_border=true&bg_color=FFF8F0&title_color=A65A3A&text_color=6F4E37&icon_color=C97C4A&ring_color=C97C4A" alt="GitHub stats" />
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Syris-EkzD&layout=compact&hide_border=true&bg_color=FFF8F0&title_color=A65A3A&text_color=6F4E37" alt="Top languages" />
-</div>
-
----
+### 📜 the commit log
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=C97C4A&height=2&section=footer" alt="footer line" />
+<img height="165" src="https://github-readme-stats.vercel.app/api?username=Syris-EkzD&show_icons=true&hide_border=true&bg_color=2A211E&title_color=E9AD70&text_color=F3DDC3&icon_color=C78651&ring_color=C78651" alt="GitHub activity statistics" />
+<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Syris-EkzD&layout=compact&hide_border=true&bg_color=2A211E&title_color=E9AD70&text_color=F3DDC3" alt="Most-used languages in public GitHub repositories" />
 
-*always learning. occasionally shipping. frequently debugging.*
+<br><br>
+
+`a little code, a little coffee, a lot of curiosity.`
+
+**thanks for stopping by 🍂**
 
 </div>
