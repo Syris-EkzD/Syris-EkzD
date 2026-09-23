@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/mining-history.png" width="100%" alt="Mining History: an automatically refreshed Minecraft deepslate mining wall showing the past 365 days of qualifying GitHub contributions. Each day is one block; ores show daily activity level, with thresholds in the legend." />
+  <img src="./assets/mining-history.gif" width="100%" alt="Animated Mining History: the past 365 days of qualifying GitHub contributions appear as Minecraft deepslate ore blocks, with inactive days shown as plain deepslate. Steve walks left to right, mines each active column until its ore becomes deepslate, exits the mine, and loops with the ores restored." />
 </div>
 
 ---
