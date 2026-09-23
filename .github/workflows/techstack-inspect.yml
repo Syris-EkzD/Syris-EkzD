@@ -17,6 +17,7 @@ jobs:
       - run: python -m pip install Pillow==11.3.0
       - name: Add centered programming language icons without changing anything else
         run: |
+          python - <<'PY'
           from PIL import Image, ImageDraw, ImageFont, ImageChops
           from pathlib import Path
           from collections import Counter
@@ -136,6 +137,7 @@ jobs:
           print("PASS: 9 centered pixel-art language icons in frames 0-8 only.")
           print("PASS: all 45 frames, 600ms timing and every pixel outside icon boxes unchanged.")
           print("Palette colors:",len(colors),"File bytes:",path.stat().st_size)
+          PY
       - name: Commit only techstack GIF
         run: |
           git add -- assets/techstack-level-loop.gif
