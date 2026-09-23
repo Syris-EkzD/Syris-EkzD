@@ -1,14 +1,9 @@
 name: Update Mining History
 
+# Retained for manual regeneration of the archived Mining History asset.
+# Commit City is now the daily-updated activity visualization.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 16 * * *"
-  push:
-    paths:
-      - "scripts/mining_history.py"
-      - "scripts/mining_history_textures.json"
-      - "scripts/mining_history_miner_assets/**"
 
 permissions:
   contents: write
