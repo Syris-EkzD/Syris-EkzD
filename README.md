@@ -76,8 +76,11 @@ I like software that solves a real problem. My work spans **full-stack web apps,
 
 <div align="center">
 
-<img height="165" src="https://github-readme-stats.vercel.app/api?username=Syris-EkzD&show_icons=true&hide_border=true&bg_color=2A211E&title_color=E9AD70&text_color=F3DDC3&icon_color=C78651&ring_color=C78651" alt="GitHub activity statistics" />
-<img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Syris-EkzD&layout=compact&hide_border=true&bg_color=2A211E&title_color=E9AD70&text_color=F3DDC3" alt="Most-used languages in public GitHub repositories" />
+<img src="./assets/commit-terminal.svg" width="100%" alt="A warm, terminal-inspired illustration: build something useful, test it, fix it, and ship it." />
+
+<br>
+
+[See my actual GitHub activity →](https://github.com/Syris-EkzD?tab=overview)
 
 <br><br>
 
