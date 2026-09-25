@@ -40,14 +40,27 @@ def render() -> None:
         if not frames:
             raise RuntimeError("The source dialogue GIF has no frames")
 
+        # Use one shared palette and keep prior frames between typewriter updates.
+        # That lets GIF optimization store mostly the changing text region instead
+        # of repeating the static farm scene hundreds of times.
+        palette = frames[0].convert(
+            "P",
+            palette=Image.Palette.ADAPTIVE,
+            colors=256,
+        )
+        encoded = [
+            frame.quantize(palette=palette, dither=Image.Dither.NONE)
+            for frame in frames
+        ]
+
         OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-        frames[0].save(
+        encoded[0].save(
             OUTPUT,
             save_all=True,
-            append_images=frames[1:],
+            append_images=encoded[1:],
             duration=durations,
             loop=source.info.get("loop", 0),
-            disposal=2,
+            disposal=1,
             optimize=True,
         )
 
