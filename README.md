@@ -11,7 +11,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/techstack-level-loop.gif" width="100%" alt="Animated Minecraft-style TECHSTACK HUD. Every half-second, the selection moves one of nine empty hotbar slots to the right, one heart empties from right to left, one armor icon fills from right to left, and the XP bar gains ten percent. The animation repeats across four stages labeled level 0, 10, 20, and 30." />
+  <img src="./assets/techstack-chest.png" width="100%" alt="TechStack: a Minecraft chest interface with three rows of nine slots containing Python, C, C#, C++, Java, JavaScript, TypeScript, PHP, Dart, Laravel, React, Next.js, Flutter, Tailwind CSS, Bootstrap, Node.js, Express.js, PostgreSQL, Supabase, SQLite, MongoDB, Firebase, Git, GitHub, Docker, Linux (Tux), and Godot logos." />
 </div>
 
 ---
