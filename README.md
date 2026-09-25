@@ -5,7 +5,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/about-terminal.svg" width="100%" alt="Animated terminal: ekzd@github:~$ ekzdfetch. A three-dimensional block S appears beside EkzD's profile: BSIT student from Bohol, Philippines, focused on software development; interested in Linux, databases, and self-hosting; building software that makes work less annoying; offline: doomscrolling; status: still trying to automate everything." />
+  <img src="./assets/about-terminal.svg" width="100%" alt="Animated terminal: ekzd@github:~$ ekzdfetch. An ASCII portrait of EkzD appears beside a neofetch-style profile showing role, location, Ubuntu Linux and Kitty setup, development stack, interests, hobbies, and current status." />
 </div>
 
 ---
