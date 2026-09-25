@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
   <title id="title">EkzD's ekzdfetch About Me terminal</title>
-  <desc id="desc">A neofetch-inspired dark Linux terminal. The command ekzdfetch types out, then a large pointed Universal S emblem appears beside EkzD's personal information and a terminal color palette.</desc>
+  <desc id="desc">A neofetch-inspired dark Linux terminal. The command ekzdfetch types out, then a filled Universal S rendered entirely from ASCII characters appears beside EkzD's personal information and a terminal color palette.</desc>
   <defs>
     <style><![CDATA[
       .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, Menlo, monospace; }
@@ -26,47 +26,28 @@
   <g opacity="0">
     <animate attributeName="opacity" from="0" to="1" dur=".01s" begin="2.15s" fill="freeze"/>
     <!-- Neofetch-style emblem: the circle and raised S are both rendered with ASCII characters. -->
-    <g aria-label="Raised S inside a circular emblem, entirely rendered with ASCII characters">
-      <text x="31" y="94" class="mono ascii" font-size="20" xml:space="preserve">                  <tspan fill="#dc708c">+</tspan>                  </text>
-      <text x="31" y="117" class="mono ascii" font-size="20" xml:space="preserve">          <tspan fill="#dc708c">+++</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#dc708c">+++</tspan>          </text>
-      <text x="31" y="140" class="mono ascii" font-size="20" xml:space="preserve">       <tspan fill="#dc708c">++</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#dc708c">++</tspan>       </text>
-      <text x="31" y="163" class="mono ascii" font-size="20" xml:space="preserve">     <tspan fill="#dc708c">++</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMMMM</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#dc708c">++</tspan>     </text>
-      <text x="31" y="186" class="mono ascii" font-size="20" xml:space="preserve">    <tspan fill="#dc708c">+</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMMMMMMMM</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#dc708c">+</tspan>    </text>
-      <text x="31" y="209" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#dc708c">++</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#e8e4ec">MMMM</tspan><tspan fill="#8f8796">mmmmmmmmmmmmm</tspan><tspan fill="#e8e4ec">MMMM</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#dc708c">++</tspan>  </text>
-      <text x="31" y="232" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#dc708c">+</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#e8e4ec">MMM</tspan><tspan fill="#8f8796">mm</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#8f8796">mm</tspan><tspan fill="#e8e4ec">M</tspan><tspan fill="#8f8796">m</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#dc708c">+</tspan>  </text>
-      <text x="31" y="255" class="mono ascii" font-size="20" xml:space="preserve"> <tspan fill="#dc708c">+</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#e8e4ec">MMM</tspan><tspan fill="#8f8796">m</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#8f8796">m</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#dc708c">+</tspan> </text>
-      <text x="31" y="278" class="mono ascii" font-size="20" xml:space="preserve"> <tspan fill="#dc708c">+</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMMMM</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#dc708c">+</tspan> </text>
-      <text x="31" y="301" class="mono ascii" font-size="20" xml:space="preserve"><tspan fill="#dc708c">++</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMMMMMM</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#dc708c">++</tspan></text>
-      <text x="31" y="324" class="mono ascii" font-size="20" xml:space="preserve"> <tspan fill="#dc708c">+</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#8f8796">mm</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMMMM</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#dc708c">+</tspan> </text>
-      <text x="31" y="347" class="mono ascii" font-size="20" xml:space="preserve"> <tspan fill="#dc708c">+</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#8f8796">mmmmmmmmmmm</tspan><tspan fill="#e8e4ec">MMMM</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#dc708c">+</tspan> </text>
-      <text x="31" y="370" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#dc708c">+</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#e8e4ec">MMM</tspan><tspan fill="#8f8796">m</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#dc708c">+</tspan>  </text>
-      <text x="31" y="393" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#dc708c">++</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#e8e4ec">MMM</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">sss</tspan><tspan fill="#e8e4ec">MMM</tspan><tspan fill="#8f8796">m</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#dc708c">++</tspan>  </text>
-      <text x="31" y="416" class="mono ascii" font-size="20" xml:space="preserve">    <tspan fill="#dc708c">+</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#e8e4ec">MMMM</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ssss</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#e8e4ec">MMMM</tspan><tspan fill="#8f8796">mm</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#dc708c">+</tspan>    </text>
-      <text x="31" y="439" class="mono ascii" font-size="20" xml:space="preserve">     <tspan fill="#dc708c">++</tspan><tspan fill="#f38ba8">ss</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMMMMMMM</tspan><tspan fill="#8f8796">mm</tspan><tspan fill="#f38ba8">s</tspan><tspan fill="#dc708c">++</tspan>     </text>
-      <text x="31" y="462" class="mono ascii" font-size="20" xml:space="preserve">       <tspan fill="#dc708c">++</tspan><tspan fill="#ffa0b3">s</tspan><tspan fill="#8f8796">m</tspan><tspan fill="#e8e4ec">MMMMMMMMMMMMM</tspan><tspan fill="#8f8796">mmmm</tspan><tspan fill="#dc708c">++</tspan>       </text>
-      <text x="31" y="485" class="mono ascii" font-size="20" xml:space="preserve">          <tspan fill="#dc708c">++</tspan><tspan fill="#8f8796">mmmmmmmmmmmmm</tspan><tspan fill="#dc708c">++</tspan>          </text>
-      <text x="31" y="508" class="mono ascii" font-size="20" xml:space="preserve">                  <tspan fill="#dc708c">+</tspan>                  </text>
-    </g>
-    <!-- Refine the center mark into the familiar pointed Universal S while
-         keeping the surrounding ASCII emblem and the rest of the terminal intact. -->
-    <g aria-label="Pointed Universal S">
-      <circle cx="260" cy="301" r="171" fill="#1a1821"/>
-      <g fill="none" stroke="#8f8796" stroke-width="17" stroke-linecap="square" stroke-linejoin="miter" transform="translate(6 6)">
-        <path d="M180 180V235 M260 180V235 M340 180V235
-                 M180 365V420 M260 365V420 M340 365V420
-                 M180 235L260 365 M260 235L340 365
-                 M180 180L260 135L340 180
-                 M180 420L260 465L340 420
-                 M180 365L300 300 M340 235L220 300"/>
-      </g>
-      <g fill="none" stroke="#e8e4ec" stroke-width="13" stroke-linecap="square" stroke-linejoin="miter">
-        <path d="M180 180V235 M260 180V235 M340 180V235
-                 M180 365V420 M260 365V420 M340 365V420
-                 M180 235L260 365 M260 235L340 365
-                 M180 180L260 135L340 180
-                 M180 420L260 465L340 420
-                 M180 365L300 300 M340 235L220 300"/>
-      </g>
+    <!-- Neofetch-style emblem: both the circular frame and the Universal S are
+         filled entirely with monospace ASCII characters. -->
+    <g aria-label="Filled Universal S inside a circular ASCII emblem">
+      <text x="31" y="94" class="mono ascii" font-size="20" xml:space="preserve">                   <tspan fill="#dc708c">+</tspan>                   </text>
+      <text x="31" y="117" class="mono ascii" font-size="20" xml:space="preserve">               <tspan fill="#f38ba8">sssssssss</tspan>               </text>
+      <text x="31" y="140" class="mono ascii" font-size="20" xml:space="preserve">          <tspan fill="#f38ba8">sssss</tspan>  <tspan fill="#e8e4ec">MMMMM</tspan>  <tspan fill="#f38ba8">sssss</tspan>          </text>
+      <text x="31" y="163" class="mono ascii" font-size="20" xml:space="preserve">       <tspan fill="#f38ba8">sss</tspan>     <tspan fill="#e8e4ec">MMMMMMMMM</tspan>     <tspan fill="#f38ba8">sss</tspan>       </text>
+      <text x="31" y="186" class="mono ascii" font-size="20" xml:space="preserve">     <tspan fill="#f38ba8">sss</tspan>     <tspan fill="#e8e4ec">MMMMM</tspan>   <tspan fill="#e8e4ec">MMMMM</tspan>     <tspan fill="#f38ba8">sss</tspan>     </text>
+      <text x="31" y="209" class="mono ascii" font-size="20" xml:space="preserve">    <tspan fill="#f38ba8">ss</tspan>       <tspan fill="#e8e4ec">MMM</tspan>   <tspan fill="#e8e4ec">M</tspan>   <tspan fill="#e8e4ec">MMM</tspan>       <tspan fill="#f38ba8">ss</tspan>    </text>
+      <text x="31" y="232" class="mono ascii" font-size="20" xml:space="preserve">   <tspan fill="#f38ba8">ss</tspan>        <tspan fill="#e8e4ec">M</tspan>     <tspan fill="#e8e4ec">M</tspan>     <tspan fill="#e8e4ec">M</tspan>        <tspan fill="#f38ba8">ss</tspan>   </text>
+      <text x="31" y="255" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#f38ba8">ss</tspan>         <tspan fill="#e8e4ec">MMM</tspan>   <tspan fill="#e8e4ec">MMM</tspan>  <tspan fill="#e8e4ec">MM</tspan>         <tspan fill="#f38ba8">ss</tspan>  </text>
+      <text x="31" y="278" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#f38ba8">s</tspan>          <tspan fill="#e8e4ec">MMMMM</tspan> <tspan fill="#e8e4ec">MMMMMMM</tspan>          <tspan fill="#f38ba8">s</tspan>  </text>
+      <text x="31" y="301" class="mono ascii" font-size="20" xml:space="preserve"> <tspan fill="#f38ba8">ss</tspan>            <tspan fill="#e8e4ec">MMMMM</tspan> <tspan fill="#e8e4ec">MMMMM</tspan>          <tspan fill="#f38ba8">ss</tspan> </text>
+      <text x="31" y="324" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#f38ba8">s</tspan>          <tspan fill="#e8e4ec">MMMMMMM</tspan>   <tspan fill="#e8e4ec">MMM</tspan>          <tspan fill="#f38ba8">s</tspan>  </text>
+      <text x="31" y="347" class="mono ascii" font-size="20" xml:space="preserve">  <tspan fill="#f38ba8">ss</tspan>         <tspan fill="#e8e4ec">MM</tspan>    <tspan fill="#e8e4ec">M</tspan>     <tspan fill="#e8e4ec">M</tspan>         <tspan fill="#f38ba8">ss</tspan>  </text>
+      <text x="31" y="370" class="mono ascii" font-size="20" xml:space="preserve">   <tspan fill="#f38ba8">ss</tspan>        <tspan fill="#e8e4ec">M</tspan>     <tspan fill="#e8e4ec">M</tspan>     <tspan fill="#e8e4ec">M</tspan>        <tspan fill="#f38ba8">ss</tspan>   </text>
+      <text x="31" y="393" class="mono ascii" font-size="20" xml:space="preserve">    <tspan fill="#f38ba8">ss</tspan>       <tspan fill="#e8e4ec">MMM</tspan>   <tspan fill="#e8e4ec">M</tspan>   <tspan fill="#e8e4ec">MMM</tspan>       <tspan fill="#f38ba8">ss</tspan>    </text>
+      <text x="31" y="416" class="mono ascii" font-size="20" xml:space="preserve">     <tspan fill="#f38ba8">sss</tspan>     <tspan fill="#e8e4ec">MMMMM</tspan>   <tspan fill="#e8e4ec">MMMMM</tspan>     <tspan fill="#f38ba8">sss</tspan>     </text>
+      <text x="31" y="439" class="mono ascii" font-size="20" xml:space="preserve">       <tspan fill="#f38ba8">sss</tspan>     <tspan fill="#e8e4ec">MMMMMMMMM</tspan>     <tspan fill="#f38ba8">sss</tspan>       </text>
+      <text x="31" y="462" class="mono ascii" font-size="20" xml:space="preserve">          <tspan fill="#f38ba8">sssss</tspan>  <tspan fill="#e8e4ec">MMMMM</tspan>  <tspan fill="#f38ba8">sssss</tspan>          </text>
+      <text x="31" y="485" class="mono ascii" font-size="20" xml:space="preserve">               <tspan fill="#f38ba8">sssssssss</tspan>               </text>
+      <text x="31" y="508" class="mono ascii" font-size="20" xml:space="preserve">                   <tspan fill="#dc708c">+</tspan>                   </text>
     </g>
     <text x="528" y="101" class="mono" font-size="23" font-weight="700" fill="#f38ba8">ekzd<tspan fill="#cdd6f4">@github</tspan></text>
     <text x="528" y="125" class="mono" font-size="21" fill="#cdd6f4">----------------</text>
