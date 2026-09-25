@@ -4,9 +4,7 @@ The GUI background and the title's raster pixels come directly from the owner's
 provided vanilla chest texture and supplied MinecraftStandard typeface.
 The embedded PNG is that precomposed 176x84 crop, with a 3x9 chest grid.
 Its original layout and font pixels are palette-shifted to the supplied dark-mode
-reference. C uses the official C++ vector without its ++ glyphs. GitHub keeps the
-owner-supplied white-circle treatment but is rendered from vector geometry for HD
-quality; all other logos retain their pinned vectors.
+reference. C uses the official C++ vector without its ++ glyphs. GitHub uses the\nowner-supplied raster reference directly, cropped to its circular mark and scaled\ncleanly for the slot; all other logos retain their pinned vectors.
 """
 from __future__ import annotations
 
@@ -21,8 +19,7 @@ from PIL import Image, ImageDraw
 
 # Pinned upstream to keep all 27 vector logos reproducible between builds.
 DEVICON_COMMIT = "7330accdbc47e2dc0c19789a48533c4a3c50fe58"
-GITHUB_OFFICIAL_MARK_SVG = b"""<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="#24292f"/></svg>"""
-ICONS: tuple[tuple[str, str], ...] = (
+GITHUB_SOURCE_WEBP_B64 = """UklGRsAMAABXRUJQVlA4WAoAAAAYAAAA/wAA/wAAQUxQSGwDAAABoGNrm/O2eb/5BuEcHLClUukcl6C0C7iiVKYuLcCgKgHbEFxZK8jolQNqB9CJwRU1M9/rUM0PnP8rERETgI1KpTWvJQmxI2jNEmOQtSIa8X/pDYZbrXc46An+H1XWRYgC6Mej3dl8sdw/bL37y8V8Nv7u8wiIhnUQFOhemD77wJadX04vdAENqyYq2L75iiQt5VKsFZeSk5Hkm9snISorFRTbu3/SLBdjy7aSzfjnnRPQsDqiiFf2aLmwpZds/O1aByorIhFfPKFlY4u3bJx/hSgrERQ7R8yFLb9k/n0JGlYgSJiwFDqwFE6DhMYF9GbMRhda4g99hIYF6d9nohsT7/clNEokzJjoyMR7QaRJiikTXZk4gTZIcZmFziy8DG1MwLcHNG8YD75FaIggPmCmOzMfREgzFNeZ6dDMa9BGCE79RPOI8adTkCYodpnp0sxdaAMEZ/ZoPjHunYbUU9xmplMzb0OrCbrPWbxS+LwLqaW4SNdegNabMvklcVJNEJ+z+KXwWYTUCfjsmOYX4/GnCHUUIxY6tnAErRMxZvJM4hixTsCM2TOZM4QqAsxZPFP4FJA6vYV3Fr1agyXNM8bloNZw3zv7w1pbh9453Nr4b+O/jf82/tv4b+O/jf82/tv4b2Oy4b539oe1BkvvLAe1egsWzxS+79bC3DtPUQcBM2bPZM4QUDVizOSZxO8R6yhGLJ4pHEHrBHx2TPOL8fhThDqC+JzFL4XPIqQOFFMmvyROoKh2ka69UE/Qfc7ilcJnHUgtKG4zeyXzNhTVBaf3aD4x7p2G1INil9knmWMoGig4+RPNI8afTkGaAMU1Zo9kXoWiofqA2R+ZDxRNDfj2gOYN48G3CE2B4hKLNwp3oGiu4i6TLxInUDRYJNxj8kTivSDSJATp/cjkh8T7fQlodkBvxmQ+sMRZHwFNDyITluKBUjgNEtD8oNg5Yi5tr2Qe7UADVlEiPn9My9bmLbuffIkoWE1RxCtLWi5trWTj3pUIFaxsUGyP/6BZLta2rGQz/nlnGxqwyqKC7RsvSdJSLsVacSkpGUm+vnUCooIVDwp0zt59fsyW/eHZ5HwX0IA1GKIA8aPReDZfLPcPW+/+cjGfjUefRkBiwJoUjfi/9AbDrdY7HPQE/48qWKcisSNozdKJQbCOpTVjo1JWUDggqAgAANA1AJ0BKgABAAE+dTqcSKSjoyEktTkwkA6JaW78fJbvYeT0XT+kH937Rf71/TOJA0C/479qvL/lv3r8AL1j/qt4JAB9Pv1v8bvUL756x9QD/Onn+/UXni+pf/X7in6ydX39gP//7qf6xDguBErEWjryWZS9HZu6gjNJDnWSvpdnPdZn1IeyUjN2rXMQsreTzZSDvufnbyhatvkTlE7mIvPTNb6gAmXzEiOugKWUmSEM/luQB+2NVspjOtQlhNDBzDERtkYlmnmv9I8AUCe01jfljDhcGkk69f4KpaePwFwHGsvWjIijgT/v8oEprXKsXyEtZHYTFK077u2G0NG9JZ/hcDAX/CUFdE402IwGUh2dQdZyyNHCoYpJangkmXuA5Mkwfsndw3br+0jd8GEpTz9+c6XuCcWbRByX/BM8dT6btVcEaYpGc3cJYz8/zifB9jgO1uXaCwFtJUYAjMp3uVBqPOqwXLgSU2JQS+CXbHWHjDXhMmevHBVNyRGf0JJZWDvFaN77Tj5zyz2HEvl4G1PX08c1zY2ZHZJtdeTAghd6K4bP7i7N3BNMQx4Bl+lBThrRV46oGGAA/v3Of8XALFKNWOFzBn5g0ValVTxJR24AiCMTYnMmP8R6h2e0VglcwH0xjaMd7q18Rx0dpkt6Dpdi4NQTokweJdjdcmsqeHVUbrJMG2ECA5q/8ZqR4Us+EBn29uT/rkkY3i84zrDZhFoHgRjumfzafA7wFWD17FwSEIRD9PkGq5dRZjvTpACbRNv70gd6X9/H6ktEyANQvpyZFCANSjuAkS4fcuummFN9LpDu7+y/P/uiQfsoLMZipbjj3rGsAyBPQS6kCbRIhZoz5iR57V2KRXxCBK8ua/ERxKXqGGS4/9W2P7cvTF64JC5v0pEpmvPNgOOrGKBk6GAhc0bMSCcL8xB4pXs0cWXjYH4P1aP7lHbxPwwnlz7hbfTPdbyI4NTXTDCz72y7n72cJi7B/7xLjf1Duiy0llHKgbZLA9yplvA/pd+y1ZYKg2twXEM8283AFXAIfpBNOiGyBbNLvH8fU+nyBN00DNaoNBcethm24sSJbl3JjCfH06N3RmQ2vDY15TWufbECOLBpxKqhIBavPEyz/X5RFxLlKU35C1oaIUfYmXnieRmRD6WxPkhtQ6CDeOOdbMAsIJAIg7SGAQmkdRiczMOYJF0nmeRfAmko8EBc7d9UXvBK8lfzaBC6ZHZ0WeGW5I1hoG5B1qwNdURQEmEb8x45Wcd+oZXhg/LhUwq6LLbFUp64JIwLrdaPW1FyLROSz9z5WWrXhow1devlrmsmkoy9FsBodcvxOl+hM1egjGescKnaiZNPALxgF9tbIKa18sLr4xUwJGblw8iMdz9ugJIU6ECYJDIlv9+3zx0e35OJK6GZTojeaEscjdDNOZbAn6z/Wli6u5pO7EwGnrjtzaBsN0S0Knm5R9DZ1q0UTtD9mIgsVn+LgrtiU8lmfp6l0o6VZty1IHhiqMg2arlzl5+Ix4mm1Qg3YpfqAb7KQ1ELLDxZ/kchZPwRIEFEO9dTQerdrsFLpwQsgbGAH3ot99Lcgf+Fir81mNuCj23eJc/B1L56wSZPLwO7bByVw5EaQQgpvqrTgCrdQRt6VYOgaJ+R/fpj/CY6+/UM6Xijr45IHC2Uwz73k5c5aUeYIFbTQHRdBiw4hxgrbgMnb5FhdOHbLKD+kgE8gmVwRT0a/6F7KSgUudRQfeg30h4+Afp1evaqboIZB7bOa4Li9aQBTtfFSZ90x1sXNGmvjk45L9A0zBaj1SlTthLa1zYTCk5AHgJGoN6Q1wMJk2dj+P/C6BK1N2DwvRckToDsfPrZsyW57E5ZhEA2Fy/lPOhOIY85uXPu75+ZuIJem/LroxLTlt1Vs0KW7MbXvpiDlhYZz55gtKfN5aW7IEjEmU55h23UCD2HTsYsleycw1vUU6sQrg2wBGxPoHE7QUuybK/Uvt6S19V0LbxFzwE0nycjE3tlpCb9DV1m+SsR5BfTWZPfasZRsw2X4Nu8x3aSIJBerOe/cDmeMo+T3grlDcigGm8QockiWER0LyzXNL0ejdV/WsR/Nd0mCmYFCtf8APLfjDbVN39iza3xAxd5yzhdeUhe1udoEa27AKKFU2BmPtno7LrX07SMunCycMYPwLW4I6yM6LsvlR5z5a/O68DtsF0JG76/aTfjY+tBu2w+4ye84w2SKWQmEMrE5Oqm2MSZZkKA82ZpeJOXAv4Ykm/6TwdOCQPTf6l3yK2f5bahxdO1ICP5ucxEYJwYDJjDK0hwl25uoly4ItcU9W1UxWslTSTZ91XJEQWgi7WQIVwJkcqhSHjQ3WNe7aupww+OQL2t80ernU/6t/DmLLeggi7D/WxI6LSoO+dsyqB0Cu1cLH6w5Y8C3Tpvji5tw0Y4IlcSj2oGw/d3TzCV1SP+EtIS8GoqQURcPQPuK0Ff552/V6/ltpwyuTka1IBelSwxrs2oThhDgHP5fNaIhPYkAxFAAbhLOLnVzJAyiyEB09yemRMg0HaiePj8NBuEEmFG0IlwvHEIfrodc685rUegeaC/4bhZjcpOr9K9ITYikLHe9W0e9cDY454wbvBvJg7911yhZ+kV5VXtTfolpX4DPaN8QU0DwJ8Qx+sPf8LYxri0/+HQo4TLPNXphUCg8fQLne31XMvgdyt5EBaY3Yk0IoLYUdAW0gigiQIF4SYik2KuXofqsAy4454bI/ClPDfxUnVJjFJv8kPOk8ohyn7AIpup+ZVCMI1FLylknDCng+QwDprrXbuc7VdARU8q7e+9P1sCY+JDv1yU5RQxFT3hMT7dyKaTQkusUSU5cS9z2XROMC3v+zHGUe+n4D14QXjeStQoFhq7GuMRAIudKOhnESR92Au3HVXVUlJCDA3gngmq2/w3z/+owBxgAAhyXFOo26LN0hJ7ARZ+8D2AHZH54AAARVhJRn4AAABFeGlmAABJSSoACAAAAAUAEgEDAAEAAAABAAAAGgEFAAEAAABKAAAAGwEFAAEAAABSAAAAKAEDAAEAAAACAAAAaYcEAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAAAACAAKgBAABAAAAAAEAAAOgBAABAAAAAAEAAAAAAAA="""\nICONS: tuple[tuple[str, str], ...] = (
     ("Python", "python/python-original.svg"),
     ("C", "c/c-original.svg"),
     ("C#", "csharp/csharp-original.svg"),
@@ -115,27 +112,21 @@ def git_with_white_inner_gap(svg: bytes) -> bytes:
 
 
 def github_reference_logo() -> Image.Image:
-    """Render the supplied GitHub treatment from vectors for crisp README output."""
-    render_size = 256
-    logo = Image.new("RGBA", (render_size, render_size), (0, 0, 0, 0))
-    ImageDraw.Draw(logo).ellipse(
-        (0, 0, render_size - 1, render_size - 1),
-        fill="#ffffff",
-    )
+    """Use the owner's supplied GitHub image without altering its colors."""
+    source = Image.open(BytesIO(base64.b64decode(GITHUB_SOURCE_WEBP_B64))).convert("RGBA")
 
-    mark_size = 180
-    mark_png = cairosvg.svg2png(
-        bytestring=GITHUB_OFFICIAL_MARK_SVG,
-        output_width=mark_size,
-        output_height=mark_size,
+    # The supplied 256x256 image contains the circular mark inside a square
+    # background. Crop tightly to that circle, then remove only the four
+    # outside corners so the slot sees the circular logo itself.
+    source = source.crop((45, 45, 211, 211))
+    alpha = Image.new("L", source.size, 0)
+    ImageDraw.Draw(alpha).ellipse(
+        (0, 0, source.width - 1, source.height - 1),
+        fill=255,
     )
-    mark = Image.open(BytesIO(mark_png)).convert("RGBA")
-    logo.alpha_composite(
-        mark,
-        ((render_size - mark.width) // 2, (render_size - mark.height) // 2),
-    )
+    source.putalpha(alpha)
 
-    return logo.resize((ICON_LIMIT, ICON_LIMIT), Image.Resampling.LANCZOS)
+    return source.resize((ICON_LIMIT, ICON_LIMIT), Image.Resampling.LANCZOS)
 
 def darken_chest(base: Image.Image) -> Image.Image:
     """Recolor only the original chest GUI pixels; retain its geometry and font."""
