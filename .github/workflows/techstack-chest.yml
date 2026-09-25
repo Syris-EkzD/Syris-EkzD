@@ -1,0 +1,39 @@
+name: Render TechStack Chest
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/build_techstack_chest.py"
+      - ".github/workflows/techstack-chest.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  render-techstack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install image dependencies
+        run: python -m pip install Pillow==11.3.0 CairoSVG==2.8.2
+
+      - name: Render official-texture chest and brand vector icons
+        run: python scripts/build_techstack_chest.py
+
+      - name: Commit only TechStack image
+        run: |
+          git add -- assets/techstack-chest.png
+          if git diff --cached --quiet; then
+            echo "TechStack chest is unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(profile): refresh TechStack chest image"
+          git push
