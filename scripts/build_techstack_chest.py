@@ -53,7 +53,7 @@ ICONS: tuple[tuple[str, str], ...] = (
 # Lossless, original-pixel 176x84 GUI: owner's vanilla 6-row chest trimmed to 3
 # rows with its original bottom border moved up.  The only added pixels are the
 # "TechStack" label rasterized once using the supplied MinecraftStandard.otf.
-GITHUB_REFERENCE_PNG = """iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAAAtdEVYdENyZWF0aW9uIFRpbWUARnJpIDI1IFNlcCAyMDI2IDA2OjA1OjU3IFBNIFBTVEGIIIIAAATZSURBVFiF7ZdrUFRlGMf/Z9lYlrOuLhxg2CVsYpCriRAWYNGk6YYBo9JENjWTDUJlZTbWTHkBJRSlkJjJbMRGLMccm5FB6EsjVjAjlxIhxfAyyMUL7LJ7TBYQhqcPxsphz9kbZH3gP/N8OP/neZ/3t++7Z973MIxcSfifSz4dTVQqFVLT0hEVHQWO48BxHIgIBoMBBoMB55rPobrqJCwWy4OHjF+0CO++twHPLVsGhUJht3Zw0ILqqioU7dmDi21tLs3DuLPdWp0O23fswOqMF10dirGxMZQfOoT87XkwGo3/DuTzKSn4+kAZVCqVy4ATZTKZ8Oora1BXW+uwVuZsU4ZhsD0/H0eOfj9lQADQaDSorKrGB5s2Oaz1YGQP5TrTdPOWrdiwceNU2QRiGAZPJyeDN/NoamqUrHNqJVdlZNj84p7ubjTU17sMVn/mDK739Ai8gl27sGTJUulBjFxJ9sLHT0s9fTyZLaOCWLo8lRi5kiLmx9IX+8qsftctE9U1NFNNXQNdu2G0+p+V7KOwqBhi5ErSv7DSpl97x3VSzvIRZXAImVdQZNPQbBklbXCIoG7h44k02yfAZrxa408L4p4UeGFRMaI912/4UJzD3tvt5+eHlvMX4OXlZZN7dG4wTCaTy9sNAKGhoWj47Xcb32g0IjoyAkODgwLf7n9y5arVooAAEBIS4hYgAATPfUTU9/X1hV6vt/HtQqalp4v6HR0daGlpcZ3uH9XW/orOzmuiudQ02zklIVmWRdLixaK5ot2FuHv3rpuIwPDQEPYWF4vmluv1YBjGOUitTifqj42NoeLECbdBx1VVWSnqsywLjuMEniTk5MJx8TyPO3fuTAHvnnp7eyX7aLXCBZKE1Gg0or6Hh8cU0ISSycSn9w8IENZJNRgaHBL11Wo1/P39p4B2T7qgIHh7e4vmRkdGBM+SkP39/ZITpKxY4SbafaWmpknm+gx9gmdJyO7uLskmOW++JblVzkihUODtd9ZL5rs6OwXPkjMZDAZcam8XzYWFh2NnYaFbgDKZDCWlpQgKelg0/0drK3iedw4SAH4+fVoyty47B4e/OyL5golJq9OhovIkXsp8WbKmpuaUrWnvchEbn2Q9/A23h+i1tdm0VJ9Gjc0XrP6Vrlv0ybZPKSYugbzYOTY9lLN8KOGpZ6nw81K6YbwterGYGOHRC12/BdXWn7VCflVWThoukDRcIJ09f0nQ/HLnTYqYH2szPnmJnox/DTuEM1tG6ceffnHvqvZE0jOCRiVfHiBGrqSQeVF0ufMmmS2j1PrnVYp8LE6yx5a8nQ4B+/hBio6Jdw+SkSspN3+3tZlpYMS6JcpZPhQTl0AK79l2x8+LXOAQ8v1NH0uOdwrSw5Ol4xXV1oZ1Dc3Eqn0djhsPT6XaLuA33x6z38PepXeiVCoVjh3/AQmJiQCAi21tyN22FQMDA2BZFk2NjXa/ow0ms+iRWlNzCmsyM20uuk6/3ZPDi51DB8uPiq7G+PeLVIi9PPsPHiZPpdrhvC4dG8PDw3hj7evIzsqC2Wx2ZSiI7m8Yz/PIzspCzrp1GJl0Tk95JSeGhgukjzbn0dXuXrp4pUv0I2xiFJfup16zhQr27CUuIMi1+Zz9T/6Xcv+W8AA1AzldmoGcLs1ATpdmIKdLfwNqmNh045RSnwAAAABJRU5ErkJggg=="""
+GITHUB_OFFICIAL_MARK_SVG = b"""<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="#24292f"/></svg>"""
 
 CHEST_3_ROW_PNG = """iVBORw0KGgoAAAANSUhEUgAAALAAAABUCAYAAAAiYr3KAAACgUlEQVR42u3bUWqjUBSA4XMlq2q34UYKeSoiItLXLiRZR7orM09mrjYamlDQ5vtgoBjn3CH8NSaZm+K/c8A2pOkP5/NZv2yk3pQu7RbiZWtOp9PljiFNA/76+vIMsWqfn58REXE4HKLIHxAvW1N4Ctiy3a0TqqoaF18U0bbtjxeqqiq6rru5Rj6/ruu71rq1Hk8UcNu20fd9NE1zd0wREX3fz4Y2N3fu7zyyHk8WcFEUV3/Or5zTq/Lc8b7vo67r0fG2baOu62/nV1V1OT8/9pP1hjUf/eVjwwEvvUQPUeShzR2PiEtI+fE8uvz4EHbTNKNXg5+sN8Sbz0DAo1iuHR+u1EVRjOJpmubyWP4Sn1/Zh+P5jME96+Vr4lOIb/fH+Z9rceVBXQtp+ibx1hW/bdvZK+p0vekVHFfgi4+Pj3h/fx/F2XXd6PhwbEnXdbPnD7cIXdeNzst/GZbW2+120TSNTyT+sNE3cb7IYAtmv4mDp7oHBgHDb72Je3t7e3iBsizjeDyaY87dc15fX+//FKIsy4f+Afv9Po7Hoznm3D1n6cMFtxC4BwYBg4ARMAgYBAwCRsAgYBAwCBgBg4BBwDy5xf8PXJZl7Pf7hxcxx5zfsrgr2Y4Mc9YwZ7ojI9+VbEeGOaufY0cG3sSBgEHAIGAEDAIGASNgEDAIGASMgEHAIGCYZUeGOaufs8SODHNWP8eODHM2PceODLyJAwGDgEHACBgEDAJGwCBgEDAIGAGDgEHAMMuODHNWP2fJ4o4MWKN8R4ZbCNwDg4BBwAgYBAwCBgEjYFiN4UuMwS4iUkrpfDqdvj0IW7kCp5eXF88Gm3E4HCIiUpocP3tq2IgUEfEPVgAn91QaGgAAAAAASUVORK5CYII="""
 SCALE = 5
@@ -114,26 +114,23 @@ def git_with_white_inner_gap(svg: bytes) -> bytes:
 
 
 def github_reference_logo() -> Image.Image:
-    """Use the supplied GitHub logo itself and remove only the screenshot background."""
-    source = Image.open(BytesIO(base64.b64decode(GITHUB_REFERENCE_PNG))).convert("RGBA")
-    light = Image.new("L", source.size)
-    light.putdata([
-        255 if min(red, green, blue) >= 180 else 0
-        for red, green, blue, _ in source.getdata()
-    ])
-    bounds = light.getbbox()
-    if bounds is None:
-        raise ValueError("Supplied GitHub reference does not contain the expected white mark")
-    left, top, right, bottom = bounds
-    pad = 2
-    left, top = max(0, left - pad), max(0, top - pad)
-    right, bottom = min(source.width, right + pad), min(source.height, bottom + pad)
-    logo = source.crop((left, top, right, bottom))
-    mask = Image.new("L", logo.size, 0)
-    ImageDraw.Draw(mask).ellipse((0, 0, logo.width - 1, logo.height - 1), fill=255)
-    logo.putalpha(mask)
-    return logo.resize((ICON_LIMIT, ICON_LIMIT), Image.Resampling.LANCZOS)
-
+    """Match the supplied icon: white circle with GitHub's official black Invertocat."""
+    logo = Image.new("RGBA", (ICON_LIMIT, ICON_LIMIT), (0, 0, 0, 0))
+    ImageDraw.Draw(logo).ellipse(
+        (0, 0, ICON_LIMIT - 1, ICON_LIMIT - 1),
+        fill="#ffffff",
+    )
+    mark_png = cairosvg.svg2png(
+        bytestring=GITHUB_OFFICIAL_MARK_SVG,
+        output_width=42,
+        output_height=42,
+    )
+    mark = Image.open(BytesIO(mark_png)).convert("RGBA")
+    logo.alpha_composite(
+        mark,
+        ((ICON_LIMIT - mark.width) // 2, (ICON_LIMIT - mark.height) // 2),
+    )
+    return logo
 
 def darken_chest(base: Image.Image) -> Image.Image:
     """Recolor only the original chest GUI pixels; retain its geometry and font."""
