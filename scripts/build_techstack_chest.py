@@ -4,8 +4,8 @@ The GUI background and the title's raster pixels come directly from the owner's
 provided vanilla chest texture and supplied MinecraftStandard typeface.
 The embedded PNG is that precomposed 176x84 crop, with a 3x9 chest grid.
 Its original layout and font pixels are palette-shifted to the supplied dark-mode
-reference. C uses the official C++ vector without its ++ glyphs; all other logos
-retain their pinned original vector artwork and colors.
+reference. C uses the official C++ vector without its ++ glyphs. GitHub uses the
+owner-supplied circle logo directly; all other logos retain their pinned vectors.
 """
 from __future__ import annotations
 
@@ -53,7 +53,6 @@ ICONS: tuple[tuple[str, str], ...] = (
 # Lossless, original-pixel 176x84 GUI: owner's vanilla 6-row chest trimmed to 3
 # rows with its original bottom border moved up.  The only added pixels are the
 # "TechStack" label rasterized once using the supplied MinecraftStandard.otf.
-GITHUB_OFFICIAL_MARK_SVG = b"""<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="#24292f"/></svg>"""
 
 CHEST_3_ROW_PNG = """iVBORw0KGgoAAAANSUhEUgAAALAAAABUCAYAAAAiYr3KAAACgUlEQVR42u3bUWqjUBSA4XMlq2q34UYKeSoiItLXLiRZR7orM09mrjYamlDQ5vtgoBjn3CH8NSaZm+K/c8A2pOkP5/NZv2yk3pQu7RbiZWtOp9PljiFNA/76+vIMsWqfn58REXE4HKLIHxAvW1N4Ctiy3a0TqqoaF18U0bbtjxeqqiq6rru5Rj6/ruu71rq1Hk8UcNu20fd9NE1zd0wREX3fz4Y2N3fu7zyyHk8WcFEUV3/Or5zTq/Lc8b7vo67r0fG2baOu62/nV1V1OT8/9pP1hjUf/eVjwwEvvUQPUeShzR2PiEtI+fE8uvz4EHbTNKNXg5+sN8Sbz0DAo1iuHR+u1EVRjOJpmubyWP4Sn1/Zh+P5jME96+Vr4lOIb/fH+Z9rceVBXQtp+ibx1hW/bdvZK+p0vekVHFfgi4+Pj3h/fx/F2XXd6PhwbEnXdbPnD7cIXdeNzst/GZbW2+120TSNTyT+sNE3cb7IYAtmv4mDp7oHBgHDb72Je3t7e3iBsizjeDyaY87dc15fX+//FKIsy4f+Afv9Po7Hoznm3D1n6cMFtxC4BwYBg4ARMAgYBAwCRsAgYBAwCBgBg4BBwDy5xf8PXJZl7Pf7hxcxx5zfsrgr2Y4Mc9YwZ7ojI9+VbEeGOaufY0cG3sSBgEHAIGAEDAIGASNgEDAIGASMgEHAIGCYZUeGOaufs8SODHNWP8eODHM2PceODLyJAwGDgEHACBgEDAJGwCBgEDAIGAGDgEHAMMuODHNWP2fJ4o4MWKN8R4ZbCNwDg4BBwAgYBAwCBgEjYFiN4UuMwS4iUkrpfDqdvj0IW7kCp5eXF88Gm3E4HCIiUpocP3tq2IgUEfEPVgAn91QaGgAAAAAASUVORK5CYII="""
 SCALE = 5
@@ -114,23 +113,12 @@ def git_with_white_inner_gap(svg: bytes) -> bytes:
 
 
 def github_reference_logo() -> Image.Image:
-    """Match the supplied icon: white circle with GitHub's official black Invertocat."""
-    logo = Image.new("RGBA", (ICON_LIMIT, ICON_LIMIT), (0, 0, 0, 0))
-    ImageDraw.Draw(logo).ellipse(
-        (0, 0, ICON_LIMIT - 1, ICON_LIMIT - 1),
-        fill="#ffffff",
-    )
-    mark_png = cairosvg.svg2png(
-        bytestring=GITHUB_OFFICIAL_MARK_SVG,
-        output_width=42,
-        output_height=42,
-    )
-    mark = Image.open(BytesIO(mark_png)).convert("RGBA")
-    logo.alpha_composite(
-        mark,
-        ((ICON_LIMIT - mark.width) // 2, (ICON_LIMIT - mark.height) // 2),
-    )
-    return logo
+    """Use the owner's supplied GitHub image directly, cropped to a clean circle."""
+    logo_path = Path("assets/github-logo-circle.png")
+    logo = Image.open(logo_path).convert("RGBA")
+    if logo.size != (32, 32):
+        raise ValueError("Unexpected supplied GitHub logo dimensions")
+    return logo.resize((ICON_LIMIT, ICON_LIMIT), Image.Resampling.LANCZOS)
 
 def darken_chest(base: Image.Image) -> Image.Image:
     """Recolor only the original chest GUI pixels; retain its geometry and font."""
