@@ -211,6 +211,20 @@ def render(out_path: Path) -> None:
             (badge_left + 2, badge_top + 2, badge_right - 2, badge_bottom - 2),
             fill=LIGHT_BADGE_FILL if name in LIGHT_BADGE_NAMES else BADGE_FILL,
         )
+        if name == "Java":
+            # Keep the Java artwork unchanged; add only a clean white circle
+            # behind it so the red/blue mark stays readable on the dark chest.
+            java_circle = 64
+            java_radius = java_circle // 2
+            draw.ellipse(
+                (
+                    center_x - java_radius,
+                    center_y - java_radius,
+                    center_x + java_radius - 1,
+                    center_y + java_radius - 1,
+                ),
+                fill="#ffffff",
+            )
         x, y = center_x - logo.width // 2, center_y - logo.height // 2
         result.alpha_composite(logo, (x, y))
         print(f"slot {index+1:02d}: {name} ({logo.width}x{logo.height})")
