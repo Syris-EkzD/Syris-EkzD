@@ -2,8 +2,10 @@
 
 The GUI background and the title's raster pixels come directly from the owner's
 provided vanilla chest texture and supplied MinecraftStandard typeface.
-The embedded PNG is exactly that precomposed 176x84 crop, with a 3x9 chest grid.
-Each logo is rasterized from a pinned vector source; no brand marks are redrawn.
+The embedded PNG is that precomposed 176x84 crop, with a 3x9 chest grid.
+Its original layout and font pixels are palette-shifted to the supplied dark-mode
+reference. C uses the official C++ vector without its ++ glyphs; all other logos
+retain their pinned original vector artwork and colors.
 """
 from __future__ import annotations
 
@@ -11,6 +13,7 @@ import base64
 from io import BytesIO
 from pathlib import Path
 from urllib.request import Request, urlopen
+from xml.etree import ElementTree
 
 import cairosvg
 from PIL import Image, ImageDraw
@@ -54,8 +57,10 @@ CHEST_3_ROW_PNG = """iVBORw0KGgoAAAANSUhEUgAAALAAAABUCAYAAAAiYr3KAAACgUlEQVR42u3
 SCALE = 5
 ICON_LIMIT = 60  # Leave padding between the brand mark and its opaque slot backing.
 BADGE_SIZE = 72  # Fits within each vanilla 18-pixel slot (90px at 5x).
-BADGE_OUTLINE = "#bcbcb8"
-BADGE_FILL = "#f5f5f2"  # Solid, high-contrast backing for dark and colored logos.
+BADGE_OUTLINE = "#626262"
+BADGE_FILL = "#454545"  # Muted charcoal to match the dark chest without hiding branding.
+LIGHT_BADGE_FILL = "#eeeeee"  # Only for logos whose original artwork is nearly black.
+LIGHT_BADGE_NAMES = frozenset({"Next.js", "Express.js", "GitHub"})
 
 
 def fetch_svg(path: str) -> bytes:
@@ -66,6 +71,40 @@ def fetch_svg(path: str) -> bytes:
     if len(svg) > 500_000 or b"<svg" not in svg[:2048]:
         raise ValueError(f"Expected an SVG vector logo: {path}")
     return svg
+
+
+def c_with_cpp_shield(svg: bytes) -> bytes:
+    """Use the pinned C++ logo's actual blue shield and white C, minus two pluses."""
+    root = ElementTree.fromstring(svg)
+    white_paths = [
+        node for node in root.iter()
+        if node.tag.rsplit("}", 1)[-1] == "path" and node.get("fill") == "#fff"
+    ]
+    if len(white_paths) != 1 or "M92.88" not in white_paths[0].get("d", ""):
+        raise ValueError("The pinned C++ icon changed; cannot safely remove its ++")
+    white_paths[0].set("d", white_paths[0].get("d").split("M92.88", 1)[0])
+    return ElementTree.tostring(root, encoding="utf-8")
+
+
+def darken_chest(base: Image.Image) -> Image.Image:
+    """Recolor only the original chest GUI pixels; retain its geometry and font."""
+    palette = {
+        0: 11, 55: 20, 85: 38, 139: 52, 198: 83, 255: 107,
+        64: 245, 66: 245, 68: 245, 194: 82, 196: 82,
+    }
+    pixels = []
+    for y in range(base.height):
+        for x in range(base.width):
+            red, green, blue, alpha = base.getpixel((x, y))
+            if alpha and not (red == green == blue and red in palette):
+                raise ValueError("Original chest palette changed; refusing to recolor")
+            shade = palette.get(red, red)
+            if y >= 15 and red in (64, 66, 68):
+                shade = 83  # Bright header lettering only; not the slot grid.
+            pixels.append((shade, shade, shade, alpha))
+    dark = Image.new("RGBA", base.size)
+    dark.putdata(pixels)
+    return dark
 
 
 def vector_logo(svg: bytes) -> Image.Image:
@@ -87,17 +126,22 @@ def render(out_path: Path) -> None:
     base = Image.open(BytesIO(base64.b64decode(CHEST_3_ROW_PNG))).convert("RGBA")
     if base.size != (176, 84):
         raise ValueError("Unexpected chest GUI crop dimensions")
-    result = base.resize((176 * SCALE, 84 * SCALE), Image.Resampling.NEAREST)
+    result = darken_chest(base).resize((176 * SCALE, 84 * SCALE), Image.Resampling.NEAREST)
     for index, (name, source) in enumerate(ICONS):
-        logo = vector_logo(fetch_svg(source))
+        # C and C++ now share the identical blue C++ shield and C glyph.
+        # Remove only the two ++ marks from C; do not fabricate a replacement.
+        svg = fetch_svg("cplusplus/cplusplus-original.svg" if name == "C" else source)
+        if name == "C":
+            svg = c_with_cpp_shield(svg)
+        logo = vector_logo(svg)
         row, column = divmod(index, 9)
         # Vanilla GUI chest grid: first slot starts at x=7, y=17,
         # with an exact 18-pixel stride on both axes.
         center_x = (7 + column * 18) * SCALE + (18 * SCALE) // 2
         center_y = (17 + row * 18) * SCALE + (18 * SCALE) // 2
-        # Draw only inside the original chest slot; preserve vanilla slot borders,
-        # chest panel, title and all other UI pixels. A solid neutral backing keeps
-        # black, gray and low-opacity logo details recognizable at README scale.
+        # Draw only inside each slot and retain the vanilla borders/geometry.
+        # Keep dark badges for most brands; use a light badge for near-black marks
+        # rather than altering their official vector fill (particularly GitHub).
         badge_left = center_x - BADGE_SIZE // 2
         badge_top = center_y - BADGE_SIZE // 2
         badge_right = badge_left + BADGE_SIZE - 1
@@ -109,7 +153,7 @@ def render(out_path: Path) -> None:
         )
         draw.rectangle(
             (badge_left + 2, badge_top + 2, badge_right - 2, badge_bottom - 2),
-            fill=BADGE_FILL,
+            fill=LIGHT_BADGE_FILL if name in LIGHT_BADGE_NAMES else BADGE_FILL,
         )
         x, y = center_x - logo.width // 2, center_y - logo.height // 2
         result.alpha_composite(logo, (x, y))
