@@ -60,7 +60,7 @@ BADGE_SIZE = 72  # Fits within each vanilla 18-pixel slot (90px at 5x).
 BADGE_OUTLINE = "#626262"
 BADGE_FILL = "#454545"  # Muted charcoal to match the dark chest without hiding branding.
 LIGHT_BADGE_FILL = "#eeeeee"  # Only for logos whose original artwork is nearly black.
-LIGHT_BADGE_NAMES = frozenset({"Next.js", "Express.js", "GitHub"})
+LIGHT_BADGE_NAMES = frozenset({"Express.js"})
 
 
 def fetch_svg(path: str) -> bytes:
@@ -83,6 +83,31 @@ def c_with_cpp_shield(svg: bytes) -> bytes:
     if len(white_paths) != 1 or "M92.88" not in white_paths[0].get("d", ""):
         raise ValueError("The pinned C++ icon changed; cannot safely remove its ++")
     white_paths[0].set("d", white_paths[0].get("d").split("M92.88", 1)[0])
+    return ElementTree.tostring(root, encoding="utf-8")
+
+
+def git_with_white_inner_gap(svg: bytes) -> bytes:
+    """Fill only the Git branch cutout, retaining the original orange SVG mark.
+
+    The white diamond is inset beneath the unmodified official Git path, so
+    white appears solely in that path's transparent internal branch and nodes.
+    It never replaces the orange shape or changes the outside slot backing.
+    """
+    root = ElementTree.fromstring(svg)
+    original_paths = [
+        node for node in root.iter()
+        if node.tag.rsplit("}", 1)[-1] == "path"
+    ]
+    if len(original_paths) != 1 or original_paths[0].get("fill", "").lower() != "#f34f29":
+        raise ValueError("Pinned Git SVG changed; cannot safely fill the gap")
+    namespace = "{http://www.w3.org/2000/svg}"
+    root.insert(
+        0,
+        ElementTree.Element(
+            f"{namespace}path",
+            {"d": "M64 4 L124 64 L64 124 L4 64 Z", "fill": "#fff"},
+        ),
+    )
     return ElementTree.tostring(root, encoding="utf-8")
 
 
@@ -133,6 +158,8 @@ def render(out_path: Path) -> None:
         svg = fetch_svg("cplusplus/cplusplus-original.svg" if name == "C" else source)
         if name == "C":
             svg = c_with_cpp_shield(svg)
+        elif name == "Git":
+            svg = git_with_white_inner_gap(svg)
         logo = vector_logo(svg)
         row, column = divmod(index, 9)
         # Vanilla GUI chest grid: first slot starts at x=7, y=17,
@@ -140,8 +167,8 @@ def render(out_path: Path) -> None:
         center_x = (7 + column * 18) * SCALE + (18 * SCALE) // 2
         center_y = (17 + row * 18) * SCALE + (18 * SCALE) // 2
         # Draw only inside each slot and retain the vanilla borders/geometry.
-        # Keep dark badges for most brands; use a light badge for near-black marks
-        # rather than altering their official vector fill (particularly GitHub).
+        # Keep the default dark backing; only Express.js retains its light badge.
+        # GitHub uses its original black mark against a white circular surround.
         badge_left = center_x - BADGE_SIZE // 2
         badge_top = center_y - BADGE_SIZE // 2
         badge_right = badge_left + BADGE_SIZE - 1
@@ -155,6 +182,16 @@ def render(out_path: Path) -> None:
             (badge_left + 2, badge_top + 2, badge_right - 2, badge_bottom - 2),
             fill=LIGHT_BADGE_FILL if name in LIGHT_BADGE_NAMES else BADGE_FILL,
         )
+        if name == "GitHub":
+            # The white area belongs to GitHub’s circular logo surround only,
+            # not to the square inventory slot. Preserve the black SVG pixels.
+            circle_size = 68
+            radius = circle_size // 2
+            draw.ellipse(
+                (center_x - radius, center_y - radius,
+                 center_x + radius - 1, center_y + radius - 1),
+                fill="#ffffff",
+            )
         x, y = center_x - logo.width // 2, center_y - logo.height // 2
         result.alpha_composite(logo, (x, y))
         print(f"slot {index+1:02d}: {name} ({logo.width}x{logo.height})")
