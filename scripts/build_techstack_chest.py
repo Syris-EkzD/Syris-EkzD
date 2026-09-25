@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 import cairosvg
-from PIL import Image
+from PIL import Image, ImageDraw
 
 # Pinned upstream to keep all 27 vector logos reproducible between builds.
 DEVICON_COMMIT = "7330accdbc47e2dc0c19789a48533c4a3c50fe58"
@@ -52,7 +52,10 @@ ICONS: tuple[tuple[str, str], ...] = (
 # "TechStack" label rasterized once using the supplied MinecraftStandard.otf.
 CHEST_3_ROW_PNG = """iVBORw0KGgoAAAANSUhEUgAAALAAAABUCAYAAAAiYr3KAAACgUlEQVR42u3bUWqjUBSA4XMlq2q34UYKeSoiItLXLiRZR7orM09mrjYamlDQ5vtgoBjn3CH8NSaZm+K/c8A2pOkP5/NZv2yk3pQu7RbiZWtOp9PljiFNA/76+vIMsWqfn58REXE4HKLIHxAvW1N4Ctiy3a0TqqoaF18U0bbtjxeqqiq6rru5Rj6/ruu71rq1Hk8UcNu20fd9NE1zd0wREX3fz4Y2N3fu7zyyHk8WcFEUV3/Or5zTq/Lc8b7vo67r0fG2baOu62/nV1V1OT8/9pP1hjUf/eVjwwEvvUQPUeShzR2PiEtI+fE8uvz4EHbTNKNXg5+sN8Sbz0DAo1iuHR+u1EVRjOJpmubyWP4Sn1/Zh+P5jME96+Vr4lOIb/fH+Z9rceVBXQtp+ibx1hW/bdvZK+p0vekVHFfgi4+Pj3h/fx/F2XXd6PhwbEnXdbPnD7cIXdeNzst/GZbW2+120TSNTyT+sNE3cb7IYAtmv4mDp7oHBgHDb72Je3t7e3iBsizjeDyaY87dc15fX+//FKIsy4f+Afv9Po7Hoznm3D1n6cMFtxC4BwYBg4ARMAgYBAwCRsAgYBAwCBgBg4BBwDy5xf8PXJZl7Pf7hxcxx5zfsrgr2Y4Mc9YwZ7ojI9+VbEeGOaufY0cG3sSBgEHAIGAEDAIGASNgEDAIGASMgEHAIGCYZUeGOaufs8SODHNWP8eODHM2PceODLyJAwGDgEHACBgEDAJGwCBgEDAIGAGDgEHAMMuODHNWP2fJ4o4MWKN8R4ZbCNwDg4BBwAgYBAwCBgEjYFiN4UuMwS4iUkrpfDqdvj0IW7kCp5eXF88Gm3E4HCIiUpocP3tq2IgUEfEPVgAn91QaGgAAAAAASUVORK5CYII="""
 SCALE = 5
-ICON_LIMIT = 68  # Fits inside the unmodified 18-pixel slots at 5x.
+ICON_LIMIT = 60  # Leave padding between the brand mark and its opaque slot backing.
+BADGE_SIZE = 72  # Fits within each vanilla 18-pixel slot (90px at 5x).
+BADGE_OUTLINE = "#bcbcb8"
+BADGE_FILL = "#f5f5f2"  # Solid, high-contrast backing for dark and colored logos.
 
 
 def fetch_svg(path: str) -> bytes:
@@ -92,6 +95,22 @@ def render(out_path: Path) -> None:
         # with an exact 18-pixel stride on both axes.
         center_x = (7 + column * 18) * SCALE + (18 * SCALE) // 2
         center_y = (17 + row * 18) * SCALE + (18 * SCALE) // 2
+        # Draw only inside the original chest slot; preserve vanilla slot borders,
+        # chest panel, title and all other UI pixels. A solid neutral backing keeps
+        # black, gray and low-opacity logo details recognizable at README scale.
+        badge_left = center_x - BADGE_SIZE // 2
+        badge_top = center_y - BADGE_SIZE // 2
+        badge_right = badge_left + BADGE_SIZE - 1
+        badge_bottom = badge_top + BADGE_SIZE - 1
+        draw = ImageDraw.Draw(result)
+        draw.rectangle(
+            (badge_left, badge_top, badge_right, badge_bottom),
+            fill=BADGE_OUTLINE,
+        )
+        draw.rectangle(
+            (badge_left + 2, badge_top + 2, badge_right - 2, badge_bottom - 2),
+            fill=BADGE_FILL,
+        )
         x, y = center_x - logo.width // 2, center_y - logo.height // 2
         result.alpha_composite(logo, (x, y))
         print(f"slot {index+1:02d}: {name} ({logo.width}x{logo.height})")
