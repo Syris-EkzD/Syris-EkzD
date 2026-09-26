@@ -8,7 +8,9 @@ Mapping:
 - the animated contribution orb travels to the most recent active day.
 
 The leaf cloud intentionally stays around the top of the trunk instead of
-covering the month branches.
+covering the month branches. The trunk, paired limbs, curled tips, and scrolling
+roots are stylized after the heraldic White Tree of Gondor while the data
+mapping remains original.
 """
 from __future__ import annotations
 
@@ -37,18 +39,20 @@ MONTH_NAMES = ("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "O
 
 # start, quadratic control, end. Jan-Jun grow left; Jul-Dec grow right.
 MONTH_BRANCHES = {
-    1: ((620.0, 470.0), (470.0, 490.0), (250.0, 505.0)),
-    2: ((620.0, 435.0), (450.0, 420.0), (190.0, 455.0)),
-    3: ((620.0, 400.0), (440.0, 385.0), (150.0, 395.0)),
-    4: ((620.0, 365.0), (440.0, 335.0), (170.0, 330.0)),
-    5: ((620.0, 330.0), (455.0, 290.0), (225.0, 270.0)),
-    6: ((620.0, 295.0), (485.0, 245.0), (330.0, 220.0)),
-    7: ((620.0, 295.0), (755.0, 245.0), (910.0, 220.0)),
-    8: ((620.0, 330.0), (785.0, 290.0), (1015.0, 270.0)),
-    9: ((620.0, 365.0), (800.0, 335.0), (1070.0, 330.0)),
-    10: ((620.0, 400.0), (800.0, 385.0), (1090.0, 395.0)),
-    11: ((620.0, 435.0), (790.0, 420.0), (1050.0, 455.0)),
-    12: ((620.0, 470.0), (770.0, 490.0), (990.0, 505.0)),
+    # Six mirrored branch pairs create the heraldic, upward-fanning silhouette
+    # of Gondor's White Tree while keeping months as the data-bearing limbs.
+    1: ((620.0, 470.0), (500.0, 500.0), (360.0, 455.0)),
+    2: ((620.0, 435.0), (480.0, 455.0), (315.0, 405.0)),
+    3: ((620.0, 400.0), (470.0, 405.0), (300.0, 345.0)),
+    4: ((620.0, 360.0), (475.0, 345.0), (335.0, 285.0)),
+    5: ((620.0, 325.0), (505.0, 295.0), (400.0, 235.0)),
+    6: ((620.0, 290.0), (555.0, 255.0), (500.0, 205.0)),
+    7: ((620.0, 470.0), (740.0, 500.0), (880.0, 455.0)),
+    8: ((620.0, 435.0), (760.0, 455.0), (925.0, 405.0)),
+    9: ((620.0, 400.0), (770.0, 405.0), (940.0, 345.0)),
+    10: ((620.0, 360.0), (765.0, 345.0), (905.0, 285.0)),
+    11: ((620.0, 325.0), (735.0, 295.0), (840.0, 235.0)),
+    12: ((620.0, 290.0), (685.0, 255.0), (740.0, 205.0)),
 }
 
 
@@ -173,6 +177,21 @@ def organic_path(
     return " ".join(commands)
 
 
+def branch_flourish(month: int, end: tuple[float, float]) -> str:
+    """Small heraldic curl at each month-branch tip."""
+    x, y = end
+    side = -1 if month <= 6 else 1
+    outer_x = x + side * 28
+    lift_y = y - 34
+    curl_x = x + side * 8
+    return (
+        f"M{x:.1f} {y:.1f} "
+        f"C{x + side * 13:.1f} {y - 5:.1f} {outer_x:.1f} {y - 18:.1f} {outer_x:.1f} {lift_y:.1f} "
+        f"C{outer_x:.1f} {y - 47:.1f} {curl_x:.1f} {y - 48:.1f} {curl_x:.1f} {y - 34:.1f} "
+        f"C{curl_x:.1f} {y - 24:.1f} {x + side * 17:.1f} {y - 23:.1f} {x + side * 19:.1f} {y - 29:.1f}"
+    )
+
+
 def intensity_class(count: int) -> str:
     if count >= 25:
         return "bud5"
@@ -250,6 +269,9 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
         side = -1 if month <= 6 else 1
         branch_parts.append(
             f'<path d="{organic_path(month, start, control, end)}" class="month-branch"/>'
+        )
+        branch_parts.append(
+            f'<path d="{branch_flourish(month, end)}" class="branch-flourish"/>'
         )
 
         label_x = end[0] + (-12 if side < 0 else 12)
@@ -347,7 +369,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
   <title id="title">WhiteTree Activity Core</title>
-  <desc id="desc">A long WhiteTree trunk leads into a compact leaf cloud showing the rolling 365-day contribution total. Each month is a major branch, each day is a twig, and an animated contribution orb travels to the most recent active day.</desc>
+  <desc id="desc">A Gondor-inspired White Tree visualization with a narrow heraldic trunk, paired curling month branches, ornamental roots, a white contribution crown, day twigs, and an animated orb traveling to the latest active day.</desc>
   <defs>
     <style><![CDATA[
       .mono {{ font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }}
@@ -362,7 +384,9 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
       .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
       .canopy-value {{ font-size: 43px; font-weight: 900; }}
       .tiny {{ font-size: 9px; letter-spacing: .6px; }}
-      .month-branch {{ fill: none; stroke: #d9e0e8; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }}
+      .month-branch {{ fill: none; stroke: #f1f5f9; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }}
+      .branch-flourish {{ fill: none; stroke: #f1f5f9; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; opacity: .95; }}
+      .gondor-root {{ fill: none; stroke: #eef3f8; stroke-width: 3.1; stroke-linecap: round; stroke-linejoin: round; opacity: .92; }}
       .day-twig {{ fill: none; stroke: #aeb9c7; stroke-width: 1.25; stroke-linecap: round; opacity: .9; }}
       .day-twig.inactive {{ stroke: #445061; opacity: .43; }}
       .bud0 {{ fill: #303947; opacity: .75; }}
@@ -384,9 +408,11 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
   <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
   <text x="42" y="75" class="mono sub" fill="#718096">MONTH → BRANCH   DAY → TWIG   ORB → LATEST CONTRIBUTION</text>
 
-  <!-- one long trunk -->
-  <path d="M620 580 C616 520 620 462 620 405 C620 340 620 276 620 205"
-        fill="none" stroke="url(#trunk)" stroke-width="22" stroke-linecap="round"/>
+  <!-- heraldic White Tree trunk: pale outer line with a dark hollow center -->
+  <path d="M620 580 C614 520 618 463 620 405 C620 342 619 278 620 205"
+        fill="none" stroke="#f3f7fa" stroke-width="15" stroke-linecap="round"/>
+  <path d="M620 580 C614 520 618 463 620 405 C620 342 619 278 620 205"
+        fill="none" stroke="#11151d" stroke-width="6" stroke-linecap="round"/>
 
   <!-- compact leaf cloud: only caps the trunk -->
   <g opacity=".95">
@@ -402,6 +428,16 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
   <g class="mono" text-anchor="middle">
     <text x="620" y="156" class="canopy-label" fill="#11151d">TOTAL CONTRIBUTIONS</text>
     <text x="620" y="204" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
+  </g>
+
+  <!-- Gondor-inspired ornamental root scrollwork -->
+  <g class="gondor-root">
+    <path d="M620 575 C592 582 565 594 548 610 C535 623 541 637 555 636 C568 635 575 622 566 614 C557 606 542 613 533 623"/>
+    <path d="M620 575 C648 582 675 594 692 610 C705 623 699 637 685 636 C672 635 665 622 674 614 C683 606 698 613 707 623"/>
+    <path d="M610 579 C585 588 561 605 552 624 C547 636 557 644 567 640"/>
+    <path d="M630 579 C655 588 679 605 688 624 C693 636 683 644 673 640"/>
+    <path d="M604 584 C590 599 586 614 594 626 C601 636 613 633 612 622 C611 614 604 611 598 616"/>
+    <path d="M636 584 C650 599 654 614 646 626 C639 636 627 633 628 622 C629 614 636 611 642 616"/>
   </g>
 
   <!-- Mind / Work roots -->
