@@ -42,7 +42,7 @@
 
   <!-- compact leaf cloud: only caps the trunk -->
   <g opacity=".95">
-    <ellipse cx="620" cy="165" rx="116" ry="62" fill="#183329" stroke="#315746" stroke-width="1.4"/><ellipse cx="552" cy="174" rx="72" ry="48" fill="#183329" stroke="#315746" stroke-width="1.4"/><ellipse cx="688" cy="174" rx="72" ry="48" fill="#183329" stroke="#315746" stroke-width="1.4"/><ellipse cx="620" cy="124" rx="76" ry="45" fill="#183329" stroke="#315746" stroke-width="1.4"/><ellipse cx="620" cy="202" rx="92" ry="42" fill="#183329" stroke="#315746" stroke-width="1.4"/>
+    <ellipse cx="620" cy="165" rx="116" ry="62" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="552" cy="174" rx="72" ry="48" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="688" cy="174" rx="72" ry="48" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="620" cy="124" rx="76" ry="45" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="620" cy="202" rx="92" ry="42" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/>
   </g>
 
   <!-- month branches stay outside the leaf cloud -->
@@ -52,9 +52,9 @@
 
   <!-- total contributions highlighted inside the trunk canopy -->
   <g class="mono" text-anchor="middle">
-    <text x="620" y="154" class="canopy-label" fill="#a1bfae">TOTAL CONTRIBUTIONS</text>
-    <text x="620" y="195" class="canopy-value" fill="#f3f7fa">534</text>
-    <text x="620" y="214" class="tiny" fill="#799589">ROLLING 365 DAYS</text>
+    <text x="620" y="154" class="canopy-label" fill="#44505e">TOTAL CONTRIBUTIONS</text>
+    <text x="620" y="195" class="canopy-value" fill="#11151d">534</text>
+    <text x="620" y="214" class="tiny" fill="#5f6c7a">ROLLING 365 DAYS</text>
   </g>
 
   <!-- Mind / Work roots -->
@@ -73,29 +73,29 @@
 
   <!-- contribution orb: trunk -> latest month branch -> latest active day -->
   <circle r="6" fill="#ffffff" filter="url(#glow)">
-    <animateMotion path="M620 580 C620 520 620 460 620 365.0 365.0 C625.2 364.3 640.7 361.6 651.4 360.6 C662.1 359.7 673.3 360.0 684.5 359.4 C695.6 358.8 707.1 358.9 718.6 357.1 C730.0 355.4 741.5 351.8 753.2 348.8 C765.0 345.7 776.9 341.2 789.2 339.0 C801.5 336.8 814.2 336.0 827.1 335.4 C840.0 334.8 853.2 335.8 866.5 335.4 C879.8 335.0 893.3 333.9 907.0 333.1 C920.7 332.3 941.8 331.1 948.8 330.7 L948.4 309.7" dur="5.2s" repeatCount="indefinite"/>
+    <animateMotion path="M620 580 C620 520 620 460 620 365.0 C625.2 364.3 640.7 361.6 651.4 360.6 C662.1 359.7 673.3 360.0 684.5 359.4 C695.6 358.8 707.1 358.9 718.6 357.1 C730.0 355.4 741.5 351.8 753.2 348.8 C765.0 345.7 776.9 341.2 789.2 339.0 C801.5 336.8 814.2 336.0 827.1 335.4 C840.0 334.8 853.2 335.8 866.5 335.4 C879.8 335.0 893.3 333.9 907.0 333.1 C920.7 332.3 941.8 331.1 948.8 330.7 L949.1 351.7" dur="5.2s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0;.95;.95;0" keyTimes="0;.08;.9;1" dur="5.2s" repeatCount="indefinite"/>
   </circle>
-  <circle cx="948.4" cy="309.7" r="10" fill="none" stroke="#f3f7fa" opacity=".28">
+  <circle cx="949.1" cy="351.7" r="10" fill="none" stroke="#f3f7fa" opacity=".28">
     <animate attributeName="r" values="8;14;8" dur="2.2s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values=".15;.5;.15" dur="2.2s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- deliberately small footer -->
-  <rect x="28" y="665" width="1184" height="62" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
+  <!-- focused contribution statistics -->
+  <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
   <g class="mono">
-    <g transform="translate(52 688)">
-      <text class="stat-label" fill="#6f7e91">PERIOD</text>
-      <text y="23" class="stat-value" fill="#f1f5f9">365 DAYS</text>
+    <g transform="translate(72 675)">
+      <text class="stat-label" fill="#7f8c9d">CURRENT STREAK</text>
+      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">6 DAYS</text>
     </g>
-    <g transform="translate(385 688)">
-      <text class="stat-label" fill="#6f7e91">LATEST CONTRIBUTION</text>
-      <text y="23" class="stat-value" fill="#f1f5f9">Sep 26, 2026</text>
+    <g transform="translate(455 675)">
+      <text class="stat-label" fill="#7f8c9d">LONGEST STREAK</text>
+      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">8 DAYS</text>
     </g>
-    <g transform="translate(820 688)">
-      <text class="stat-label" fill="#6f7e91">LATEST DAY COUNT</text>
-      <text y="23" class="stat-value" fill="#f1f5f9">46</text>
+    <g transform="translate(835 675)">
+      <text class="stat-label" fill="#7f8c9d">MOST CONTRIBUTIONS IN A DAY</text>
+      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">86</text>
+      <text x="72" y="35" class="tiny" fill="#93a0b0">Sep 17 2026</text>
     </g>
-    <text x="1178" y="713" text-anchor="end" class="tiny" fill="#59677a">2025-09-27 → 2026-09-26</text>
   </g>
 </svg>

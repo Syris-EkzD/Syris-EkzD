@@ -201,15 +201,40 @@ def bud_radius(count: int) -> float:
     return 1.8
 
 
+def current_streak(calendar: dict[date, int]) -> int:
+    """Count consecutive active days ending on the latest calendar day."""
+    streak = 0
+    cursor = max(calendar)
+    while calendar.get(cursor, 0) > 0:
+        streak += 1
+        cursor -= timedelta(days=1)
+    return streak
+
+
+def longest_streak(calendar: dict[date, int]) -> int:
+    """Return the longest consecutive run of active contribution days."""
+    longest = 0
+    running = 0
+    for day in sorted(calendar):
+        if calendar[day] > 0:
+            running += 1
+            longest = max(longest, running)
+        else:
+            running = 0
+    return longest
+
+
 def render(calendar: dict[date, int], out_path: Path) -> None:
     if not calendar:
         raise ValueError("Cannot render an empty contribution calendar")
 
     total_contributions = sum(calendar.values())
     latest_active = max((day for day, count in calendar.items() if count > 0), default=max(calendar))
-    latest_count = calendar.get(latest_active, 0)
     first_day = min(calendar)
     last_day = max(calendar)
+    current_streak_days = current_streak(calendar)
+    longest_streak_days = longest_streak(calendar)
+    peak_day, peak_count = max(calendar.items(), key=lambda item: item[1])
 
     branch_parts: list[str] = []
     twig_parts: list[str] = []
@@ -292,7 +317,8 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
     )
     # Continue from the trunk into the exact same organic month path used by
     # the visible branch, then finish on the latest day's twig.
-    branch_motion_suffix = branch_motion.split(" ", 1)[1] if " " in branch_motion else ""
+    first_curve = branch_motion.find("C")
+    branch_motion_suffix = branch_motion[first_curve:] if first_curve >= 0 else ""
     orb_path = (
         f"M620 580 C620 520 620 460 620 {latest_start[1]:.1f} "
         f"{branch_motion_suffix} "
@@ -351,7 +377,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
   <!-- compact leaf cloud: only caps the trunk -->
   <g opacity=".95">
-    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#183329" stroke="#315746" stroke-width="1.4"/>' for cx,cy,rx,ry in canopy_shapes)}
+    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/>' for cx,cy,rx,ry in canopy_shapes)}
   </g>
 
   <!-- month branches stay outside the leaf cloud -->
@@ -361,9 +387,9 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
   <!-- total contributions highlighted inside the trunk canopy -->
   <g class="mono" text-anchor="middle">
-    <text x="620" y="154" class="canopy-label" fill="#a1bfae">TOTAL CONTRIBUTIONS</text>
-    <text x="620" y="195" class="canopy-value" fill="#f3f7fa">{total_contributions:,}</text>
-    <text x="620" y="214" class="tiny" fill="#799589">ROLLING 365 DAYS</text>
+    <text x="620" y="154" class="canopy-label" fill="#44505e">TOTAL CONTRIBUTIONS</text>
+    <text x="620" y="195" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
+    <text x="620" y="214" class="tiny" fill="#5f6c7a">ROLLING 365 DAYS</text>
   </g>
 
   <!-- Mind / Work roots -->
@@ -390,22 +416,22 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
     <animate attributeName="opacity" values=".15;.5;.15" dur="2.2s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- deliberately small footer -->
-  <rect x="28" y="665" width="1184" height="62" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
+  <!-- focused contribution statistics -->
+  <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
   <g class="mono">
-    <g transform="translate(52 688)">
-      <text class="stat-label" fill="#6f7e91">PERIOD</text>
-      <text y="23" class="stat-value" fill="#f1f5f9">365 DAYS</text>
+    <g transform="translate(72 675)">
+      <text class="stat-label" fill="#7f8c9d">CURRENT STREAK</text>
+      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
     </g>
-    <g transform="translate(385 688)">
-      <text class="stat-label" fill="#6f7e91">LATEST CONTRIBUTION</text>
-      <text y="23" class="stat-value" fill="#f1f5f9">{latest_active:%b %d, %Y}</text>
+    <g transform="translate(455 675)">
+      <text class="stat-label" fill="#7f8c9d">LONGEST STREAK</text>
+      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
     </g>
-    <g transform="translate(820 688)">
-      <text class="stat-label" fill="#6f7e91">LATEST DAY COUNT</text>
-      <text y="23" class="stat-value" fill="#f1f5f9">{latest_count}</text>
+    <g transform="translate(835 675)">
+      <text class="stat-label" fill="#7f8c9d">MOST CONTRIBUTIONS IN A DAY</text>
+      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
+      <text x="72" y="35" class="tiny" fill="#93a0b0">{peak_day:%b %d, %Y}</text>
     </g>
-    <text x="1178" y="713" text-anchor="end" class="tiny" fill="#59677a">{first_day:%Y-%m-%d} → {last_day:%Y-%m-%d}</text>
   </g>
 </svg>'''
 
