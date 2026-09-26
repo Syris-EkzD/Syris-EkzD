@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/commit-city.png" width="100%" alt="Commit City: a minimal isometric 365-day GitHub contribution map. Each day is one plot; empty lots mark inactive days, and taller plain buildings indicate more contributions. The activity overview appears in the header above the city." />
+  <img src="./assets/whitetree-activity.svg" width="100%" alt="WhiteTree Activity Core concept: a circuit-tree visualization where Mind and Work form the roots, contribution intensity appears as illuminated branch nodes, and an animated pulse travels through the activity tree." />
 </div>
 
 ---
