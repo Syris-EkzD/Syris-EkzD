@@ -1,18 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="620" viewBox="0 0 1240 620" role="img" aria-labelledby="title desc">
-  <title id="title">WhiteTree Activity Core concept</title>
-  <desc id="desc">A dark circuit-tree visualization for GitHub activity. Mind and Work form the roots, contribution nodes illuminate the branches, and a pulse travels through the tree.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="700" viewBox="0 0 1240 700" role="img" aria-labelledby="title desc">
+  <title id="title">WhiteTree Activity Core</title>
+  <desc id="desc">A polished WhiteTree contribution visualization. Mind and Work feed the roots of a connected activity tree; contribution intensity appears as branch nodes, while statistics are separated into a clean bottom panel.</desc>
 
   <defs>
     <style><![CDATA[
       .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }
       .title { font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }
-      .sub { font-size: 13px; letter-spacing: 2.4px; }
-      .label { font-size: 14px; font-weight: 700; letter-spacing: 1.2px; }
-      .tiny { font-size: 11px; letter-spacing: .9px; }
-      .month { font-size: 12px; font-weight: 700; }
+      .sub { font-size: 12px; letter-spacing: 2.2px; }
+      .month { font-size: 11px; font-weight: 700; letter-spacing: .8px; }
+      .root-title { font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }
+      .root-sub { font-size: 10px; letter-spacing: .3px; }
+      .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; }
+      .stat-value { font-size: 22px; font-weight: 800; }
+      .tiny { font-size: 10px; letter-spacing: .7px; }
       .branch { fill: none; stroke: #d8dee9; stroke-linecap: round; stroke-linejoin: round; }
-      .trace { fill: none; stroke: #7f8ea3; stroke-linecap: round; stroke-linejoin: round; }
-      .node0 { fill: #2d3442; stroke: #566173; stroke-width: 1; }
+      .twig { fill: none; stroke: #aeb8c5; stroke-linecap: round; stroke-linejoin: round; }
+      .node0 { fill: #29313d; stroke: #4d5968; stroke-width: 1; }
       .node1 { fill: #5d7288; }
       .node2 { fill: #88b7c7; }
       .node3 { fill: #b8e1d1; }
@@ -26,139 +29,147 @@
 
     <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
       <stop offset="0" stop-color="#738399"/>
-      <stop offset=".55" stop-color="#c7d0da"/>
+      <stop offset=".58" stop-color="#c7d0da"/>
       <stop offset="1" stop-color="#f7fafc"/>
     </linearGradient>
 
-    <path id="pulsePath" d="M620 554 C620 500 620 455 620 418 C620 372 612 334 607 302 C602 263 617 225 646 198 C680 166 733 149 786 138"/>
+    <path id="pulsePath" d="M620 482 C620 446 620 410 620 374 C620 337 621 300 620 264 C620 226 630 194 654 167 C687 130 737 111 792 102"/>
   </defs>
 
-  <rect width="1240" height="620" rx="18" fill="#11151d"/>
-  <rect x="10" y="10" width="1220" height="600" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
+  <!-- shell -->
+  <rect width="1240" height="700" rx="18" fill="#11151d"/>
+  <rect x="10" y="10" width="1220" height="680" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
 
   <!-- header -->
-  <text x="40" y="52" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
-  <text x="42" y="78" class="mono sub" fill="#718096">CONTRIBUTION SIGNAL MAP • CONCEPT DRAFT</text>
-  <text x="1192" y="50" text-anchor="end" class="mono tiny" fill="#718096">LIVE DATA MAPPING — NEXT PASS</text>
+  <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
+  <text x="42" y="75" class="mono sub" fill="#718096">A YEAR OF CONTRIBUTIONS, GROWN INTO ONE TREE</text>
 
-  <!-- quadrant labels -->
-  <g class="mono month" fill="#7f8ea3">
-    <text x="174" y="118">JAN—MAR</text>
-    <text x="390" y="104">APR—JUN</text>
-    <text x="770" y="104">JUL—SEP</text>
-    <text x="979" y="118">OCT—DEC</text>
+  <!-- month anchors -->
+  <g class="mono month" fill="#68778a">
+    <text x="164" y="111">JAN–MAR</text>
+    <text x="395" y="92">APR–JUN</text>
+    <text x="786" y="92">JUL–SEP</text>
+    <text x="997" y="111">OCT–DEC</text>
   </g>
 
-  <!-- faint circuit field -->
-  <g class="trace" stroke-width="1" opacity=".22">
-    <path d="M52 151 H204 V177 H254"/>
-    <path d="M1090 151 H1038 V177 H988"/>
-    <path d="M78 242 H188 V225 H260"/>
-    <path d="M1160 242 H1052 V225 H980"/>
-    <path d="M116 352 H218 V331 H297"/>
-    <path d="M1124 352 H1024 V331 H946"/>
-    <path d="M132 451 H244 V433 H344"/>
-    <path d="M1107 451 H997 V433 H895"/>
-  </g>
-
-  <!-- roots: Mind / Work -->
-  <g class="mono">
-    <rect x="95" y="518" width="210" height="52" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="119" y="541" class="label" fill="#9ccfd8">MIND</text>
-    <text x="119" y="559" class="tiny" fill="#6f7e91">notes • planning • knowledge</text>
-
-    <rect x="935" y="518" width="210" height="52" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="959" y="541" class="label" fill="#a6e3a1">WORK</text>
-    <text x="959" y="559" class="tiny" fill="#6f7e91">code • repos • shipped things</text>
-  </g>
-
-  <!-- root traces -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M305 544 C395 544 477 520 535 483 C569 462 591 440 608 412" stroke="#7ca8b8" stroke-width="5" opacity=".75"/>
-    <path d="M935 544 C847 544 764 520 705 483 C671 462 646 439 630 412" stroke="#91b98f" stroke-width="5" opacity=".75"/>
-    <path d="M305 544 C395 544 477 520 535 483 C569 462 591 440 608 412" stroke="#c4eef6" stroke-width="1.4" opacity=".8"/>
-    <path d="M935 544 C847 544 764 520 705 483 C671 462 646 439 630 412" stroke="#d9f7d6" stroke-width="1.4" opacity=".8"/>
-  </g>
-
-  <!-- central trunk -->
+  <!-- tree silhouette: one connected structure -->
   <g fill="none" stroke="url(#trunk)" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M620 496 C615 458 618 438 620 410 C622 370 612 338 607 302 C602 263 617 225 646 198" stroke-width="16"/>
-    <path d="M607 302 C568 269 542 234 536 194" stroke-width="9"/>
-    <path d="M613 340 C663 307 701 275 721 230" stroke-width="10"/>
-    <path d="M624 401 C572 382 534 352 505 317" stroke-width="8"/>
-    <path d="M622 416 C678 398 726 367 757 330" stroke-width="8"/>
+    <!-- trunk -->
+    <path d="M620 478 C618 436 620 398 620 362 C620 323 621 289 620 254 C619 218 628 190 654 165" stroke-width="17"/>
+    <!-- major limbs -->
+    <path d="M620 286 C585 257 555 222 546 183" stroke-width="10"/>
+    <path d="M654 165 C690 132 737 111 792 102" stroke-width="10"/>
+    <path d="M620 349 C568 333 525 306 490 274" stroke-width="9"/>
+    <path d="M620 360 C674 341 717 313 750 280" stroke-width="9"/>
   </g>
 
-  <!-- primary branches -->
+  <!-- clean connected branches -->
   <g class="branch">
-    <path d="M536 194 C493 165 443 143 384 138" stroke-width="7"/>
-    <path d="M536 194 C492 205 444 212 390 209" stroke-width="5"/>
-    <path d="M646 198 C686 166 735 146 792 138" stroke-width="8"/>
-    <path d="M646 198 C698 202 748 205 802 198" stroke-width="5"/>
+    <!-- upper left -->
+    <path d="M546 183 C507 151 463 133 414 128" stroke-width="7"/>
+    <path d="M546 183 C505 191 466 205 427 223" stroke-width="5"/>
+    <path d="M414 128 C367 111 321 108 273 121" stroke-width="4"/>
+    <path d="M414 128 C375 146 341 163 304 180" stroke-width="3.5"/>
+    <path d="M427 223 C385 224 346 234 308 253" stroke-width="3.5"/>
 
-    <path d="M505 317 C458 290 414 275 361 276" stroke-width="6"/>
-    <path d="M505 317 C457 329 411 339 356 340" stroke-width="5"/>
-    <path d="M757 330 C805 299 852 283 906 284" stroke-width="6"/>
-    <path d="M757 330 C809 345 855 351 911 345" stroke-width="5"/>
-
-    <path d="M384 138 C337 126 292 128 247 143" stroke-width="4"/>
-    <path d="M390 209 C338 205 293 214 250 235" stroke-width="4"/>
-    <path d="M792 138 C838 126 883 130 928 146" stroke-width="4"/>
-    <path d="M802 198 C850 197 895 208 936 229" stroke-width="4"/>
-
-    <path d="M361 276 C313 268 270 278 230 301" stroke-width="4"/>
-    <path d="M356 340 C306 340 263 353 225 379" stroke-width="4"/>
-    <path d="M906 284 C952 277 996 287 1036 310" stroke-width="4"/>
-    <path d="M911 345 C959 346 1001 361 1039 386" stroke-width="4"/>
-  </g>
-
-  <!-- branch joints -->
-  <g fill="#f1f5f9">
-    <circle cx="536" cy="194" r="5"/><circle cx="646" cy="198" r="5"/>
-    <circle cx="505" cy="317" r="5"/><circle cx="757" cy="330" r="5"/>
-    <circle cx="607" cy="302" r="5"/><circle cx="620" cy="410" r="5"/>
-  </g>
-
-  <!-- contribution nodes: sample mapping -->
-  <g>
-    <!-- Q1 -->
-    <circle cx="247" cy="143" r="5" class="node1"/><circle cx="279" cy="136" r="4" class="node0"/>
-    <circle cx="309" cy="133" r="6" class="node2"/><circle cx="340" cy="135" r="7" class="node3"/>
-    <circle cx="370" cy="137" r="4" class="node1"/>
-    <circle cx="250" cy="235" r="6" class="node2"/><circle cx="283" cy="220" r="5" class="node1"/>
-    <circle cx="320" cy="211" r="8" class="node4"/><circle cx="353" cy="209" r="6" class="node2"/>
-
-    <!-- Q2 -->
-    <circle cx="384" cy="138" r="8" class="node3"/><circle cx="418" cy="145" r="5" class="node1"/>
-    <circle cx="447" cy="154" r="7" class="node4"/><circle cx="480" cy="168" r="5" class="node2"/>
-    <circle cx="390" cy="209" r="5" class="node1"/><circle cx="425" cy="207" r="7" class="node3"/>
-    <circle cx="461" cy="202" r="6" class="node2"/><circle cx="496" cy="198" r="4" class="node0"/>
-
-    <!-- Q3 -->
-    <circle cx="792" cy="138" r="8" class="node4"/><circle cx="827" cy="134" r="6" class="node3"/>
-    <circle cx="859" cy="135" r="5" class="node2"/><circle cx="893" cy="139" r="7" class="node3"/>
-    <circle cx="928" cy="146" r="4" class="node1"/>
-    <circle cx="802" cy="198" r="5" class="node2"/><circle cx="837" cy="200" r="7" class="node4"/>
-    <circle cx="873" cy="207" r="6" class="node2"/><circle cx="909" cy="218" r="5" class="node1"/>
-
-    <!-- Q4 -->
-    <circle cx="936" cy="229" r="7" class="node3"/><circle cx="969" cy="244" r="5" class="node1"/>
-    <circle cx="1004" cy="263" r="6" class="node2"/>
-    <circle cx="1036" cy="310" r="8" class="node4"/><circle cx="1004" cy="295" r="5" class="node1"/>
-    <circle cx="1039" cy="386" r="6" class="node3"/><circle cx="1008" cy="367" r="5" class="node2"/>
-    <circle cx="975" cy="356" r="4" class="node1"/>
+    <!-- upper right -->
+    <path d="M792 102 C840 102 887 112 931 132" stroke-width="6"/>
+    <path d="M750 280 C793 249 827 217 849 184" stroke-width="6"/>
+    <path d="M849 184 C890 173 930 177 970 192" stroke-width="4"/>
+    <path d="M849 184 C826 151 808 127 792 102" stroke-width="4"/>
+    <path d="M931 132 C973 133 1012 143 1048 162" stroke-width="3.5"/>
 
     <!-- lower left -->
-    <circle cx="230" cy="301" r="6" class="node2"/><circle cx="266" cy="284" r="5" class="node1"/>
-    <circle cx="301" cy="277" r="7" class="node4"/><circle cx="333" cy="276" r="6" class="node3"/>
-    <circle cx="225" cy="379" r="5" class="node1"/><circle cx="260" cy="360" r="7" class="node3"/>
-    <circle cx="295" cy="348" r="5" class="node2"/><circle cx="327" cy="342" r="4" class="node0"/>
+    <path d="M490 274 C446 257 404 252 360 259" stroke-width="6"/>
+    <path d="M490 274 C451 306 407 329 357 342" stroke-width="5"/>
+    <path d="M360 259 C320 250 282 254 247 271" stroke-width="3.5"/>
+    <path d="M357 342 C315 342 277 352 241 374" stroke-width="3.5"/>
 
     <!-- lower right -->
-    <circle cx="906" cy="284" r="7" class="node3"/><circle cx="940" cy="284" r="5" class="node2"/>
-    <circle cx="975" cy="292" r="4" class="node1"/>
-    <circle cx="911" cy="345" r="6" class="node2"/><circle cx="944" cy="349" r="8" class="node4"/>
-    <circle cx="977" cy="359" r="5" class="node2"/>
+    <path d="M750 280 C794 293 838 296 882 291" stroke-width="5"/>
+    <path d="M750 280 C788 319 831 345 880 359" stroke-width="5"/>
+    <path d="M882 291 C922 286 962 292 998 309" stroke-width="3.5"/>
+    <path d="M880 359 C921 363 959 376 994 397" stroke-width="3.5"/>
+  </g>
+
+  <!-- small twigs to make it read as a tree, not a circuit -->
+  <g class="twig" stroke-width="2.5" opacity=".9">
+    <path d="M304 180 C279 166 255 160 231 162"/>
+    <path d="M304 180 C286 196 269 209 248 218"/>
+    <path d="M308 253 C284 242 263 239 239 242"/>
+    <path d="M273 121 C248 112 226 113 204 120"/>
+
+    <path d="M970 192 C992 181 1015 177 1037 181"/>
+    <path d="M970 192 C988 207 1006 218 1027 225"/>
+    <path d="M1048 162 C1072 158 1094 161 1113 170"/>
+    <path d="M998 309 C1024 302 1047 304 1069 315"/>
+
+    <path d="M247 271 C221 266 198 270 178 281"/>
+    <path d="M241 374 C217 373 197 379 178 390"/>
+    <path d="M994 397 C1017 401 1038 411 1055 426"/>
+    <path d="M880 359 C902 344 919 334 937 329"/>
+  </g>
+
+  <!-- contribution nodes: sample data -->
+  <g>
+    <!-- Q1 -->
+    <circle cx="204" cy="120" r="4" class="node0"/>
+    <circle cx="231" cy="162" r="5" class="node1"/>
+    <circle cx="248" cy="218" r="6" class="node2"/>
+    <circle cx="273" cy="121" r="6" class="node2"/>
+    <circle cx="304" cy="180" r="7" class="node3"/>
+    <circle cx="239" cy="242" r="4" class="node1"/>
+    <circle cx="308" cy="253" r="8" class="node4"/>
+    <circle cx="247" cy="271" r="5" class="node2"/>
+    <circle cx="178" cy="281" r="4" class="node1"/>
+    <circle cx="241" cy="374" r="6" class="node3"/>
+    <circle cx="178" cy="390" r="4" class="node1"/>
+
+    <!-- Q2 -->
+    <circle cx="414" cy="128" r="7" class="node3"/>
+    <circle cx="427" cy="223" r="5" class="node1"/>
+    <circle cx="360" cy="259" r="6" class="node2"/>
+    <circle cx="357" cy="342" r="7" class="node4"/>
+    <circle cx="490" cy="274" r="5" class="node2"/>
+    <circle cx="546" cy="183" r="6" class="node3"/>
+
+    <!-- Q3 -->
+    <circle cx="654" cy="165" r="6" class="node3"/>
+    <circle cx="792" cy="102" r="8" class="node4"/>
+    <circle cx="849" cy="184" r="6" class="node2"/>
+    <circle cx="882" cy="291" r="5" class="node2"/>
+    <circle cx="880" cy="359" r="7" class="node4"/>
+    <circle cx="937" cy="329" r="5" class="node1"/>
+
+    <!-- Q4 -->
+    <circle cx="931" cy="132" r="6" class="node3"/>
+    <circle cx="970" cy="192" r="5" class="node1"/>
+    <circle cx="1037" cy="181" r="6" class="node2"/>
+    <circle cx="1048" cy="162" r="7" class="node3"/>
+    <circle cx="1113" cy="170" r="4" class="node1"/>
+    <circle cx="998" cy="309" r="8" class="node4"/>
+    <circle cx="1069" cy="315" r="5" class="node2"/>
+    <circle cx="994" cy="397" r="6" class="node3"/>
+    <circle cx="1055" cy="426" r="4" class="node1"/>
+  </g>
+
+  <!-- roots -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M620 478 C575 475 535 486 495 503 C469 514 449 520 426 520" stroke="#7ca8b8" stroke-width="5" opacity=".9"/>
+    <path d="M620 478 C665 475 706 486 745 503 C771 514 791 520 814 520" stroke="#91b98f" stroke-width="5" opacity=".9"/>
+    <path d="M620 478 C575 475 535 486 495 503 C469 514 449 520 426 520" stroke="#c4eef6" stroke-width="1.2" opacity=".9"/>
+    <path d="M620 478 C665 475 706 486 745 503 C771 514 791 520 814 520" stroke="#d9f7d6" stroke-width="1.2" opacity=".9"/>
+  </g>
+
+  <!-- root cards, concise text that actually fits -->
+  <g class="mono">
+    <rect x="300" y="492" width="190" height="54" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="318" y="515" class="root-title" fill="#9ccfd8">MIND</text>
+    <text x="318" y="533" class="root-sub" fill="#718096">notes · plans · knowledge</text>
+
+    <rect x="750" y="492" width="190" height="54" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="768" y="515" class="root-title" fill="#a6e3a1">WORK</text>
+    <text x="768" y="533" class="root-sub" fill="#718096">code · repos · shipping</text>
   </g>
 
   <!-- active pulse -->
@@ -169,32 +180,50 @@
     <animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;.08;.92;1" dur="4.8s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- core -->
-  <g transform="translate(620 438)">
-    <circle r="33" fill="#171d27" stroke="#5e6f84" stroke-width="2"/>
-    <circle r="18" fill="none" stroke="#d8dee9" stroke-width="2" opacity=".8"/>
-    <circle r="6" fill="#f1f5f9" filter="url(#glow)">
-      <animate attributeName="r" values="5;8;5" dur="2.4s" repeatCount="indefinite"/>
+  <!-- activity core -->
+  <g transform="translate(620 455)">
+    <circle r="25" fill="#171d27" stroke="#5e6f84" stroke-width="2"/>
+    <circle r="13" fill="none" stroke="#d8dee9" stroke-width="2" opacity=".8"/>
+    <circle r="5" fill="#f1f5f9" filter="url(#glow)">
+      <animate attributeName="r" values="4;7;4" dur="2.4s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values=".7;1;.7" dur="2.4s" repeatCount="indefinite"/>
     </circle>
   </g>
 
-  <!-- labels -->
-  <g class="mono tiny" fill="#7f8ea3">
-    <text x="620" y="482" text-anchor="middle">ACTIVITY CORE</text>
-    <text x="620" y="502" text-anchor="middle" fill="#526174">each node = contribution intensity</text>
-  </g>
+  <!-- dedicated stats strip -->
+  <rect x="28" y="570" width="1184" height="96" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
+  <g class="mono">
+    <text x="52" y="593" class="tiny" fill="#667488">ACTIVITY SUMMARY</text>
 
-  <!-- legend -->
-  <g class="mono tiny">
-    <text x="40" y="603" fill="#59677a">ACTIVITY</text>
-    <circle cx="116" cy="599" r="4" class="node0"/>
-    <circle cx="139" cy="599" r="4" class="node1"/>
-    <circle cx="162" cy="599" r="5" class="node2"/>
-    <circle cx="188" cy="599" r="6" class="node3"/>
-    <circle cx="218" cy="599" r="7" class="node4"/>
-    <text x="236" y="603" fill="#59677a">LOW → HIGH</text>
+    <g transform="translate(52 608)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">TOTAL COMMITS</text>
+      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    </g>
 
-    <text x="1200" y="603" text-anchor="end" fill="#59677a">MIND + WORK → WHITETREE</text>
+    <g transform="translate(310 608)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">ACTIVE DAYS</text>
+      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    </g>
+
+    <g transform="translate(560 608)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">CURRENT STREAK</text>
+      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    </g>
+
+    <g transform="translate(830 608)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">PUBLIC REPOS</text>
+      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    </g>
+
+    <!-- legend stays out of the tree -->
+    <g transform="translate(1030 603)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">INTENSITY</text>
+      <circle cx="4" cy="28" r="4" class="node0"/>
+      <circle cx="28" cy="28" r="4" class="node1"/>
+      <circle cx="53" cy="28" r="5" class="node2"/>
+      <circle cx="80" cy="28" r="6" class="node3"/>
+      <circle cx="110" cy="28" r="7" class="node4"/>
+      <text x="0" y="49" class="tiny" fill="#59677a">LOW → HIGH</text>
+    </g>
   </g>
 </svg>
