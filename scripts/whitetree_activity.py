@@ -104,6 +104,75 @@ def qderivative(start: tuple[float, float], control: tuple[float, float], end: t
     )
 
 
+def organic_point(
+    month: int,
+    start: tuple[float, float],
+    control: tuple[float, float],
+    end: tuple[float, float],
+    t: float,
+) -> tuple[float, float]:
+    """Bend a month branch naturally without changing its overall route."""
+    x, y = qpoint(start, control, end, t)
+    dx, dy = qderivative(start, control, end, t)
+    length = math.hypot(dx, dy) or 1.0
+    nx, ny = -dy / length, dx / length
+
+    # Deterministic layered waves keep the same shape on every refresh.
+    phase = month * 0.73
+    envelope = math.sin(math.pi * t)  # zero offset where branch meets trunk/tip
+    offset = envelope * (
+        (6.0 + (month % 3) * 1.4) * math.sin(2.35 * math.pi * t + phase)
+        + 3.4 * math.sin(5.2 * math.pi * t + phase * 0.61)
+    )
+    return x + nx * offset, y + ny * offset
+
+
+def organic_derivative(
+    month: int,
+    start: tuple[float, float],
+    control: tuple[float, float],
+    end: tuple[float, float],
+    t: float,
+) -> tuple[float, float]:
+    epsilon = 0.002
+    left = max(0.0, t - epsilon)
+    right = min(1.0, t + epsilon)
+    ax, ay = organic_point(month, start, control, end, left)
+    bx, by = organic_point(month, start, control, end, right)
+    return bx - ax, by - ay
+
+
+def organic_path(
+    month: int,
+    start: tuple[float, float],
+    control: tuple[float, float],
+    end: tuple[float, float],
+    *,
+    end_t: float = 1.0,
+    steps: int = 12,
+) -> str:
+    """Return a smooth Catmull-Rom-derived SVG path through organic samples."""
+    end_t = max(0.0, min(1.0, end_t))
+    count = max(2, int(steps * end_t) + 1)
+    points = [
+        organic_point(month, start, control, end, end_t * i / (count - 1))
+        for i in range(count)
+    ]
+
+    commands = [f"M{points[0][0]:.1f} {points[0][1]:.1f}"]
+    for i in range(len(points) - 1):
+        p0 = points[i - 1] if i > 0 else points[i]
+        p1 = points[i]
+        p2 = points[i + 1]
+        p3 = points[i + 2] if i + 2 < len(points) else p2
+        c1 = (p1[0] + (p2[0] - p0[0]) / 6.0, p1[1] + (p2[1] - p0[1]) / 6.0)
+        c2 = (p2[0] - (p3[0] - p1[0]) / 6.0, p2[1] - (p3[1] - p1[1]) / 6.0)
+        commands.append(
+            f"C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} {p2[0]:.1f} {p2[1]:.1f}"
+        )
+    return " ".join(commands)
+
+
 def intensity_class(count: int) -> str:
     if count >= 25:
         return "bud5"
@@ -148,12 +217,14 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
     latest_target: tuple[float, float] | None = None
     latest_branch_point: tuple[float, float] | None = None
     latest_geometry: tuple[tuple[float, float], tuple[float, float], tuple[float, float]] | None = None
+    latest_month: int | None = None
+    latest_t: float | None = None
 
     for month in range(1, 13):
         start, control, end = MONTH_BRANCHES[month]
         side = -1 if month <= 6 else 1
         branch_parts.append(
-            f'<path d="M{start[0]:.1f} {start[1]:.1f} Q{control[0]:.1f} {control[1]:.1f} {end[0]:.1f} {end[1]:.1f}" class="month-branch"/>'
+            f'<path d="{organic_path(month, start, control, end)}" class="month-branch"/>'
         )
 
         label_x = end[0] + (-12 if side < 0 else 12)
@@ -169,8 +240,8 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
             count = calendar[day]
             t = 0.10 + 0.80 * ((day.day - 1) / 30.0)
             t = max(0.08, min(0.92, t))
-            px, py = qpoint(start, control, end, t)
-            dx, dy = qderivative(start, control, end, t)
+            px, py = organic_point(month, start, control, end, t)
+            dx, dy = organic_derivative(month, start, control, end, t)
             length = math.hypot(dx, dy) or 1.0
             nx, ny = -dy / length, dx / length
 
@@ -194,16 +265,37 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
                 latest_target = (tx, ty)
                 latest_branch_point = (px, py)
                 latest_geometry = (start, control, end)
+                latest_month = month
+                latest_t = t
 
-    if latest_target is None or latest_branch_point is None or latest_geometry is None:
+    if (
+        latest_target is None
+        or latest_branch_point is None
+        or latest_geometry is None
+        or latest_month is None
+        or latest_t is None
+    ):
         latest_target = (620.0, 365.0)
         latest_branch_point = latest_target
         latest_geometry = MONTH_BRANCHES[9]
+        latest_month = 9
+        latest_t = 0.0
 
-    latest_start, latest_control, _ = latest_geometry
+    latest_start, latest_control, latest_end = latest_geometry
+    branch_motion = organic_path(
+        latest_month,
+        latest_start,
+        latest_control,
+        latest_end,
+        end_t=latest_t,
+        steps=12,
+    )
+    # Continue from the trunk into the exact same organic month path used by
+    # the visible branch, then finish on the latest day's twig.
+    branch_motion_suffix = branch_motion.split(" ", 1)[1] if " " in branch_motion else ""
     orb_path = (
         f"M620 580 C620 520 620 460 620 {latest_start[1]:.1f} "
-        f"Q{latest_control[0]:.1f} {latest_control[1]:.1f} {latest_branch_point[0]:.1f} {latest_branch_point[1]:.1f} "
+        f"{branch_motion_suffix} "
         f"L{latest_target[0]:.1f} {latest_target[1]:.1f}"
     )
 
