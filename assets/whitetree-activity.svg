@@ -1,50 +1,103 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1240" height="760" viewBox="0 0 1240 760" role="img" aria-labelledby="title desc">
   <title id="title">WhiteTree Activity Core</title>
-  <desc id="desc">A long WhiteTree trunk grows into a bushy contribution canopy. The canopy highlights total contributions, the 2026 branch contains active-day twigs, and an animated orb travels to the latest rendered activity.</desc>
+  <desc id="desc">A long WhiteTree trunk grows into a bushy contribution canopy. Each year is a major branch, each active contribution day is a twig, the canopy highlights total contributions, and an animated orb travels to the latest active day.</desc>
   <defs>
     <style><![CDATA[
-      .mono{font-family:"DejaVu Sans Mono","Liberation Mono",Consolas,monospace}.title{font-size:30px;font-weight:800;letter-spacing:1.5px}.sub{font-size:12px;letter-spacing:2px}.year{font-size:12px;font-weight:800;letter-spacing:1px}.root-title{font-size:14px;font-weight:800;letter-spacing:1.4px}.root-sub{font-size:10px}.stat-label{font-size:10px;font-weight:700;letter-spacing:1.2px}.stat-value{font-size:22px;font-weight:800}.canopy-label{font-size:11px;font-weight:800;letter-spacing:2px}.canopy-value{font-size:50px;font-weight:900}.tiny{font-size:9px;letter-spacing:.6px}.day{fill:none;stroke:#b8c4cf;stroke-width:1.5;stroke-linecap:round}.bud1{fill:#53677b}.bud2{fill:#7393a5}.bud3{fill:#91bdc5}.bud4{fill:#b8e1d1}.bud5{fill:#f3f7fa}
+      .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }
+      .title { font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }
+      .sub { font-size: 12px; letter-spacing: 2px; }
+      .year-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; fill: #8592a3; }
+      .root-title { font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }
+      .root-sub { font-size: 10px; }
+      .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; }
+      .stat-value { font-size: 22px; font-weight: 800; }
+      .canopy-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; }
+      .canopy-value { font-size: 48px; font-weight: 900; }
+      .tiny { font-size: 9px; letter-spacing: .6px; }
+      .year-branch { fill: none; stroke: #d9e0e8; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+      .day-twig { fill: none; stroke: #aeb9c7; stroke-width: 1.35; stroke-linecap: round; opacity: .9; }
+      .bud1 { fill: #53677b; } .bud2 { fill: #7393a5; } .bud3 { fill: #91bdc5; }
+      .bud4 { fill: #b8e1d1; } .bud5 { fill: #f3f7fa; }
     ]]></style>
-    <filter id="glow" x="-220%" y="-220%" width="440%" height="440%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6e7f93"/><stop offset=".6" stop-color="#c7d0da"/><stop offset="1" stop-color="#f5f8fb"/></linearGradient>
-    <path id="orbPath" d="M620 548 C618 500 620 450 620 392 Q760 282 947 292 L961 276"/>
+    <filter id="glow" x="-220%" y="-220%" width="440%" height="440%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#6e7f93"/><stop offset=".6" stop-color="#c7d0da"/><stop offset="1" stop-color="#f5f8fb"/>
+    </linearGradient>
   </defs>
-  <rect width="1240" height="760" rx="18" fill="#11151d"/><rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
+
+  <rect width="1240" height="760" rx="18" fill="#11151d"/>
+  <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
+
   <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
   <text x="42" y="75" class="mono sub" fill="#718096">YEAR → BRANCH   ACTIVE DAY → TWIG   ORB → LATEST CONTRIBUTION</text>
 
-  <g opacity=".94">
-    <ellipse cx="620" cy="244" rx="255" ry="144" fill="#183329" stroke="#2f5748"/><ellipse cx="445" cy="238" rx="178" ry="116" fill="#183329" stroke="#2f5748"/>
-    <ellipse cx="795" cy="235" rx="183" ry="118" fill="#183329" stroke="#2f5748"/><ellipse cx="326" cy="272" rx="135" ry="92" fill="#183329" stroke="#2f5748"/>
-    <ellipse cx="916" cy="268" rx="140" ry="95" fill="#183329" stroke="#2f5748"/><ellipse cx="512" cy="165" rx="145" ry="96" fill="#183329" stroke="#2f5748"/>
-    <ellipse cx="715" cy="165" rx="145" ry="96" fill="#183329" stroke="#2f5748"/><ellipse cx="418" cy="323" rx="155" ry="92" fill="#183329" stroke="#2f5748"/>
-    <ellipse cx="830" cy="322" rx="158" ry="94" fill="#183329" stroke="#2f5748"/><ellipse cx="620" cy="330" rx="210" ry="96" fill="#183329" stroke="#2f5748"/>
+  <!-- leaf cloud -->
+  <g opacity=".92">
+    <ellipse cx="620" cy="245" rx="255" ry="142" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="450" cy="235" rx="175" ry="116" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="790" cy="233" rx="180" ry="118" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="330" cy="260" rx="132" ry="92" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="910" cy="260" rx="135" ry="94" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="515" cy="170" rx="142" ry="95" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="710" cy="165" rx="145" ry="96" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="405" cy="320" rx="155" ry="92" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="835" cy="320" rx="158" ry="94" fill="#183329" stroke="#2f5748" stroke-width="1.4"/><ellipse cx="620" cy="330" rx="210" ry="96" fill="#183329" stroke="#2f5748" stroke-width="1.4"/>
+  </g>
+  <g opacity=".35">
+    <ellipse cx="620" cy="245" rx="330" ry="175" fill="none" stroke="#8fb8a1" stroke-width="2"/>
+    <ellipse cx="620" cy="245" rx="285" ry="145" fill="none" stroke="#5d8d76" stroke-width="1"/>
   </g>
 
-  <path d="M620 548 C616 500 620 450 620 408 C620 382 620 360 620 340" fill="none" stroke="url(#trunk)" stroke-width="22" stroke-linecap="round"/>
-  <path d="M620 392 Q760 282 968 292" fill="none" stroke="#d9e0e8" stroke-width="5" stroke-linecap="round"/>
-  <text x="986" y="287" class="mono year" fill="#8998a8">2026</text>
+  <!-- one long trunk -->
+  <path d="M620 548 C616 500 620 452 620 410 C620 382 620 363 620 340"
+        fill="none" stroke="url(#trunk)" stroke-width="22" stroke-linecap="round"/>
 
-  <g class="day">
-    <path d="M714 333 l-5 -18"/><path d="M744 320 l8 17"/><path d="M771 310 l-7 -20"/><path d="M800 302 l9 18"/>
-    <path d="M828 296 l-6 -20"/><path d="M855 292 l10 17"/><path d="M884 290 l-7 -21"/><path d="M911 290 l10 18"/>
-    <path d="M936 291 l-7 -20"/><path d="M947 292 l14 -16"/>
+  <!-- year branches + day twigs -->
+  <g><path d="M620.0 388.0 Q482.0 188.0 320.0 154.0" class="year-branch"/><path d="M620.0 388.0 Q777.3 244.2 962.0 188.2" class="year-branch"/><path d="M620.0 388.0 Q443.4 256.3 236.0 222.3" class="year-branch"/><path d="M620.0 388.0 Q758.0 312.5 920.0 256.5" class="year-branch"/><path d="M620.0 388.0 Q462.7 324.7 278.0 290.7" class="year-branch"/><path d="M620.0 388.0 Q796.6 380.8 1004.0 324.8" class="year-branch"/><path d="M620.0 388.0 Q482.0 393.0 320.0 359.0" class="year-branch"/></g>
+  <g><path d="M442.1 205.4 Q445.4 200.2 448.7 195.1" class="day-twig"/><circle cx="448.7" cy="195.1" r="3.5" class="bud1"><title>2020-08-11: 1 contribution</title></circle><path d="M888.3 352.8 Q889.7 359.4 891.1 366.0" class="day-twig"/><circle cx="891.1" cy="366.0" r="3.5" class="bud1"><title>2025-09-18: 2 contributions</title></circle><path d="M903.6 349.5 Q904.9 355.4 906.2 361.4" class="day-twig"/><circle cx="906.2" cy="361.4" r="3.5" class="bud1"><title>2025-10-02: 1 contribution</title></circle><path d="M913.5 347.3 Q912.0 340.7 910.5 334.1" class="day-twig"/><circle cx="910.5" cy="334.1" r="3.5" class="bud1"><title>2025-10-11: 2 contributions</title></circle><path d="M944.4 340.1 Q943.0 334.1 941.6 328.2" class="day-twig"/><circle cx="941.6" cy="328.2" r="3.5" class="bud1"><title>2025-11-08: 1 contribution</title></circle><path d="M530.7 387.3 Q530.4 393.4 530.0 399.5" class="day-twig"/><circle cx="530.0" cy="399.5" r="3.5" class="bud1"><title>2026-04-25: 1 contribution</title></circle><path d="M439.9 379.2 Q440.8 372.1 441.7 365.0" class="day-twig"/><circle cx="441.7" cy="365.0" r="4.2" class="bud2"><title>2026-08-14: 3 contributions</title></circle><path d="M430.7 378.1 Q429.4 387.7 428.1 397.4" class="day-twig"/><circle cx="428.1" cy="397.4" r="6.0" class="bud4"><title>2026-08-25: 19 contributions</title></circle><path d="M428.1 377.7 Q429.2 369.5 430.4 361.3" class="day-twig"/><circle cx="430.4" cy="361.3" r="5.0" class="bud3"><title>2026-08-28: 7 contributions</title></circle><path d="M427.3 377.6 Q426.5 383.6 425.7 389.7" class="day-twig"/><circle cx="425.7" cy="389.7" r="3.5" class="bud1"><title>2026-08-29: 1 contribution</title></circle><path d="M424.8 377.3 Q425.7 370.1 426.7 363.0" class="day-twig"/><circle cx="426.7" cy="363.0" r="4.2" class="bud2"><title>2026-09-01: 3 contributions</title></circle><path d="M423.9 377.1 Q423.0 383.8 422.1 390.5" class="day-twig"/><circle cx="422.1" cy="390.5" r="3.5" class="bud1"><title>2026-09-02: 2 contributions</title></circle><path d="M423.1 377.0 Q424.1 369.5 425.1 362.1" class="day-twig"/><circle cx="425.1" cy="362.1" r="4.2" class="bud2"><title>2026-09-03: 4 contributions</title></circle><path d="M422.2 376.9 Q421.3 383.6 420.4 390.3" class="day-twig"/><circle cx="420.4" cy="390.3" r="3.5" class="bud1"><title>2026-09-04: 2 contributions</title></circle><path d="M421.4 376.8 Q422.7 367.6 424.0 358.4" class="day-twig"/><circle cx="424.0" cy="358.4" r="6.0" class="bud4"><title>2026-09-05: 14 contributions</title></circle><path d="M420.5 376.7 Q419.4 384.7 418.3 392.7" class="day-twig"/><circle cx="418.3" cy="392.7" r="5.0" class="bud3"><title>2026-09-06: 6 contributions</title></circle><path d="M415.5 376.0 Q413.9 386.8 412.3 397.7" class="day-twig"/><circle cx="412.3" cy="397.7" r="7.0" class="bud5"><title>2026-09-12: 79 contributions</title></circle><path d="M414.6 375.8 Q416.2 364.9 417.8 354.1" class="day-twig"/><circle cx="417.8" cy="354.1" r="7.0" class="bud5"><title>2026-09-13: 65 contributions</title></circle><path d="M413.8 375.7 Q412.7 383.2 411.6 390.7" class="day-twig"/><circle cx="411.6" cy="390.7" r="4.2" class="bud2"><title>2026-09-14: 4 contributions</title></circle><path d="M412.9 375.6 Q414.4 365.3 415.9 355.1" class="day-twig"/><circle cx="415.9" cy="355.1" r="7.0" class="bud5"><title>2026-09-15: 28 contributions</title></circle><path d="M412.1 375.5 Q410.7 384.6 409.4 393.6" class="day-twig"/><circle cx="409.4" cy="393.6" r="6.0" class="bud4"><title>2026-09-16: 13 contributions</title></circle><path d="M411.2 375.3 Q412.8 364.5 414.4 353.6" class="day-twig"/><circle cx="414.4" cy="353.6" r="7.0" class="bud5"><title>2026-09-17: 86 contributions</title></circle><path d="M410.4 375.2 Q408.9 385.4 407.4 395.6" class="day-twig"/><circle cx="407.4" cy="395.6" r="7.0" class="bud5"><title>2026-09-18: 27 contributions</title></circle><path d="M409.5 375.1 Q410.7 367.3 411.8 359.6" class="day-twig"/><circle cx="411.8" cy="359.6" r="4.2" class="bud2"><title>2026-09-19: 5 contributions</title></circle><path d="M407.8 374.8 Q408.7 368.8 409.6 362.8" class="day-twig"/><circle cx="409.6" cy="362.8" r="3.5" class="bud1"><title>2026-09-21: 1 contribution</title></circle><path d="M407.0 374.7 Q405.9 381.8 404.8 388.9" class="day-twig"/><circle cx="404.8" cy="388.9" r="4.2" class="bud2"><title>2026-09-22: 3 contributions</title></circle><path d="M406.1 374.6 Q407.7 364.3 409.2 354.1" class="day-twig"/><circle cx="409.2" cy="354.1" r="7.0" class="bud5"><title>2026-09-23: 28 contributions</title></circle><path d="M405.3 374.4 Q403.6 385.3 402.0 396.2" class="day-twig"/><circle cx="402.0" cy="396.2" r="7.0" class="bud5"><title>2026-09-24: 59 contributions</title></circle><path d="M404.4 374.3 Q405.9 364.3 407.4 354.3" class="day-twig"/><circle cx="407.4" cy="354.3" r="6.0" class="bud4"><title>2026-09-25: 24 contributions</title></circle><path d="M403.6 374.2 Q401.9 385.1 400.2 395.9" class="day-twig"/><circle cx="400.2" cy="395.9" r="7.0" class="bud5"><title>2026-09-26: 44 contributions</title></circle></g>
+  <g><text x="308.0" y="146.0" text-anchor="end" class="mono year-label">2020</text><text x="974.0" y="180.2" text-anchor="start" class="mono year-label">2021</text><text x="224.0" y="214.3" text-anchor="end" class="mono year-label">2022</text><text x="932.0" y="248.5" text-anchor="start" class="mono year-label">2023</text><text x="266.0" y="282.7" text-anchor="end" class="mono year-label">2024</text><text x="1016.0" y="316.8" text-anchor="start" class="mono year-label">2025</text><text x="308.0" y="351.0" text-anchor="end" class="mono year-label">2026</text></g>
+
+  <!-- total contributions inside the leaf cloud -->
+  <g class="mono" text-anchor="middle">
+    <text x="620" y="228" class="canopy-label" fill="#9bb8aa">TOTAL CONTRIBUTIONS</text>
+    <text x="620" y="282" class="canopy-value" fill="#f3f7fa">535</text>
+    <text x="620" y="305" class="tiny" fill="#7f9a8d">ACROSS 7 CONTRIBUTION YEARS</text>
   </g>
-  <g>
-    <circle cx="709" cy="315" r="4" class="bud2"/><circle cx="752" cy="337" r="5" class="bud3"/><circle cx="764" cy="290" r="6" class="bud4"/>
-    <circle cx="809" cy="320" r="4" class="bud2"/><circle cx="822" cy="276" r="7" class="bud5"/><circle cx="865" cy="309" r="6" class="bud4"/>
-    <circle cx="877" cy="269" r="7" class="bud5"/><circle cx="921" cy="308" r="5" class="bud3"/><circle cx="929" cy="271" r="6" class="bud4"/>
-    <circle cx="961" cy="276" r="7" class="bud5"/>
+
+  <!-- Mind / Work roots -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M620 548 C574 548 532 555 494 571 C465 583 439 588 408 588" stroke="#7ca8b8" stroke-width="5.2"/>
+    <path d="M620 548 C666 548 708 555 746 571 C775 583 801 588 832 588" stroke="#91b98f" stroke-width="5.2"/>
+  </g>
+  <g class="mono">
+    <rect x="286" y="562" width="214" height="52" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="305" y="584" class="root-title" fill="#9ccfd8">MIND</text>
+    <text x="305" y="602" class="root-sub" fill="#718096">notes · plans · knowledge</text>
+    <rect x="740" y="562" width="214" height="52" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="759" y="584" class="root-title" fill="#a6e3a1">WORK</text>
+    <text x="759" y="602" class="root-sub" fill="#718096">code · repos · shipping</text>
   </g>
 
-  <g class="mono" text-anchor="middle"><text x="620" y="225" class="canopy-label" fill="#9bb8aa">TOTAL CONTRIBUTIONS</text><text x="620" y="282" class="canopy-value" fill="#f3f7fa">503</text><text x="620" y="304" class="tiny" fill="#7f9a8d">LIVE GENERATOR WILL EXPAND THIS TO ONE BRANCH PER CONTRIBUTION YEAR</text></g>
+  <!-- contribution orb follows the trunk, then the newest year branch, then the latest day twig -->
+  <circle r="6" fill="#ffffff" filter="url(#glow)">
+    <animateMotion path="M620 548 C620 500 620 448 620 390 Q482.0 393.0 403.6 374.2 L400.2 395.9" dur="5.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;.95;.95;0" keyTimes="0;.08;.9;1" dur="5.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="400.2" cy="395.9" r="11" fill="none" stroke="#f3f7fa" opacity=".28">
+    <animate attributeName="r" values="8;14;8" dur="2.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".18;.5;.18" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
 
-  <g fill="none" stroke-linecap="round"><path d="M620 548 C574 548 532 555 494 571 C465 583 439 588 408 588" stroke="#7ca8b8" stroke-width="5.2"/><path d="M620 548 C666 548 708 555 746 571 C775 583 801 588 832 588" stroke="#91b98f" stroke-width="5.2"/></g>
-  <g class="mono"><rect x="286" y="562" width="214" height="52" rx="9" fill="#171d27" stroke="#354154"/><text x="305" y="584" class="root-title" fill="#9ccfd8">MIND</text><text x="305" y="602" class="root-sub" fill="#718096">notes · plans · knowledge</text><rect x="740" y="562" width="214" height="52" rx="9" fill="#171d27" stroke="#354154"/><text x="759" y="584" class="root-title" fill="#a6e3a1">WORK</text><text x="759" y="602" class="root-sub" fill="#718096">code · repos · shipping</text></g>
-
-  <circle r="6" fill="#fff" filter="url(#glow)"><animateMotion dur="5.2s" repeatCount="indefinite"><mpath href="#orbPath"/></animateMotion><animate attributeName="opacity" values="0;.95;.95;0" keyTimes="0;.08;.9;1" dur="5.2s" repeatCount="indefinite"/></circle>
-  <circle cx="961" cy="276" r="10" fill="none" stroke="#fff" opacity=".3"><animate attributeName="r" values="8;14;8" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.5;.15" dur="2.2s" repeatCount="indefinite"/></circle>
-
+  <!-- small footer; the total lives in the canopy -->
   <rect x="28" y="646" width="1184" height="80" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
-  <g class="mono"><g transform="translate(52 671)"><text class="stat-label" fill="#6f7e91">AUTHORED COMMITS</text><text y="29" class="stat-value" fill="#f1f5f9">467</text></g><g transform="translate(390 671)"><text class="stat-label" fill="#6f7e91">LATEST RENDERED DAY</text><text y="29" class="stat-value" fill="#f1f5f9">SEP 26, 2026</text></g><g transform="translate(815 671)"><text class="stat-label" fill="#6f7e91">LATEST DAY COUNT</text><text y="29" class="stat-value" fill="#f1f5f9">29</text></g></g>
+  <g class="mono">
+    <g transform="translate(52 671)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">COMMIT CONTRIBUTIONS</text>
+      <text x="0" y="29" class="stat-value" fill="#f1f5f9">416</text>
+    </g>
+    <g transform="translate(390 671)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">LATEST CONTRIBUTION</text>
+      <text x="0" y="29" class="stat-value" fill="#f1f5f9">Sep 26, 2026</text>
+    </g>
+    <g transform="translate(815 671)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">LATEST DAY COUNT</text>
+      <text x="0" y="29" class="stat-value" fill="#f1f5f9">44</text>
+    </g>
+    <text x="1178" y="700" text-anchor="end" class="tiny" fill="#59677a">GENERATED FROM GITHUB CONTRIBUTION DATA</text>
+  </g>
 </svg>
