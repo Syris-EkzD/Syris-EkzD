@@ -3,16 +3,18 @@
   <desc id="desc">A hollow white line-art study of the White Tree of Gondor with a thick tapering trunk, two heavy primary limbs, curling sub-branches, and ornamental roots.</desc>
   <defs>
     <style><![CDATA[
-      .tree-art { fill:none;stroke:#f3f7fa;stroke-linecap:round;stroke-linejoin:round; }
-      .hollow-major { fill:#11151d;stroke:#f3f7fa;stroke-width:4.2; }
-      .hollow-primary { fill:#11151d;stroke:#f3f7fa;stroke-width:4; }
-      .hollow-secondary { fill:#11151d;stroke:#f3f7fa;stroke-width:3.6; }
-      .twig { fill:none;stroke:#f3f7fa;stroke-width:3; }
-      .root { fill:none;stroke:#f3f7fa;stroke-width:3.6; }
+      .tree-art { fill: none; stroke: #f3f7fa; stroke-linecap: round; stroke-linejoin: round; }
+      .hollow-major { fill: #11151d; stroke: #f3f7fa; stroke-width: 4.2; }
+      .hollow-primary { fill: #11151d; stroke: #f3f7fa; stroke-width: 4.0; }
+      .hollow-secondary { fill: #11151d; stroke: #f3f7fa; stroke-width: 3.6; }
+      .twig { fill: none; stroke: #f3f7fa; stroke-width: 3.0; }
+      .root { fill: none; stroke: #f3f7fa; stroke-width: 3.6; }
     ]]></style>
   </defs>
+
   <rect width="1240" height="760" rx="18" fill="#11151d"/>
   <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
+
   
   <!-- Hollow White Tree of Gondor study -->
   <g class="tree-art">
