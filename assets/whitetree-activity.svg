@@ -1,229 +1,125 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="700" viewBox="0 0 1240 700" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="760" viewBox="0 0 1240 760" role="img" aria-labelledby="title desc">
   <title id="title">WhiteTree Activity Core</title>
-  <desc id="desc">A polished WhiteTree contribution visualization. Mind and Work feed the roots of a connected activity tree; contribution intensity appears as branch nodes, while statistics are separated into a clean bottom panel.</desc>
+  <desc id="desc">WhiteTree maps the year as a tree: each month is a major branch, each week a sub-branch, and each active commit day a twig whose bud size reflects authored commit intensity. Mind and Work form the roots. A statistics strip summarizes 2026 activity from connected repositories.</desc>
 
   <defs>
     <style><![CDATA[
       .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }
       .title { font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }
-      .sub { font-size: 12px; letter-spacing: 2.2px; }
-      .month { font-size: 11px; font-weight: 700; letter-spacing: .8px; }
+      .sub { font-size: 12px; letter-spacing: 2px; }
+      .month-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; fill: #657386; }
       .root-title { font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }
-      .root-sub { font-size: 10px; letter-spacing: .3px; }
-      .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; }
-      .stat-value { font-size: 22px; font-weight: 800; }
-      .tiny { font-size: 10px; letter-spacing: .7px; }
-      .branch { fill: none; stroke: #d8dee9; stroke-linecap: round; stroke-linejoin: round; }
-      .twig { fill: none; stroke: #aeb8c5; stroke-linecap: round; stroke-linejoin: round; }
-      .node0 { fill: #29313d; stroke: #4d5968; stroke-width: 1; }
-      .node1 { fill: #5d7288; }
-      .node2 { fill: #88b7c7; }
-      .node3 { fill: #b8e1d1; }
-      .node4 { fill: #f1f5f9; }
+      .root-sub { font-size: 10px; letter-spacing: .2px; }
+      .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.25px; }
+      .stat-value { font-size: 23px; font-weight: 800; }
+      .tiny { font-size: 9px; letter-spacing: .55px; }
+      .month-branch { fill: none; stroke: #d9e0e8; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+      .week-branch { fill: none; stroke: #7e8b9d; stroke-width: 2.1; stroke-linecap: round; }
+      .day-twig { fill: none; stroke: #b7c2cf; stroke-width: 1.65; stroke-linecap: round; }
+      .bud1 { fill: #53677b; }
+      .bud2 { fill: #7393a5; }
+      .bud3 { fill: #91bdc5; }
+      .bud4 { fill: #b8e1d1; }
+      .bud5 { fill: #f3f7fa; }
     ]]></style>
 
-    <filter id="glow" x="-200%" y="-200%" width="400%" height="400%">
+    <filter id="glow" x="-220%" y="-220%" width="440%" height="440%">
       <feGaussianBlur stdDeviation="4" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
     <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stop-color="#738399"/>
-      <stop offset=".58" stop-color="#c7d0da"/>
-      <stop offset="1" stop-color="#f7fafc"/>
+      <stop offset="0" stop-color="#6f8096"/>
+      <stop offset=".55" stop-color="#c5ced8"/>
+      <stop offset="1" stop-color="#f6f8fb"/>
     </linearGradient>
 
-    <path id="pulsePath" d="M620 482 C620 446 620 410 620 374 C620 337 621 300 620 264 C620 226 630 194 654 167 C687 130 737 111 792 102"/>
+    <path id="pulsePath" d="M620 532 C620 482 621 432 620 382 C620 338 621 296 624 252 C629 217 652 190 688 176 C758 148 846 170 930 215"/>
   </defs>
 
-  <!-- shell -->
-  <rect width="1240" height="700" rx="18" fill="#11151d"/>
-  <rect x="10" y="10" width="1220" height="680" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
+  <rect width="1240" height="760" rx="18" fill="#11151d"/>
+  <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
 
   <!-- header -->
   <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
-  <text x="42" y="75" class="mono sub" fill="#718096">A YEAR OF CONTRIBUTIONS, GROWN INTO ONE TREE</text>
+  <text x="42" y="75" class="mono sub" fill="#718096">MONTH → BRANCH   WEEK → SUB-BRANCH   ACTIVE DAY → TWIG</text>
 
-  <!-- month anchors -->
-  <g class="mono month" fill="#68778a">
-    <text x="164" y="111">JAN–MAR</text>
-    <text x="395" y="92">APR–JUN</text>
-    <text x="786" y="92">JUL–SEP</text>
-    <text x="997" y="111">OCT–DEC</text>
-  </g>
+  <!-- connected trunk -->
+  <path d="M620 532 C616 488 620 448 620 408 C620 365 621 324 620 284 C619 242 630 206 654 174 C672 150 695 130 724 116"
+        fill="none" stroke="url(#trunk)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- tree silhouette: one connected structure -->
-  <g fill="none" stroke="url(#trunk)" stroke-linecap="round" stroke-linejoin="round">
-    <!-- trunk -->
-    <path d="M620 478 C618 436 620 398 620 362 C620 323 621 289 620 254 C619 218 628 190 654 165" stroke-width="17"/>
-    <!-- major limbs -->
-    <path d="M620 286 C585 257 555 222 546 183" stroke-width="10"/>
-    <path d="M654 165 C690 132 737 111 792 102" stroke-width="10"/>
-    <path d="M620 349 C568 333 525 306 490 274" stroke-width="9"/>
-    <path d="M620 360 C674 341 717 313 750 280" stroke-width="9"/>
-  </g>
+  <!-- month branches -->
+  <g><path d="M616 444 C501.8 455.6 374.1 459.3 280 470" class="month-branch"/><path d="M615 412 C484.1 422.8 337.8 416.7 230 425" class="month-branch"/><path d="M614 380 C488.5 389.1 348.3 361.7 245 365" class="month-branch"/><path d="M614 346 C497 353.5 366.3 306.4 270 305" class="month-branch"/><path d="M616 312 C512 318 395.7 251.1 310 245" class="month-branch"/><path d="M620 278 C541.8 282.1 454.4 191.6 390 180" class="month-branch"/><path d="M624 268 C700.8 251.8 786.7 189.5 850 165" class="month-branch"/><path d="M626 300 C729.4 284.9 844.9 236.3 930 215" class="month-branch"/><path d="M626 334 C749.8 320.8 888.1 295.7 990 280" class="month-branch"/><path d="M626 370 C756.6 358.5 902.5 355.5 1010 345" class="month-branch"/><path d="M625 406 C749.1 396.2 887.8 415.3 990 410" class="month-branch"/><path d="M624 442 C729.7 433.4 847.9 466.9 935 465" class="month-branch"/></g>
 
-  <!-- clean connected branches -->
-  <g class="branch">
-    <!-- upper left -->
-    <path d="M546 183 C507 151 463 133 414 128" stroke-width="7"/>
-    <path d="M546 183 C505 191 466 205 427 223" stroke-width="5"/>
-    <path d="M414 128 C367 111 321 108 273 121" stroke-width="4"/>
-    <path d="M414 128 C375 146 341 163 304 180" stroke-width="3.5"/>
-    <path d="M427 223 C385 224 346 234 308 253" stroke-width="3.5"/>
+  <!-- week structure -->
+  <g opacity=".9"><path d="M542.1 449.7 Q540.9 460.7 543.8 471.7" class="week-branch"/><path d="M493.4 453.5 Q490.4 441 491.4 428.6" class="week-branch"/><path d="M444.6 457.3 Q443.7 471.2 446.8 485.2" class="week-branch"/><path d="M395.9 461 Q393.1 450.1 394.2 439.1" class="week-branch"/><path d="M347.2 464.8 Q346.2 477.3 349.1 489.7" class="week-branch"/><path d="M530.3 414.9 Q528.7 425.9 531 436.8" class="week-branch"/><path d="M474.5 416.7 Q472.1 404.3 473.6 391.8" class="week-branch"/><path d="M418.6 418.6 Q417.1 432.6 419.6 446.6" class="week-branch"/><path d="M362.8 420.5 Q360.5 409.5 362.1 398.5" class="week-branch"/><path d="M307 422.4 Q305.4 434.9 307.8 447.4" class="week-branch"/><path d="M532.8 376.7 Q530.4 387.7 531.9 398.7" class="week-branch"/><path d="M479.3 374.5 Q477.8 362 480.3 349.5" class="week-branch"/><path d="M425.8 372.4 Q423.2 386.3 424.7 400.3" class="week-branch"/><path d="M372.3 370.2 Q370.8 359.2 373.2 348.2" class="week-branch"/><path d="M318.8 368 Q316.3 380.5 317.8 393" class="week-branch"/><path d="M538.3 337 Q535 347.9 535.7 358.8" class="week-branch"/><path d="M488.4 331 Q487.9 318.6 491.4 306.2" class="week-branch"/><path d="M438.6 325.1 Q434.9 339 435.2 352.9" class="week-branch"/><path d="M388.7 319.1 Q388 308.2 391.3 297.3" class="week-branch"/><path d="M338.8 313.2 Q335.3 325.6 335.8 338" class="week-branch"/><path d="M548.7 297.3 Q544.3 308 544 318.8" class="week-branch"/><path d="M504.3 287.5 Q505 275.3 509.7 263.1" class="week-branch"/><path d="M459.9 277.8 Q454.9 291.5 454 305.2" class="week-branch"/><path d="M415.6 268.1 Q415.9 257.4 420.3 246.6" class="week-branch"/><path d="M371.2 258.4 Q366.5 270.6 365.9 282.8" class="week-branch"/><path d="M569.4 256.4 Q563.1 266.6 560.8 276.7" class="week-branch"/><path d="M536 242.2 Q538.9 230.7 545.8 219.2" class="week-branch"/><path d="M502.7 228 Q495.2 240.9 491.7 253.8" class="week-branch"/><path d="M469.4 213.8 Q471.7 203.7 478 193.6" class="week-branch"/><path d="M436 199.6 Q429.1 211.1 426.2 222.6" class="week-branch"/><path d="M673.7 245.3 Q680.3 255.3 682.8 265.4" class="week-branch"/><path d="M706.5 230.4 Q703.3 219 696.1 207.7" class="week-branch"/><path d="M739.3 215.5 Q747.1 228.2 750.9 240.9" class="week-branch"/><path d="M772 200.5 Q769.5 190.5 762.9 180.5" class="week-branch"/><path d="M804.8 185.6 Q812 197 815.2 208.3" class="week-branch"/><path d="M692.9 281.3 Q697.8 291.9 698.8 302.5" class="week-branch"/><path d="M737 269 Q735.6 256.9 730.2 244.9" class="week-branch"/><path d="M781 256.6 Q786.8 270.1 788.6 283.6" class="week-branch"/><path d="M825.1 244.3 Q824.2 233.7 819.2 223.1" class="week-branch"/><path d="M869.2 232 Q874.6 244 875.9 256.1" class="week-branch"/><path d="M706.1 322.1 Q709.7 333 709.3 343.9" class="week-branch"/><path d="M758.9 314.3 Q759 301.9 755.2 289.6" class="week-branch"/><path d="M811.6 306.5 Q815.7 320.3 815.7 334.2" class="week-branch"/><path d="M864.4 298.6 Q864.8 287.7 861.2 276.9" class="week-branch"/><path d="M917.2 290.8 Q921 303.2 920.9 315.5" class="week-branch"/><path d="M710.5 364.5 Q713.2 375.5 711.9 386.5" class="week-branch"/><path d="M766.2 360.9 Q767.3 348.4 764.5 335.9" class="week-branch"/><path d="M821.8 357.3 Q824.7 371.2 823.7 385.2" class="week-branch"/><path d="M877.5 353.6 Q878.8 342.6 876.1 331.7" class="week-branch"/><path d="M933.2 350 Q936 362.5 934.8 374.9" class="week-branch"/><path d="M705.3 406.9 Q707.2 417.9 705.1 428.9" class="week-branch"/><path d="M758.2 407.5 Q760.4 395 758.5 382.5" class="week-branch"/><path d="M811.1 408 Q813 422 810.8 436" class="week-branch"/><path d="M864.1 408.6 Q866.2 397.6 864.3 386.6" class="week-branch"/><path d="M917 409.2 Q918.9 421.7 916.7 434.2" class="week-branch"/><path d="M692.4 447.1 Q693.6 458 690.8 469" class="week-branch"/><path d="M737.5 450.4 Q740.4 437.9 739.4 425.5" class="week-branch"/><path d="M782.6 453.7 Q783.6 467.7 780.5 481.7" class="week-branch"/><path d="M827.7 457.1 Q830.5 446.1 829.3 435.1" class="week-branch"/><path d="M872.8 460.4 Q873.9 472.9 871 485.3" class="week-branch"/></g>
 
-    <!-- upper right -->
-    <path d="M792 102 C840 102 887 112 931 132" stroke-width="6"/>
-    <path d="M750 280 C793 249 827 217 849 184" stroke-width="6"/>
-    <path d="M849 184 C890 173 930 177 970 192" stroke-width="4"/>
-    <path d="M849 184 C826 151 808 127 792 102" stroke-width="4"/>
-    <path d="M931 132 C973 133 1012 143 1048 162" stroke-width="3.5"/>
+  <!-- active-day twigs and intensity buds -->
+  <g><path d="M731.6 249.7 Q731.5 244.3 728.5 238.8" class="day-twig"/><circle cx="728.5" cy="238.8" r="3.5" class="bud1"><title>2026-08-14: 2 authored commits</title></circle><path d="M822.5 235 Q821.7 226.9 818 218.7" class="day-twig"/><circle cx="818" cy="218.7" r="6.5" class="bud4"><title>2026-08-25: 18 authored commits</title></circle><path d="M820.4 227.4 Q820 220.7 816.6 214" class="day-twig"/><circle cx="816.6" cy="214" r="5.5" class="bud3"><title>2026-08-28: 6 authored commits</title></circle><path d="M875.4 254.2 Q878.3 259 878.1 263.9" class="day-twig"/><circle cx="878.1" cy="263.9" r="3.5" class="bud1"><title>2026-08-29: 1 authored commit</title></circle><path d="M707.5 331.7 Q710 338.3 709.5 345" class="day-twig"/><circle cx="709.5" cy="345" r="4.5" class="bud2"><title>2026-09-01: 5 authored commits</title></circle><path d="M707.9 334.3 Q710.2 339.9 709.6 345.5" class="day-twig"/><circle cx="709.6" cy="345.5" r="3.5" class="bud1"><title>2026-09-02: 2 authored commits</title></circle><path d="M708.3 336.9 Q710.7 343.3 710.2 349.7" class="day-twig"/><circle cx="710.2" cy="349.7" r="4.5" class="bud2"><title>2026-09-03: 4 authored commits</title></circle><path d="M708.7 339.5 Q710.9 344.5 710.1 349.5" class="day-twig"/><circle cx="710.1" cy="349.5" r="3.5" class="bud1"><title>2026-09-04: 1 authored commit</title></circle><path d="M709.1 342.1 Q711.7 350.1 711.4 358" class="day-twig"/><circle cx="711.4" cy="358" r="6.5" class="bud4"><title>2026-09-05: 13 authored commits</title></circle><path d="M706.7 326.5 Q709.2 333.3 708.8 340.2" class="day-twig"/><circle cx="708.8" cy="340.2" r="5.5" class="bud3"><title>2026-09-06: 6 authored commits</title></circle><path d="M755.5 291.5 Q755.7 282.6 752.8 273.7" class="day-twig"/><circle cx="752.8" cy="273.7" r="7.5" class="bud5"><title>2026-09-12: 75 authored commits</title></circle><path d="M758.1 309.3 Q758.3 300.4 755.5 291.5" class="day-twig"/><circle cx="755.5" cy="291.5" r="7.5" class="bud5"><title>2026-09-13: 53 authored commits</title></circle><path d="M757.7 306.4 Q758.3 300.3 755.9 294.3" class="day-twig"/><circle cx="755.9" cy="294.3" r="4.5" class="bud2"><title>2026-09-14: 3 authored commits</title></circle><path d="M813.4 318.6 Q816.2 327.2 816 335.7" class="day-twig"/><circle cx="816" cy="335.7" r="6.5" class="bud4"><title>2026-09-15: 20 authored commits</title></circle><path d="M813.9 322 Q816.5 329.4 816.1 336.8" class="day-twig"/><circle cx="816.1" cy="336.8" r="5.5" class="bud3"><title>2026-09-16: 9 authored commits</title></circle><path d="M814.4 325.3 Q817.3 334.2 817.1 343.1" class="day-twig"/><circle cx="817.1" cy="343.1" r="7.5" class="bud5"><title>2026-09-17: 75 authored commits</title></circle><path d="M814.9 328.6 Q817.7 337.5 817.5 346.3" class="day-twig"/><circle cx="817.5" cy="346.3" r="7.5" class="bud5"><title>2026-09-18: 25 authored commits</title></circle><path d="M815.4 331.9 Q817.9 338.6 817.4 345.2" class="day-twig"/><circle cx="817.4" cy="345.2" r="4.5" class="bud2"><title>2026-09-19: 5 authored commits</title></circle><path d="M813 315.3 Q815.2 320.3 814.4 325.3" class="day-twig"/><circle cx="814.4" cy="325.3" r="3.5" class="bud1"><title>2026-09-21: 1 authored commit</title></circle><path d="M863 289.1 Q863.7 283.5 861.3 277.8" class="day-twig"/><circle cx="861.3" cy="277.8" r="3.5" class="bud1"><title>2026-09-22: 2 authored commits</title></circle><path d="M862.6 286.4 Q862.9 278 860.1 269.6" class="day-twig"/><circle cx="860.1" cy="269.6" r="6.5" class="bud4"><title>2026-09-23: 19 authored commits</title></circle><path d="M862.2 283.8 Q862.4 274.9 859.6 266" class="day-twig"/><circle cx="859.6" cy="266" r="7.5" class="bud5"><title>2026-09-24: 70 authored commits</title></circle><path d="M861.8 281.2 Q862 272.5 859.3 263.8" class="day-twig"/><circle cx="859.3" cy="263.8" r="6.5" class="bud4"><title>2026-09-25: 23 authored commits</title></circle><path d="M861.4 278.6 Q861.6 269.7 858.8 260.8" class="day-twig"/><circle cx="858.8" cy="260.8" r="7.5" class="bud5"><title>2026-09-26: 29 authored commits</title></circle></g>
 
-    <!-- lower left -->
-    <path d="M490 274 C446 257 404 252 360 259" stroke-width="6"/>
-    <path d="M490 274 C451 306 407 329 357 342" stroke-width="5"/>
-    <path d="M360 259 C320 250 282 254 247 271" stroke-width="3.5"/>
-    <path d="M357 342 C315 342 277 352 241 374" stroke-width="3.5"/>
-
-    <!-- lower right -->
-    <path d="M750 280 C794 293 838 296 882 291" stroke-width="5"/>
-    <path d="M750 280 C788 319 831 345 880 359" stroke-width="5"/>
-    <path d="M882 291 C922 286 962 292 998 309" stroke-width="3.5"/>
-    <path d="M880 359 C921 363 959 376 994 397" stroke-width="3.5"/>
-  </g>
-
-  <!-- small twigs to make it read as a tree, not a circuit -->
-  <g class="twig" stroke-width="2.5" opacity=".9">
-    <path d="M304 180 C279 166 255 160 231 162"/>
-    <path d="M304 180 C286 196 269 209 248 218"/>
-    <path d="M308 253 C284 242 263 239 239 242"/>
-    <path d="M273 121 C248 112 226 113 204 120"/>
-
-    <path d="M970 192 C992 181 1015 177 1037 181"/>
-    <path d="M970 192 C988 207 1006 218 1027 225"/>
-    <path d="M1048 162 C1072 158 1094 161 1113 170"/>
-    <path d="M998 309 C1024 302 1047 304 1069 315"/>
-
-    <path d="M247 271 C221 266 198 270 178 281"/>
-    <path d="M241 374 C217 373 197 379 178 390"/>
-    <path d="M994 397 C1017 401 1038 411 1055 426"/>
-    <path d="M880 359 C902 344 919 334 937 329"/>
-  </g>
-
-  <!-- contribution nodes: sample data -->
-  <g>
-    <!-- Q1 -->
-    <circle cx="204" cy="120" r="4" class="node0"/>
-    <circle cx="231" cy="162" r="5" class="node1"/>
-    <circle cx="248" cy="218" r="6" class="node2"/>
-    <circle cx="273" cy="121" r="6" class="node2"/>
-    <circle cx="304" cy="180" r="7" class="node3"/>
-    <circle cx="239" cy="242" r="4" class="node1"/>
-    <circle cx="308" cy="253" r="8" class="node4"/>
-    <circle cx="247" cy="271" r="5" class="node2"/>
-    <circle cx="178" cy="281" r="4" class="node1"/>
-    <circle cx="241" cy="374" r="6" class="node3"/>
-    <circle cx="178" cy="390" r="4" class="node1"/>
-
-    <!-- Q2 -->
-    <circle cx="414" cy="128" r="7" class="node3"/>
-    <circle cx="427" cy="223" r="5" class="node1"/>
-    <circle cx="360" cy="259" r="6" class="node2"/>
-    <circle cx="357" cy="342" r="7" class="node4"/>
-    <circle cx="490" cy="274" r="5" class="node2"/>
-    <circle cx="546" cy="183" r="6" class="node3"/>
-
-    <!-- Q3 -->
-    <circle cx="654" cy="165" r="6" class="node3"/>
-    <circle cx="792" cy="102" r="8" class="node4"/>
-    <circle cx="849" cy="184" r="6" class="node2"/>
-    <circle cx="882" cy="291" r="5" class="node2"/>
-    <circle cx="880" cy="359" r="7" class="node4"/>
-    <circle cx="937" cy="329" r="5" class="node1"/>
-
-    <!-- Q4 -->
-    <circle cx="931" cy="132" r="6" class="node3"/>
-    <circle cx="970" cy="192" r="5" class="node1"/>
-    <circle cx="1037" cy="181" r="6" class="node2"/>
-    <circle cx="1048" cy="162" r="7" class="node3"/>
-    <circle cx="1113" cy="170" r="4" class="node1"/>
-    <circle cx="998" cy="309" r="8" class="node4"/>
-    <circle cx="1069" cy="315" r="5" class="node2"/>
-    <circle cx="994" cy="397" r="6" class="node3"/>
-    <circle cx="1055" cy="426" r="4" class="node1"/>
-  </g>
+  <!-- month labels -->
+  <g><text x="268" y="463" text-anchor="end" class="mono month-label">JAN</text><text x="218" y="439" text-anchor="end" class="mono month-label">FEB</text><text x="233" y="358" text-anchor="end" class="mono month-label">MAR</text><text x="258" y="319" text-anchor="end" class="mono month-label">APR</text><text x="298" y="238" text-anchor="end" class="mono month-label">MAY</text><text x="378" y="194" text-anchor="end" class="mono month-label">JUN</text><text x="862" y="158" text-anchor="start" class="mono month-label">JUL</text><text x="942" y="229" text-anchor="start" class="mono month-label">AUG</text><text x="1002" y="273" text-anchor="start" class="mono month-label">SEP</text><text x="1022" y="359" text-anchor="start" class="mono month-label">OCT</text><text x="1002" y="403" text-anchor="start" class="mono month-label">NOV</text><text x="947" y="479" text-anchor="start" class="mono month-label">DEC</text></g>
 
   <!-- roots -->
   <g fill="none" stroke-linecap="round">
-    <path d="M620 478 C575 475 535 486 495 503 C469 514 449 520 426 520" stroke="#7ca8b8" stroke-width="5" opacity=".9"/>
-    <path d="M620 478 C665 475 706 486 745 503 C771 514 791 520 814 520" stroke="#91b98f" stroke-width="5" opacity=".9"/>
-    <path d="M620 478 C575 475 535 486 495 503 C469 514 449 520 426 520" stroke="#c4eef6" stroke-width="1.2" opacity=".9"/>
-    <path d="M620 478 C665 475 706 486 745 503 C771 514 791 520 814 520" stroke="#d9f7d6" stroke-width="1.2" opacity=".9"/>
+    <path d="M620 531 C575 528 534 536 496 552 C467 564 444 568 416 568" stroke="#7ca8b8" stroke-width="5.2" opacity=".92"/>
+    <path d="M620 531 C665 528 706 536 744 552 C773 564 796 568 824 568" stroke="#91b98f" stroke-width="5.2" opacity=".92"/>
+    <path d="M620 531 C575 528 534 536 496 552 C467 564 444 568 416 568" stroke="#c4eef6" stroke-width="1.2" opacity=".9"/>
+    <path d="M620 531 C665 528 706 536 744 552 C773 564 796 568 824 568" stroke="#d9f7d6" stroke-width="1.2" opacity=".9"/>
   </g>
 
-  <!-- root cards, concise text that actually fits -->
+  <!-- root cards -->
   <g class="mono">
-    <rect x="300" y="492" width="190" height="54" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="318" y="515" class="root-title" fill="#9ccfd8">MIND</text>
-    <text x="318" y="533" class="root-sub" fill="#718096">notes · plans · knowledge</text>
+    <rect x="294" y="540" width="205" height="52" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="313" y="562" class="root-title" fill="#9ccfd8">MIND</text>
+    <text x="313" y="580" class="root-sub" fill="#718096">notes · plans · knowledge</text>
 
-    <rect x="750" y="492" width="190" height="54" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="768" y="515" class="root-title" fill="#a6e3a1">WORK</text>
-    <text x="768" y="533" class="root-sub" fill="#718096">code · repos · shipping</text>
+    <rect x="741" y="540" width="205" height="52" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="760" y="562" class="root-title" fill="#a6e3a1">WORK</text>
+    <text x="760" y="580" class="root-sub" fill="#718096">code · repos · shipping</text>
   </g>
 
-  <!-- active pulse -->
-  <circle r="6" fill="#ffffff" filter="url(#glow)">
+  <!-- subtle activity pulse toward the current month -->
+  <circle r="5.5" fill="#ffffff" filter="url(#glow)">
     <animateMotion dur="4.8s" repeatCount="indefinite">
       <mpath href="#pulsePath"/>
     </animateMotion>
     <animate attributeName="opacity" values="0;.9;.9;0" keyTimes="0;.08;.92;1" dur="4.8s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- activity core -->
-  <g transform="translate(620 455)">
-    <circle r="25" fill="#171d27" stroke="#5e6f84" stroke-width="2"/>
-    <circle r="13" fill="none" stroke="#d8dee9" stroke-width="2" opacity=".8"/>
-    <circle r="5" fill="#f1f5f9" filter="url(#glow)">
-      <animate attributeName="r" values="4;7;4" dur="2.4s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values=".7;1;.7" dur="2.4s" repeatCount="indefinite"/>
-    </circle>
-  </g>
-
-  <!-- dedicated stats strip -->
-  <rect x="28" y="570" width="1184" height="96" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
+  <!-- stats footer -->
+  <rect x="28" y="615" width="1184" height="112" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
   <g class="mono">
-    <text x="52" y="593" class="tiny" fill="#667488">ACTIVITY SUMMARY</text>
+    <text x="52" y="639" class="tiny" fill="#667488">2026 YTD · AUTHORED COMMITS ACROSS CONNECTED REPOSITORIES · UPDATED SEP 26</text>
 
-    <g transform="translate(52 608)">
-      <text x="0" y="0" class="stat-label" fill="#6f7e91">TOTAL COMMITS</text>
-      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    <g transform="translate(52 658)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">AUTHORED COMMITS</text>
+      <text x="0" y="31" class="stat-value" fill="#f1f5f9">467</text>
     </g>
 
-    <g transform="translate(310 608)">
-      <text x="0" y="0" class="stat-label" fill="#6f7e91">ACTIVE DAYS</text>
-      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    <g transform="translate(320 658)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">ACTIVE COMMIT DAYS</text>
+      <text x="0" y="31" class="stat-value" fill="#f1f5f9">24</text>
     </g>
 
-    <g transform="translate(560 608)">
-      <text x="0" y="0" class="stat-label" fill="#6f7e91">CURRENT STREAK</text>
-      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+    <g transform="translate(590 658)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">COMMIT STREAK</text>
+      <text x="0" y="31" class="stat-value" fill="#f1f5f9">6d</text>
     </g>
 
-    <g transform="translate(830 608)">
+    <g transform="translate(815 658)">
       <text x="0" y="0" class="stat-label" fill="#6f7e91">PUBLIC REPOS</text>
-      <text x="0" y="30" class="stat-value" fill="#f1f5f9">—</text>
+      <text x="0" y="31" class="stat-value" fill="#f1f5f9">5</text>
     </g>
 
-    <!-- legend stays out of the tree -->
-    <g transform="translate(1030 603)">
-      <text x="0" y="0" class="stat-label" fill="#6f7e91">INTENSITY</text>
-      <circle cx="4" cy="28" r="4" class="node0"/>
-      <circle cx="28" cy="28" r="4" class="node1"/>
-      <circle cx="53" cy="28" r="5" class="node2"/>
-      <circle cx="80" cy="28" r="6" class="node3"/>
-      <circle cx="110" cy="28" r="7" class="node4"/>
-      <text x="0" y="49" class="tiny" fill="#59677a">LOW → HIGH</text>
+    <g transform="translate(1012 649)">
+      <text x="0" y="0" class="stat-label" fill="#6f7e91">BUD INTENSITY</text>
+      <circle cx="5" cy="28" r="3.5" class="bud1"/>
+      <circle cx="31" cy="28" r="4.5" class="bud2"/>
+      <circle cx="59" cy="28" r="5.5" class="bud3"/>
+      <circle cx="90" cy="28" r="6.5" class="bud4"/>
+      <circle cx="124" cy="28" r="7.5" class="bud5"/>
+      <text x="0" y="51" class="tiny" fill="#59677a">LOW → HIGH</text>
     </g>
   </g>
 </svg>
