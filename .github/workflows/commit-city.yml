@@ -1,4 +1,4 @@
-name: Update Commit City
+name: Update Profile Activity
 
 on:
   workflow_dispatch:
@@ -7,13 +7,14 @@ on:
   push:
     paths:
       - "scripts/commit_city.py"
+      - "scripts/whitetree_activity.py"
       - ".github/workflows/commit-city.yml"
 
 permissions:
   contents: write
 
 jobs:
-  update-commit-city:
+  update-profile-activity:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -26,20 +27,22 @@ jobs:
       - name: Install image renderer
         run: python -m pip install Pillow==11.3.0
 
-      - name: Render Commit City from GitHub contributions
+      - name: Render contribution visuals
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USER: ${{ github.repository_owner }}
-        run: python scripts/commit_city.py
-
-      - name: Commit only the generated city image
         run: |
-          git add -- assets/commit-city.png
+          python scripts/commit_city.py
+          python scripts/whitetree_activity.py
+
+      - name: Commit generated activity assets
+        run: |
+          git add -- assets/commit-city.png assets/whitetree-activity.svg
           if git diff --cached --quiet; then
-            echo "Commit City image is already up to date."
+            echo "Profile activity assets are already up to date."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(profile): refresh commit city"
+          git commit -m "chore(profile): refresh activity visuals"
           git push
