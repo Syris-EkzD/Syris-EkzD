@@ -87,12 +87,22 @@
   <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
   <g class="mono">
     <g transform="translate(72 675)">
-      <text class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
-      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">6 DAYS</text>
+      <!-- lit flame: current streak -->
+      <g transform="translate(0 -13)" filter="url(#glow)">
+        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
+              fill="#f7fafc"/>
+      </g>
+      <text x="28" class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
+      <text x="28" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">6 DAYS</text>
     </g>
     <g transform="translate(455 675)">
-      <text class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
-      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">8 DAYS</text>
+      <!-- dormant flame: longest streak -->
+      <g transform="translate(0 -13)">
+        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
+              fill="none" stroke="#596675" stroke-width="1.8" stroke-linejoin="round"/>
+      </g>
+      <text x="28" class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
+      <text x="28" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">8 DAYS</text>
     </g>
     <g transform="translate(835 675)">
       <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
