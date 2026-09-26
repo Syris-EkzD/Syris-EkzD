@@ -1,16 +1,13 @@
 """Generate the WhiteTree GitHub contribution visualization.
 
-Mapping:
-- one long trunk feeds a compact leaf cloud that highlights the 365-day total,
-- each month is one major branch,
-- every day is a small sub-branch/twig,
-- active days end in brighter contribution buds,
-- the animated contribution orb travels to the most recent active day.
+The visual is a direct activity-oriented adaptation of the White Tree of Gondor:
+- the tree itself uses a tall narrow trunk, symmetrical curling limbs, and ornate roots,
+- the old leaf cloud and bottom dashboard are gone,
+- contribution statistics live in the seven star/rosette motifs around the crown,
+- only active contribution days appear as subtle buds on hidden month tracks,
+- the contribution orb travels to the most recent active day.
 
-The leaf cloud intentionally stays around the top of the trunk instead of
-covering the month branches. The trunk, paired limbs, curled tips, and scrolling
-roots are stylized after the heraldic White Tree of Gondor while the data
-mapping remains original.
+All activity values come from GitHub's GraphQL contributionsCollection.
 """
 from __future__ import annotations
 
@@ -35,28 +32,66 @@ QUERY = """query($login: String!) {
 WIDTH = 1240
 HEIGHT = 760
 DAYS = 365
-MONTH_NAMES = ("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
 
-# start, quadratic control, end. Jan-Jun grow left; Jul-Dec grow right.
-MONTH_BRANCHES = {
-    # Six mirrored branch pairs create the heraldic, upward-fanning silhouette
-    # of Gondor's White Tree while keeping months as the data-bearing limbs.
-    1: ((620.0, 470.0), (500.0, 500.0), (360.0, 455.0)),
-    2: ((620.0, 435.0), (480.0, 455.0), (315.0, 405.0)),
-    3: ((620.0, 400.0), (470.0, 405.0), (300.0, 345.0)),
-    4: ((620.0, 360.0), (475.0, 345.0), (335.0, 285.0)),
-    5: ((620.0, 325.0), (505.0, 295.0), (400.0, 235.0)),
-    6: ((620.0, 290.0), (555.0, 255.0), (500.0, 205.0)),
-    7: ((620.0, 470.0), (740.0, 500.0), (880.0, 455.0)),
-    8: ((620.0, 435.0), (760.0, 455.0), (925.0, 405.0)),
-    9: ((620.0, 400.0), (770.0, 405.0), (940.0, 345.0)),
-    10: ((620.0, 360.0), (765.0, 345.0), (905.0, 285.0)),
-    11: ((620.0, 325.0), (735.0, 295.0), (840.0, 235.0)),
-    12: ((620.0, 290.0), (685.0, 255.0), (740.0, 205.0)),
+# Invisible month tracks roughly follow the major limbs. They preserve the
+# data mapping without forcing calendar labels into the heraldic artwork.
+MONTH_TRACKS = {
+    1: ((620.0, 455.0), (555.0, 472.0), (470.0, 462.0)),
+    2: ((620.0, 420.0), (540.0, 432.0), (445.0, 418.0)),
+    3: ((620.0, 385.0), (525.0, 388.0), (425.0, 370.0)),
+    4: ((620.0, 350.0), (525.0, 337.0), (445.0, 305.0)),
+    5: ((620.0, 315.0), (545.0, 287.0), (495.0, 242.0)),
+    6: ((620.0, 280.0), (585.0, 238.0), (565.0, 200.0)),
+    7: ((620.0, 455.0), (685.0, 472.0), (770.0, 462.0)),
+    8: ((620.0, 420.0), (700.0, 432.0), (795.0, 418.0)),
+    9: ((620.0, 385.0), (715.0, 388.0), (815.0, 370.0)),
+    10: ((620.0, 350.0), (715.0, 337.0), (795.0, 305.0)),
+    11: ((620.0, 315.0), (695.0, 287.0), (745.0, 242.0)),
+    12: ((620.0, 280.0), (655.0, 238.0), (675.0, 200.0)),
 }
 
+# Static tree artwork. These paths deliberately mimic the tall, symmetric,
+# curling silhouette of Gondor's White Tree instead of a generic data tree.
+TREE_PATHS = (
+    # trunk edges
+    "M610 575 C605 520 607 465 611 410 C614 355 613 300 608 248 C606 223 603 198 600 178",
+    "M630 575 C635 520 633 465 629 410 C626 355 627 300 632 248 C634 223 637 198 640 178",
+    # central crown
+    "M620 330 C612 292 610 252 618 214 C621 196 621 177 620 158",
+    "M616 300 C594 278 583 251 585 224 C586 202 596 183 610 170",
+    "M624 300 C646 278 657 251 655 224 C654 202 644 183 630 170",
+    # left upper branches
+    "M613 330 C573 319 545 296 533 270 C523 248 529 226 546 221 C561 216 572 228 568 241 C565 253 551 258 542 250",
+    "M611 360 C560 352 521 326 501 295 C486 272 490 250 507 243 C522 236 537 246 536 260 C535 271 524 279 513 275",
+    "M611 392 C554 392 510 375 478 347 C456 327 450 305 463 294 C476 284 494 291 498 305 C502 318 492 329 479 329",
+    "M610 425 C550 437 500 429 459 404 C431 387 418 365 430 352 C441 340 460 345 466 359 C471 372 463 384 449 385",
+    "M610 458 C556 477 511 485 473 471 C451 463 443 448 452 438 C462 427 479 432 482 444 C485 456 474 464 463 459",
+    # right upper branches
+    "M627 330 C667 319 695 296 707 270 C717 248 711 226 694 221 C679 216 668 228 672 241 C675 253 689 258 698 250",
+    "M629 360 C680 352 719 326 739 295 C754 272 750 250 733 243 C718 236 703 246 704 260 C705 271 716 279 727 275",
+    "M629 392 C686 392 730 375 762 347 C784 327 790 305 777 294 C764 284 746 291 742 305 C738 318 748 329 761 329",
+    "M630 425 C690 437 740 429 781 404 C809 387 822 365 810 352 C799 340 780 345 774 359 C769 372 777 384 791 385",
+    "M630 458 C684 477 729 485 767 471 C789 463 797 448 788 438 C778 427 761 432 758 444 C755 456 766 464 777 459",
+    # forked decorative shoots
+    "M536 260 C520 249 508 237 507 222 C506 210 513 201 523 202 C533 204 536 214 531 222",
+    "M704 260 C720 249 732 237 733 222 C734 210 727 201 717 202 C707 204 704 214 709 222",
+    "M501 295 C478 289 461 274 458 257 C456 245 464 236 475 237 C487 238 491 248 486 257",
+    "M739 295 C762 289 779 274 782 257 C784 245 776 236 765 237 C753 238 749 248 754 257",
+    "M478 347 C451 345 429 332 421 314 C415 301 421 289 432 288 C445 287 452 298 448 309",
+    "M762 347 C789 345 811 332 819 314 C825 301 819 289 808 288 C795 287 788 298 792 309",
+    # ornamental roots
+    "M612 570 C585 578 557 590 538 606 C522 620 524 635 538 638 C551 640 563 630 561 619 C559 608 546 604 536 611",
+    "M628 570 C655 578 683 590 702 606 C718 620 716 635 702 638 C689 640 677 630 679 619 C681 608 694 604 704 611",
+    "M606 575 C579 590 560 608 557 626 C555 638 566 645 577 640 C587 635 589 623 580 617 C572 611 563 616 560 624",
+    "M634 575 C661 590 680 608 683 626 C685 638 674 645 663 640 C653 635 651 623 660 617 C668 611 677 616 680 624",
+    "M602 582 C588 598 586 615 595 627 C603 638 616 634 616 622 C616 612 607 608 600 615",
+    "M638 582 C652 598 654 615 645 627 C637 638 624 634 624 622 C624 612 633 608 640 615",
+    "M588 600 C566 607 544 617 530 631 C522 639 526 648 536 648 C545 648 551 641 548 634",
+    "M652 600 C674 607 696 617 710 631 C718 639 714 648 704 648 C695 648 689 641 692 634",
+)
 
-def fetch_calendar(login: str, token: str) -> dict[date, int]:
+
+def github_calendar(login: str, token: str) -> dict[date, int]:
     request = Request(
         "https://api.github.com/graphql",
         data=json.dumps({"query": QUERY, "variables": {"login": login}}).encode("utf-8"),
@@ -72,14 +107,14 @@ def fetch_calendar(login: str, token: str) -> dict[date, int]:
         payload = json.load(response)
     if payload.get("errors"):
         raise RuntimeError(f"GitHub GraphQL returned errors: {payload['errors']}")
+
     account = (payload.get("data") or {}).get("user")
     if account is None:
         raise RuntimeError(f"GitHub user not found: {login!r}")
 
-    weeks = account["contributionsCollection"]["contributionCalendar"]["weeks"]
     raw = {
         date.fromisoformat(day["date"]): int(day["contributionCount"])
-        for week in weeks
+        for week in account["contributionsCollection"]["contributionCalendar"]["weeks"]
         for day in week["contributionDays"]
     }
     if not raw:
@@ -108,120 +143,7 @@ def qderivative(start: tuple[float, float], control: tuple[float, float], end: t
     )
 
 
-def organic_point(
-    month: int,
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    t: float,
-) -> tuple[float, float]:
-    """Bend a month branch naturally without changing its overall route."""
-    x, y = qpoint(start, control, end, t)
-    dx, dy = qderivative(start, control, end, t)
-    length = math.hypot(dx, dy) or 1.0
-    nx, ny = -dy / length, dx / length
-
-    # Deterministic layered waves keep the same shape on every refresh.
-    phase = month * 0.73
-    envelope = math.sin(math.pi * t)  # zero offset where branch meets trunk/tip
-    offset = envelope * (
-        (6.0 + (month % 3) * 1.4) * math.sin(2.35 * math.pi * t + phase)
-        + 3.4 * math.sin(5.2 * math.pi * t + phase * 0.61)
-    )
-    return x + nx * offset, y + ny * offset
-
-
-def organic_derivative(
-    month: int,
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    t: float,
-) -> tuple[float, float]:
-    epsilon = 0.002
-    left = max(0.0, t - epsilon)
-    right = min(1.0, t + epsilon)
-    ax, ay = organic_point(month, start, control, end, left)
-    bx, by = organic_point(month, start, control, end, right)
-    return bx - ax, by - ay
-
-
-def organic_path(
-    month: int,
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    *,
-    end_t: float = 1.0,
-    steps: int = 12,
-) -> str:
-    """Return a smooth Catmull-Rom-derived SVG path through organic samples."""
-    end_t = max(0.0, min(1.0, end_t))
-    count = max(2, int(steps * end_t) + 1)
-    points = [
-        organic_point(month, start, control, end, end_t * i / (count - 1))
-        for i in range(count)
-    ]
-
-    commands = [f"M{points[0][0]:.1f} {points[0][1]:.1f}"]
-    for i in range(len(points) - 1):
-        p0 = points[i - 1] if i > 0 else points[i]
-        p1 = points[i]
-        p2 = points[i + 1]
-        p3 = points[i + 2] if i + 2 < len(points) else p2
-        c1 = (p1[0] + (p2[0] - p0[0]) / 6.0, p1[1] + (p2[1] - p0[1]) / 6.0)
-        c2 = (p2[0] - (p3[0] - p1[0]) / 6.0, p2[1] - (p3[1] - p1[1]) / 6.0)
-        commands.append(
-            f"C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} {p2[0]:.1f} {p2[1]:.1f}"
-        )
-    return " ".join(commands)
-
-
-def branch_flourish(month: int, end: tuple[float, float]) -> str:
-    """Small heraldic curl at each month-branch tip."""
-    x, y = end
-    side = -1 if month <= 6 else 1
-    outer_x = x + side * 28
-    lift_y = y - 34
-    curl_x = x + side * 8
-    return (
-        f"M{x:.1f} {y:.1f} "
-        f"C{x + side * 13:.1f} {y - 5:.1f} {outer_x:.1f} {y - 18:.1f} {outer_x:.1f} {lift_y:.1f} "
-        f"C{outer_x:.1f} {y - 47:.1f} {curl_x:.1f} {y - 48:.1f} {curl_x:.1f} {y - 34:.1f} "
-        f"C{curl_x:.1f} {y - 24:.1f} {x + side * 17:.1f} {y - 23:.1f} {x + side * 19:.1f} {y - 29:.1f}"
-    )
-
-
-def intensity_class(count: int) -> str:
-    if count >= 25:
-        return "bud5"
-    if count >= 13:
-        return "bud4"
-    if count >= 6:
-        return "bud3"
-    if count >= 3:
-        return "bud2"
-    if count >= 1:
-        return "bud1"
-    return "bud0"
-
-
-def bud_radius(count: int) -> float:
-    if count >= 25:
-        return 7.0
-    if count >= 13:
-        return 6.0
-    if count >= 6:
-        return 5.0
-    if count >= 3:
-        return 4.2
-    if count >= 1:
-        return 3.4
-    return 1.8
-
-
 def current_streak(calendar: dict[date, int]) -> int:
-    """Count consecutive active days ending on the latest calendar day."""
     streak = 0
     cursor = max(calendar)
     while calendar.get(cursor, 0) > 0:
@@ -231,7 +153,6 @@ def current_streak(calendar: dict[date, int]) -> int:
 
 
 def longest_streak(calendar: dict[date, int]) -> int:
-    """Return the longest consecutive run of active contribution days."""
     longest = 0
     running = 0
     for day in sorted(calendar):
@@ -243,254 +164,189 @@ def longest_streak(calendar: dict[date, int]) -> int:
     return longest
 
 
+def bud_radius(count: int) -> float:
+    if count >= 25:
+        return 6.0
+    if count >= 13:
+        return 5.2
+    if count >= 6:
+        return 4.5
+    if count >= 3:
+        return 3.8
+    return 3.0
+
+
+def bud_class(count: int) -> str:
+    if count >= 25:
+        return "bud5"
+    if count >= 13:
+        return "bud4"
+    if count >= 6:
+        return "bud3"
+    if count >= 3:
+        return "bud2"
+    return "bud1"
+
+
+def rosette(
+    cx: float,
+    cy: float,
+    radius: float,
+    label: str = "",
+    value: str = "",
+    detail: str = "",
+    *,
+    glow: bool = False,
+    petals: int = 12,
+) -> str:
+    filter_attr = ' filter="url(#glow)"' if glow else ""
+    petal_radius = 4.6 if radius >= 40 else 3.6
+    ring = radius
+    petals_svg = []
+    for index in range(petals):
+        angle = -math.pi / 2 + index * (2 * math.pi / petals)
+        px = cx + math.cos(angle) * ring
+        py = cy + math.sin(angle) * ring
+        petals_svg.append(
+            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{petal_radius:.1f}" fill="none" stroke="#f3f7fa" stroke-width="2"/>'
+        )
+
+    text_svg = ""
+    if label:
+        text_svg = (
+            f'<text x="{cx:.1f}" y="{cy-10:.1f}" text-anchor="middle" class="mono star-label">{html.escape(label)}</text>'
+            f'<text x="{cx:.1f}" y="{cy+16:.1f}" text-anchor="middle" class="mono star-value">{html.escape(value)}</text>'
+        )
+        if detail:
+            text_svg += (
+                f'<text x="{cx:.1f}" y="{cy+35:.1f}" text-anchor="middle" class="mono star-detail">{html.escape(detail)}</text>'
+            )
+
+    pulse = ""
+    if glow:
+        pulse = (
+            f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius+9:.1f}" fill="none" stroke="#f3f7fa" opacity=".16">'
+            f'<animate attributeName="opacity" values=".08;.38;.08" dur="2.4s" repeatCount="indefinite"/>'
+            f'<animate attributeName="r" values="{radius+5:.1f};{radius+13:.1f};{radius+5:.1f}" dur="2.4s" repeatCount="indefinite"/>'
+            f'</circle>'
+        )
+
+    return f'<g{filter_attr}>{"".join(petals_svg)}{pulse}{text_svg}</g>'
+
+
 def render(calendar: dict[date, int], out_path: Path) -> None:
     if not calendar:
         raise ValueError("Cannot render an empty contribution calendar")
 
-    total_contributions = sum(calendar.values())
-    latest_active = max((day for day, count in calendar.items() if count > 0), default=max(calendar))
-    first_day = min(calendar)
-    last_day = max(calendar)
-    current_streak_days = current_streak(calendar)
-    longest_streak_days = longest_streak(calendar)
+    total = sum(calendar.values())
+    current = current_streak(calendar)
+    longest = longest_streak(calendar)
     peak_day, peak_count = max(calendar.items(), key=lambda item: item[1])
+    latest_active = max((day for day, count in calendar.items() if count > 0), default=max(calendar))
 
-    branch_parts: list[str] = []
-    twig_parts: list[str] = []
-    label_parts: list[str] = []
+    active_parts: list[str] = []
     latest_target: tuple[float, float] | None = None
-    latest_branch_point: tuple[float, float] | None = None
-    latest_geometry: tuple[tuple[float, float], tuple[float, float], tuple[float, float]] | None = None
-    latest_month: int | None = None
-    latest_t: float | None = None
+    latest_track: tuple[tuple[float, float], tuple[float, float], tuple[float, float], float] | None = None
 
     for month in range(1, 13):
-        start, control, end = MONTH_BRANCHES[month]
-        side = -1 if month <= 6 else 1
-        branch_parts.append(
-            f'<path d="{organic_path(month, start, control, end)}" class="month-branch"/>'
-        )
-        branch_parts.append(
-            f'<path d="{branch_flourish(month, end)}" class="branch-flourish"/>'
-        )
-
-        label_x = end[0] + (-12 if side < 0 else 12)
-        anchor = "end" if side < 0 else "start"
-        label_parts.append(
-            f'<text x="{label_x:.1f}" y="{end[1]-8:.1f}" text-anchor="{anchor}" class="mono month-label">{MONTH_NAMES[month-1]}</text>'
-        )
-
-        # Every real day in the rolling 365-day window is a twig. Inactive
-        # days stay faint; active days receive a brighter, larger bud.
-        month_days = sorted(day for day in calendar if day.month == month)
-        for day in month_days:
-            count = calendar[day]
-            t = 0.10 + 0.80 * ((day.day - 1) / 30.0)
-            t = max(0.08, min(0.92, t))
-            px, py = organic_point(month, start, control, end, t)
-            dx, dy = organic_derivative(month, start, control, end, t)
+        start, control, end = MONTH_TRACKS[month]
+        for day, count in sorted((d, c) for d, c in calendar.items() if d.month == month and c > 0):
+            t = max(0.08, min(0.92, 0.10 + 0.80 * ((day.day - 1) / 30.0)))
+            px, py = qpoint(start, control, end, t)
+            dx, dy = qderivative(start, control, end, t)
             length = math.hypot(dx, dy) or 1.0
             nx, ny = -dy / length, dx / length
-
-            # Alternating outward directions create the intentionally messy,
-            # natural branch silhouette without breaking the date mapping.
             direction = 1 if day.toordinal() % 2 == 0 else -1
-            twig_len = 9.0 if count == 0 else 11.0 + min(10.0, math.log2(count + 1) * 2.0)
-            tx = px + nx * twig_len * direction
-            ty = py + ny * twig_len * direction
-
-            inactive = " inactive" if count == 0 else ""
-            twig_parts.append(
-                f'<path d="M{px:.1f} {py:.1f} Q{(px+tx)/2:.1f} {(py+ty)/2:.1f} {tx:.1f} {ty:.1f}" class="day-twig{inactive}"/>'
+            offset = 7.0 + min(8.0, math.log2(count + 1) * 1.5)
+            tx = px + nx * offset * direction
+            ty = py + ny * offset * direction
+            active_parts.append(
+                f'<path d="M{px:.1f} {py:.1f} L{tx:.1f} {ty:.1f}" class="activity-twig"/>'
             )
-            twig_parts.append(
-                f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{bud_radius(count):.1f}" class="{intensity_class(count)}">'
+            active_parts.append(
+                f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{bud_radius(count):.1f}" class="{bud_class(count)}">'
                 f'<title>{html.escape(day.isoformat())}: {count} contribution{"s" if count != 1 else ""}</title></circle>'
             )
-
             if day == latest_active:
                 latest_target = (tx, ty)
-                latest_branch_point = (px, py)
-                latest_geometry = (start, control, end)
-                latest_month = month
-                latest_t = t
+                latest_track = (start, control, end, t)
 
-    if (
-        latest_target is None
-        or latest_branch_point is None
-        or latest_geometry is None
-        or latest_month is None
-        or latest_t is None
-    ):
-        latest_target = (620.0, 365.0)
-        latest_branch_point = latest_target
-        latest_geometry = MONTH_BRANCHES[9]
-        latest_month = 9
-        latest_t = 0.0
+    if latest_target is None or latest_track is None:
+        latest_target = (620.0, 385.0)
+        latest_track = (*MONTH_TRACKS[9], 0.0)
 
-    latest_start, latest_control, latest_end = latest_geometry
-    branch_motion = organic_path(
-        latest_month,
-        latest_start,
-        latest_control,
-        latest_end,
-        end_t=latest_t,
-        steps=12,
-    )
-    # Continue from the trunk into the exact same organic month path used by
-    # the visible branch, then finish on the latest day's twig.
-    first_curve = branch_motion.find("C")
-    branch_motion_suffix = branch_motion[first_curve:] if first_curve >= 0 else ""
+    latest_start, latest_control, latest_end, latest_t = latest_track
+    branch_point = qpoint(latest_start, latest_control, latest_end, latest_t)
     orb_path = (
-        f"M620 580 C620 520 620 460 620 {latest_start[1]:.1f} "
-        f"{branch_motion_suffix} "
+        f"M620 575 C620 520 620 455 620 {latest_start[1]:.1f} "
+        f"Q{latest_control[0]:.1f} {latest_control[1]:.1f} {branch_point[0]:.1f} {branch_point[1]:.1f} "
         f"L{latest_target[0]:.1f} {latest_target[1]:.1f}"
     )
 
-    canopy_shapes = (
-        # Dense, irregular white crown. The smaller overlapping lobes make the
-        # canopy read as a bushy cluster rather than one smooth oval.
-        (620, 164, 112, 58),
-        (548, 166, 78, 48),
-        (694, 166, 80, 49),
-        (505, 172, 50, 38),
-        (736, 173, 52, 39),
-        (579, 126, 64, 43),
-        (641, 116, 70, 46),
-        (696, 129, 58, 41),
-        (536, 132, 48, 36),
-        (586, 202, 72, 38),
-        (653, 205, 76, 39),
-        (719, 199, 50, 33),
-        (520, 202, 46, 32),
-        (613, 91, 43, 31),
-        (657, 91, 40, 29),
-    )
+    tree_svg = "".join(f'<path d="{path}"/>' for path in TREE_PATHS)
+
+    # Seven rosettes echo the reference: four carry stats, three remain decorative.
+    stars = [
+        rosette(620, 120, 48, "TOTAL", f"{total:,}", "CONTRIBUTIONS", petals=14),
+        rosette(390, 165, 39, "CURRENT", f"{current} DAYS", "", glow=True),
+        rosette(850, 165, 39, "LONGEST", f"{longest} DAYS"),
+        rosette(260, 275, 28),
+        rosette(980, 275, 42, "PEAK", str(peak_count), f"{peak_day:%b %d, %Y}"),
+        rosette(330, 390, 26),
+        rosette(910, 390, 26),
+    ]
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
   <title id="title">WhiteTree Activity Core</title>
-  <desc id="desc">A Gondor-inspired White Tree visualization with a narrow heraldic trunk, paired curling month branches, ornamental roots, a white contribution crown, day twigs, and an animated orb traveling to the latest active day.</desc>
+  <desc id="desc">A White Tree of Gondor-inspired GitHub activity visualization. The heraldic white tree occupies the center, seven star rosettes surround its crown, four stars display contribution statistics, subtle buds mark active contribution days, and an animated orb travels to the latest active day.</desc>
   <defs>
     <style><![CDATA[
       .mono {{ font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }}
       .title {{ font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }}
-      .sub {{ font-size: 12px; letter-spacing: 2px; }}
-      .month-label {{ font-size: 11px; font-weight: 800; letter-spacing: 1px; fill: #8592a3; }}
-      .root-title {{ font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }}
-      .root-sub {{ font-size: 10px; }}
-      .stat-label {{ font-size: 14px; font-weight: 900; letter-spacing: .55px; }}
-      .stat-value {{ font-size: 22px; font-weight: 800; }}
-      .peak-date {{ font-size: 18px; font-weight: 900; letter-spacing: .15px; }}
-      .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
-      .canopy-value {{ font-size: 43px; font-weight: 900; }}
-      .tiny {{ font-size: 9px; letter-spacing: .6px; }}
-      .month-branch {{ fill: none; stroke: #f1f5f9; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }}
-      .branch-flourish {{ fill: none; stroke: #f1f5f9; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; opacity: .95; }}
-      .gondor-root {{ fill: none; stroke: #eef3f8; stroke-width: 3.1; stroke-linecap: round; stroke-linejoin: round; opacity: .92; }}
-      .day-twig {{ fill: none; stroke: #aeb9c7; stroke-width: 1.25; stroke-linecap: round; opacity: .9; }}
-      .day-twig.inactive {{ stroke: #445061; opacity: .43; }}
-      .bud0 {{ fill: #303947; opacity: .75; }}
+      .sub {{ font-size: 12px; letter-spacing: 1.6px; }}
+      .tree {{ fill: none; stroke: #f3f7fa; stroke-width: 4.1; stroke-linecap: round; stroke-linejoin: round; }}
+      .activity-twig {{ fill: none; stroke: #aeb9c7; stroke-width: 1.15; stroke-linecap: round; opacity: .72; }}
       .bud1 {{ fill: #53677b; }} .bud2 {{ fill: #7393a5; }} .bud3 {{ fill: #91bdc5; }}
       .bud4 {{ fill: #b8e1d1; }} .bud5 {{ fill: #f3f7fa; }}
+      .star-label {{ fill: #aeb9c7; font-size: 9px; font-weight: 800; letter-spacing: .8px; }}
+      .star-value {{ fill: #f3f7fa; font-size: 19px; font-weight: 900; }}
+      .star-detail {{ fill: #8996a7; font-size: 8px; font-weight: 700; }}
+      .root-label {{ fill: #7d8998; font-size: 10px; font-weight: 800; letter-spacing: 1.4px; }}
     ]]></style>
     <filter id="glow" x="-220%" y="-220%" width="440%" height="440%">
-      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feGaussianBlur stdDeviation="4.2" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stop-color="#6e7f93"/><stop offset=".62" stop-color="#c7d0da"/><stop offset="1" stop-color="#f5f8fb"/>
-    </linearGradient>
   </defs>
 
   <rect width="{WIDTH}" height="{HEIGHT}" rx="18" fill="#11151d"/>
   <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
 
   <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
-  <text x="42" y="75" class="mono sub" fill="#718096">MONTH → BRANCH   DAY → TWIG   ORB → LATEST CONTRIBUTION</text>
+  <text x="42" y="75" class="mono sub" fill="#718096">WHITE TREE → ACTIVITY   STARS → STATS   ORB → LATEST CONTRIBUTION</text>
 
-  <!-- heraldic White Tree trunk: pale outer line with a dark hollow center -->
-  <path d="M620 580 C614 520 618 463 620 405 C620 342 619 278 620 205"
-        fill="none" stroke="#f3f7fa" stroke-width="15" stroke-linecap="round"/>
-  <path d="M620 580 C614 520 618 463 620 405 C620 342 619 278 620 205"
-        fill="none" stroke="#11151d" stroke-width="6" stroke-linecap="round"/>
+  <!-- seven heraldic star rosettes -->
+  <g>{"".join(stars)}</g>
 
-  <!-- compact leaf cloud: only caps the trunk -->
-  <g opacity=".95">
-    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#f3f7fa"/>' for cx,cy,rx,ry in canopy_shapes)}
-  </g>
+  <!-- White Tree of Gondor silhouette -->
+  <g class="tree">{tree_svg}</g>
 
-  <!-- month branches stay outside the leaf cloud -->
-  <g>{''.join(branch_parts)}</g>
-  <g>{''.join(twig_parts)}</g>
-  <g>{''.join(label_parts)}</g>
+  <!-- subtle active-day contribution buds -->
+  <g>{"".join(active_parts)}</g>
 
-  <!-- total contributions highlighted inside the trunk canopy -->
-  <g class="mono" text-anchor="middle">
-    <text x="620" y="156" class="canopy-label" fill="#11151d">TOTAL CONTRIBUTIONS</text>
-    <text x="620" y="204" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
-  </g>
-
-  <!-- Gondor-inspired ornamental root scrollwork -->
-  <g class="gondor-root">
-    <path d="M620 575 C592 582 565 594 548 610 C535 623 541 637 555 636 C568 635 575 622 566 614 C557 606 542 613 533 623"/>
-    <path d="M620 575 C648 582 675 594 692 610 C705 623 699 637 685 636 C672 635 665 622 674 614 C683 606 698 613 707 623"/>
-    <path d="M610 579 C585 588 561 605 552 624 C547 636 557 644 567 640"/>
-    <path d="M630 579 C655 588 679 605 688 624 C693 636 683 644 673 640"/>
-    <path d="M604 584 C590 599 586 614 594 626 C601 636 613 633 612 622 C611 614 604 611 598 616"/>
-    <path d="M636 584 C650 599 654 614 646 626 C639 636 627 633 628 622 C629 614 636 611 642 616"/>
-  </g>
-
-  <!-- Mind / Work roots -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M620 580 C574 580 532 585 494 600 C465 611 438 614 406 614" stroke="#7ca8b8" stroke-width="5.2"/>
-    <path d="M620 580 C666 580 708 585 746 600 C775 611 802 614 834 614" stroke="#91b98f" stroke-width="5.2"/>
-  </g>
-  <g class="mono">
-    <rect x="284" y="588" width="216" height="52" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="303" y="610" class="root-title" fill="#9ccfd8">MIND</text>
-    <text x="303" y="628" class="root-sub" fill="#718096">notes · plans · knowledge</text>
-    <rect x="740" y="588" width="216" height="52" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="759" y="610" class="root-title" fill="#a6e3a1">WORK</text>
-    <text x="759" y="628" class="root-sub" fill="#718096">code · repos · shipping</text>
-  </g>
-
-  <!-- contribution orb: trunk -> latest month branch -> latest active day -->
+  <!-- latest-contribution orb -->
   <circle r="6" fill="#ffffff" filter="url(#glow)">
     <animateMotion path="{orb_path}" dur="5.2s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0;.95;.95;0" keyTimes="0;.08;.9;1" dur="5.2s" repeatCount="indefinite"/>
   </circle>
-  <circle cx="{latest_target[0]:.1f}" cy="{latest_target[1]:.1f}" r="10" fill="none" stroke="#f3f7fa" opacity=".28">
-    <animate attributeName="r" values="8;14;8" dur="2.2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values=".15;.5;.15" dur="2.2s" repeatCount="indefinite"/>
+  <circle cx="{latest_target[0]:.1f}" cy="{latest_target[1]:.1f}" r="10" fill="none" stroke="#f3f7fa" opacity=".25">
+    <animate attributeName="r" values="7;13;7" dur="2.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".12;.46;.12" dur="2.2s" repeatCount="indefinite"/>
   </circle>
 
-  <!-- focused contribution statistics -->
-  <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
-  <g class="mono">
-    <g transform="translate(72 675)">
-      <!-- lit flame: current streak -->
-      <g transform="translate(-2 -20) scale(1.45)" filter="url(#glow)">
-        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
-              fill="#ffffff"/>
-      </g>
-      <text x="36" class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
-      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
-    </g>
-    <g transform="translate(455 675)">
-      <!-- dormant flame: longest streak -->
-      <g transform="translate(-2 -20) scale(1.45)">
-        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
-              fill="#242e3a" stroke="#718096" stroke-width="1.9" stroke-linejoin="round"/>
-      </g>
-      <text x="36" class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
-      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
-    </g>
-    <g transform="translate(835 675)">
-      <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
-      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
-      <text x="68" y="38" class="peak-date" fill="#f1f5f9">{peak_day:%b %d, %Y}</text>
-    </g>
-  </g>
+  <!-- WhiteTree roots still encode the ecosystem identity without dashboard boxes -->
+  <text x="500" y="672" text-anchor="middle" class="mono root-label">MIND</text>
+  <text x="740" y="672" text-anchor="middle" class="mono root-label">WORK</text>
 </svg>'''
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -499,7 +355,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
 def main() -> None:
     render(
-        fetch_calendar(os.environ["GITHUB_USER"], os.environ["GITHUB_TOKEN"]),
+        github_calendar(os.environ["GITHUB_USER"], os.environ["GITHUB_TOKEN"]),
         Path("assets/whitetree-activity.svg"),
     )
 
