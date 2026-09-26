@@ -346,6 +346,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
       .root-sub {{ font-size: 10px; }}
       .stat-label {{ font-size: 14px; font-weight: 900; letter-spacing: .55px; }}
       .stat-value {{ font-size: 22px; font-weight: 800; }}
+      .peak-date {{ font-size: 15px; font-weight: 800; letter-spacing: .2px; }}
       .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
       .canopy-value {{ font-size: 43px; font-weight: 900; }}
       .tiny {{ font-size: 9px; letter-spacing: .6px; }}
@@ -431,7 +432,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
     <g transform="translate(835 675)">
       <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
       <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
-      <text x="72" y="38" class="tiny" fill="#93a0b0">{peak_day:%b %d, %Y}</text>
+      <text x="72" y="38" class="peak-date" fill="#d5dde7">{peak_day:%b %d, %Y}</text>
     </g>
   </g>
 </svg>'''
