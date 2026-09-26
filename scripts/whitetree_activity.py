@@ -378,7 +378,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
   <!-- compact leaf cloud: only caps the trunk -->
   <g opacity=".95">
-    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/>' for cx,cy,rx,ry in canopy_shapes)}
+    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#f3f7fa"/>' for cx,cy,rx,ry in canopy_shapes)}
   </g>
 
   <!-- month branches stay outside the leaf cloud -->

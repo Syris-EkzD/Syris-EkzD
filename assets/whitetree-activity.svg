@@ -43,7 +43,7 @@
 
   <!-- compact leaf cloud: only caps the trunk -->
   <g opacity=".95">
-    <ellipse cx="620" cy="165" rx="116" ry="62" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="552" cy="174" rx="72" ry="48" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="688" cy="174" rx="72" ry="48" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="620" cy="124" rx="76" ry="45" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/><ellipse cx="620" cy="202" rx="92" ry="42" fill="#f3f7fa" stroke="#cbd5df" stroke-width="1.4"/>
+    <ellipse cx="620" cy="165" rx="116" ry="62" fill="#f3f7fa"/><ellipse cx="552" cy="174" rx="72" ry="48" fill="#f3f7fa"/><ellipse cx="688" cy="174" rx="72" ry="48" fill="#f3f7fa"/><ellipse cx="620" cy="124" rx="76" ry="45" fill="#f3f7fa"/><ellipse cx="620" cy="202" rx="92" ry="42" fill="#f3f7fa"/>
   </g>
 
   <!-- month branches stay outside the leaf cloud -->
