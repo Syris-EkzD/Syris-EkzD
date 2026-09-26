@@ -1,263 +1,157 @@
-"""Generate the WhiteTree GitHub contribution visualization.
+"""Render a static White Tree of Gondor study for the GitHub profile.
 
-This version keeps the contribution statistics in Gondor-style star rosettes,
-but the tree itself is pure heraldic artwork: no month labels, day buds,
-calendar twigs, or latest-day indicators.
+This pass intentionally focuses only on the tree artwork. There are no stars,
+statistics, month/day indicators, contribution buds, or activity animations.
 
-The central tree is shaped to more closely match the White Tree of Gondor:
-- a thick trunk that tapers as it rises,
-- two heavy primary limbs,
-- progressively thinner curling sub-branches,
-- ornate mirrored roots.
+The tree is drawn as hollow white linework on the profile's dark background:
+a broad tapering trunk, two thick primary limbs, thinner curling branches, and
+ornamental mirrored roots matching the supplied White Tree reference.
 """
-from __future__ import annotations
-
-from datetime import date, timedelta
-import html
-import json
-import math
-import os
 from pathlib import Path
-from urllib.request import Request, urlopen
-
-QUERY = """query($login: String!) {
-  user(login: $login) {
-    contributionsCollection {
-      contributionCalendar {
-        weeks { contributionDays { date contributionCount } }
-      }
-    }
-  }
-}"""
 
 WIDTH = 1240
 HEIGHT = 760
-DAYS = 365
+
+TREE_MARKUP = r'''
+  <!-- Hollow White Tree of Gondor study -->
+  <g class="tree-art">
+    <!-- thick hollow trunk, broad at the base and tapering upward -->
+    <path class="hollow-major" d="
+      M594 610
+      C600 565 603 520 603 474
+      C603 425 600 382 603 340
+      C605 305 607 277 605 247
+      C603 220 599 198 595 180
+      C605 188 614 200 620 215
+      C626 200 635 188 645 180
+      C641 198 637 220 635 247
+      C633 277 635 305 637 340
+      C640 382 637 425 637 474
+      C637 520 640 565 646 610
+      C638 601 629 596 620 596
+      C611 596 602 601 594 610 Z"/>
+
+    <!-- two thick primary limbs -->
+    <path class="hollow-primary" d="
+      M608 418
+      C574 414 546 402 521 384
+      C494 365 475 342 468 319
+      C463 301 468 286 481 280
+      C493 274 506 280 511 291
+      C517 303 511 316 500 320
+      C488 324 479 316 480 306
+      C486 323 500 340 520 352
+      C544 367 571 375 608 378 Z"/>
+    <path class="hollow-primary" d="
+      M632 418
+      C666 414 694 402 719 384
+      C746 365 765 342 772 319
+      C777 301 772 286 759 280
+      C747 274 734 280 729 291
+      C723 303 729 316 740 320
+      C752 324 761 316 760 306
+      C754 323 740 340 720 352
+      C696 367 669 375 632 378 Z"/>
+
+    <!-- second heavy pair -->
+    <path class="hollow-secondary" d="
+      M607 365
+      C576 357 552 341 535 319
+      C518 297 513 274 522 257
+      C529 244 542 239 553 245
+      C563 251 565 263 559 272
+      C552 282 540 282 533 274
+      C536 292 552 310 575 320
+      C586 325 596 328 608 330 Z"/>
+    <path class="hollow-secondary" d="
+      M633 365
+      C664 357 688 341 705 319
+      C722 297 727 274 718 257
+      C711 244 698 239 687 245
+      C677 251 675 263 681 272
+      C688 282 700 282 707 274
+      C704 292 688 310 665 320
+      C654 325 644 328 632 330 Z"/>
+
+    <!-- upper fork -->
+    <path class="hollow-secondary" d="
+      M611 325
+      C590 309 579 286 579 261
+      C579 239 587 219 601 204
+      C609 195 615 185 620 172
+      C621 194 616 213 607 228
+      C598 243 594 260 598 276
+      C602 292 608 302 615 311 Z"/>
+    <path class="hollow-secondary" d="
+      M629 325
+      C650 309 661 286 661 261
+      C661 239 653 219 639 204
+      C631 195 625 185 620 172
+      C619 194 624 213 633 228
+      C642 243 646 260 642 276
+      C638 292 632 302 625 311 Z"/>
+
+    <!-- thin curling outer branches -->
+    <path class="twig" d="M523 319 C497 316 475 304 463 287 C452 271 452 253 462 245 C473 236 488 242 491 254 C494 266 485 276 473 274"/>
+    <path class="twig" d="M717 319 C743 316 765 304 777 287 C788 271 788 253 778 245 C767 236 752 242 749 254 C746 266 755 276 767 274"/>
+
+    <path class="twig" d="M535 319 C508 306 488 286 482 264 C477 247 482 231 495 226 C507 221 520 229 521 241 C522 252 514 260 504 260"/>
+    <path class="twig" d="M705 319 C732 306 752 286 758 264 C763 247 758 231 745 226 C733 221 720 229 719 241 C718 252 726 260 736 260"/>
+
+    <path class="twig" d="M579 261 C560 251 546 236 543 219 C540 204 546 192 557 189 C568 186 578 194 578 204 C578 214 570 221 561 219"/>
+    <path class="twig" d="M661 261 C680 251 694 236 697 219 C700 204 694 192 683 189 C672 186 662 194 662 204 C662 214 670 221 679 219"/>
+
+    <path class="twig" d="M601 204 C592 190 590 175 594 162 C597 151 605 143 613 143 C621 144 625 152 622 160"/>
+    <path class="twig" d="M639 204 C648 190 650 175 646 162 C643 151 635 143 627 143 C619 144 615 152 618 160"/>
+
+    <!-- small forks matching the reference's sharp branch tips -->
+    <path class="twig" d="M482 264 C466 259 454 248 451 235 C449 224 455 215 464 214 C473 213 480 221 477 230"/>
+    <path class="twig" d="M758 264 C774 259 786 248 789 235 C791 224 785 215 776 214 C767 213 760 221 763 230"/>
+
+    <path class="twig" d="M463 287 C445 286 430 278 423 266 C416 254 419 243 428 239 C438 235 447 241 449 250"/>
+    <path class="twig" d="M777 287 C795 286 810 278 817 266 C824 254 821 243 812 239 C802 235 793 241 791 250"/>
+
+    <path class="twig" d="M500 320 C481 329 463 332 449 325 C437 319 433 307 440 298 C448 288 462 290 468 300"/>
+    <path class="twig" d="M740 320 C759 329 777 332 791 325 C803 319 807 307 800 298 C792 288 778 290 772 300"/>
+
+    <!-- exact-style hollow ornamental roots -->
+    <path class="root" d="M604 598 C582 603 558 614 540 629 C525 642 525 658 538 665 C551 671 565 662 564 649 C563 637 549 632 539 640"/>
+    <path class="root" d="M636 598 C658 603 682 614 700 629 C715 642 715 658 702 665 C689 671 675 662 676 649 C677 637 691 632 701 640"/>
+
+    <path class="root" d="M600 606 C574 619 555 636 552 654 C550 668 562 677 575 672 C587 667 591 654 581 647 C572 640 562 646 558 654"/>
+    <path class="root" d="M640 606 C666 619 685 636 688 654 C690 668 678 677 665 672 C653 667 649 654 659 647 C668 640 678 646 682 654"/>
+
+    <path class="root" d="M597 614 C583 631 581 649 591 662 C600 673 614 670 615 657 C615 646 606 641 598 648"/>
+    <path class="root" d="M643 614 C657 631 659 649 649 662 C640 673 626 670 625 657 C625 646 634 641 642 648"/>
+
+    <path class="root" d="M586 632 C561 639 539 650 525 665 C517 673 521 682 532 682 C542 682 549 675 547 667"/>
+    <path class="root" d="M654 632 C679 639 701 650 715 665 C723 673 719 682 708 682 C698 682 691 675 693 667"/>
+
+    <!-- small inner root curls -->
+    <path class="twig" d="M608 612 C602 626 604 638 613 643 C621 648 628 643 627 635 C626 628 620 625 615 629"/>
+    <path class="twig" d="M632 612 C638 626 636 638 627 643 C619 648 612 643 613 635 C614 628 620 625 625 629"/>
+  </g>'''
 
 
-def github_calendar(login: str, token: str) -> dict[date, int]:
-    request = Request(
-        "https://api.github.com/graphql",
-        data=json.dumps({"query": QUERY, "variables": {"login": login}}).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Accept": "application/vnd.github+json",
-            "Content-Type": "application/json",
-            "User-Agent": "whitetree-profile-renderer",
-        },
-        method="POST",
-    )
-    with urlopen(request, timeout=35) as response:
-        payload = json.load(response)
-    if payload.get("errors"):
-        raise RuntimeError(f"GitHub GraphQL returned errors: {payload['errors']}")
-
-    account = (payload.get("data") or {}).get("user")
-    if account is None:
-        raise RuntimeError(f"GitHub user not found: {login!r}")
-
-    raw = {
-        date.fromisoformat(day["date"]): int(day["contributionCount"])
-        for week in account["contributionsCollection"]["contributionCalendar"]["weeks"]
-        for day in week["contributionDays"]
-    }
-    if not raw:
-        raise RuntimeError("GitHub returned an empty contribution calendar")
-
-    last_day = max(raw)
-    first_day = last_day - timedelta(days=DAYS - 1)
-    return {
-        first_day + timedelta(days=offset): raw.get(first_day + timedelta(days=offset), 0)
-        for offset in range(DAYS)
-    }
-
-
-def current_streak(calendar: dict[date, int]) -> int:
-    streak = 0
-    cursor = max(calendar)
-    while calendar.get(cursor, 0) > 0:
-        streak += 1
-        cursor -= timedelta(days=1)
-    return streak
-
-
-def longest_streak(calendar: dict[date, int]) -> int:
-    longest = 0
-    running = 0
-    for day in sorted(calendar):
-        if calendar[day] > 0:
-            running += 1
-            longest = max(longest, running)
-        else:
-            running = 0
-    return longest
-
-
-def rosette(
-    cx: float,
-    cy: float,
-    radius: float,
-    label: str = "",
-    value: str = "",
-    detail: str = "",
-    *,
-    glow: bool = False,
-    petals: int = 12,
-) -> str:
-    filter_attr = ' filter="url(#glow)"' if glow else ""
-    petal_radius = 4.6 if radius >= 40 else 3.6
-    petals_svg = []
-    for index in range(petals):
-        angle = -math.pi / 2 + index * (2 * math.pi / petals)
-        px = cx + math.cos(angle) * radius
-        py = cy + math.sin(angle) * radius
-        petals_svg.append(
-            f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{petal_radius:.1f}" '
-            f'fill="none" stroke="#f3f7fa" stroke-width="2"/>'
-        )
-
-    text_svg = ""
-    if label:
-        text_svg = (
-            f'<text x="{cx:.1f}" y="{cy-10:.1f}" text-anchor="middle" class="mono star-label">{html.escape(label)}</text>'
-            f'<text x="{cx:.1f}" y="{cy+16:.1f}" text-anchor="middle" class="mono star-value">{html.escape(value)}</text>'
-        )
-        if detail:
-            text_svg += (
-                f'<text x="{cx:.1f}" y="{cy+35:.1f}" text-anchor="middle" class="mono star-detail">{html.escape(detail)}</text>'
-            )
-
-    pulse = ""
-    if glow:
-        pulse = (
-            f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius+9:.1f}" fill="none" stroke="#f3f7fa" opacity=".16">'
-            f'<animate attributeName="opacity" values=".08;.38;.08" dur="2.4s" repeatCount="indefinite"/>'
-            f'<animate attributeName="r" values="{radius+5:.1f};{radius+13:.1f};{radius+5:.1f}" dur="2.4s" repeatCount="indefinite"/>'
-            f'</circle>'
-        )
-
-    return f'<g{filter_attr}>{"".join(petals_svg)}{pulse}{text_svg}</g>'
-
-
-def tree_art() -> str:
-    # Filled trunk: broad at the base, narrowing continuously toward the crown.
-    trunk = """<path class="tree-fill" d="
-      M598 575
-      C603 535 604 498 603 461
-      C602 421 600 385 603 348
-      C606 313 608 281 606 247
-      C605 216 601 187 595 165
-      C605 170 614 180 620 193
-      C626 180 635 170 645 165
-      C639 187 635 216 634 247
-      C632 281 634 313 637 348
-      C640 385 638 421 637 461
-      C636 498 637 535 642 575
-      C634 568 626 564 620 564
-      C614 564 606 568 598 575 Z"/>"""
-
-    # Two heavy primary limbs, then progressively thinner branches.
-    heavy = (
-        "M610 414 C570 409 540 392 515 366 C494 344 486 319 500 304",
-        "M630 414 C670 409 700 392 725 366 C746 344 754 319 740 304",
-        "M608 365 C570 353 543 332 525 303 C511 280 513 257 529 244",
-        "M632 365 C670 353 697 332 715 303 C729 280 727 257 711 244",
-    )
-    medium = (
-        "M604 333 C575 317 557 292 556 264 C555 241 565 219 584 207",
-        "M636 333 C665 317 683 292 684 264 C685 241 675 219 656 207",
-        "M600 300 C583 277 579 251 586 227 C591 209 602 193 614 181",
-        "M640 300 C657 277 661 251 654 227 C649 209 638 193 626 181",
-        "M515 366 C483 365 455 352 435 330 C420 314 417 296 428 285",
-        "M725 366 C757 365 785 352 805 330 C820 314 823 296 812 285",
-        "M500 304 C476 299 457 285 449 267 C442 251 447 237 459 232",
-        "M740 304 C764 299 783 285 791 267 C798 251 793 237 781 232",
-    )
-    thin = (
-        "M584 207 C568 200 555 187 553 173 C552 161 559 152 569 154 C579 156 582 166 577 174",
-        "M656 207 C672 200 685 187 687 173 C688 161 681 152 671 154 C661 156 658 166 663 174",
-        "M529 244 C511 235 500 221 500 205 C500 191 508 181 519 183 C531 185 534 196 528 205",
-        "M711 244 C729 235 740 221 740 205 C740 191 732 181 721 183 C709 185 706 196 712 205",
-        "M449 267 C426 263 407 251 399 235 C393 223 398 211 409 209 C421 207 428 218 424 228",
-        "M791 267 C814 263 833 251 841 235 C847 223 842 211 831 209 C819 207 812 218 816 228",
-        "M435 330 C407 332 386 322 374 306 C364 293 366 280 376 274 C388 267 401 274 403 286 C405 297 396 306 385 305",
-        "M805 330 C833 332 854 322 866 306 C876 293 874 280 864 274 C852 267 839 274 837 286 C835 297 844 306 855 305",
-        "M614 181 C608 165 607 149 612 135 C615 126 619 117 620 107",
-        "M626 181 C632 165 633 149 628 135 C625 126 621 117 620 107",
-    )
-    roots = (
-        "M604 568 C580 575 557 587 540 602 C525 615 525 630 538 635 C550 640 563 631 562 620 C561 610 549 605 539 611",
-        "M636 568 C660 575 683 587 700 602 C715 615 715 630 702 635 C690 640 677 631 678 620 C679 610 691 605 701 611",
-        "M602 575 C576 589 557 607 554 625 C552 638 564 646 575 641 C586 636 589 624 580 617 C572 611 563 616 559 624",
-        "M638 575 C664 589 683 607 686 625 C688 638 676 646 665 641 C654 636 651 624 660 617 C668 611 677 616 681 624",
-        "M597 583 C583 600 581 617 591 629 C599 639 613 636 614 624 C614 613 605 608 598 615",
-        "M643 583 C657 600 659 617 649 629 C641 639 627 636 626 624 C626 613 635 608 642 615",
-        "M586 601 C562 608 541 619 527 633 C520 641 524 649 534 649 C544 649 551 642 548 635",
-        "M654 601 C678 608 699 619 713 633 C720 641 716 649 706 649 C696 649 689 642 692 635",
-    )
-
-    return (
-        trunk
-        + "".join(f'<path class="tree-heavy" d="{path}"/>' for path in heavy)
-        + "".join(f'<path class="tree-medium" d="{path}"/>' for path in medium)
-        + "".join(f'<path class="tree-thin" d="{path}"/>' for path in thin)
-        + "".join(f'<path class="tree-root" d="{path}"/>' for path in roots)
-    )
-
-
-def render(calendar: dict[date, int], out_path: Path) -> None:
-    if not calendar:
-        raise ValueError("Cannot render an empty contribution calendar")
-
-    total = sum(calendar.values())
-    current = current_streak(calendar)
-    longest = longest_streak(calendar)
-    peak_day, peak_count = max(calendar.items(), key=lambda item: item[1])
-
-    stars = [
-        rosette(620, 120, 48, "TOTAL", f"{total:,}", "CONTRIBUTIONS", petals=14),
-        rosette(390, 165, 39, "CURRENT", f"{current} DAYS", "", glow=True),
-        rosette(850, 165, 39, "LONGEST", f"{longest} DAYS"),
-        rosette(260, 275, 28),
-        rosette(980, 275, 42, "PEAK", str(peak_count), f"{peak_day:%b %d, %Y}"),
-        rosette(330, 390, 26),
-        rosette(910, 390, 26),
-    ]
-
+def render(out_path: Path) -> None:
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
-  <title id="title">WhiteTree Activity Core</title>
-  <desc id="desc">A White Tree of Gondor-inspired GitHub profile artwork with a thick tapering trunk, two heavy primary limbs, curling white branches, ornate roots, and seven statistic rosettes.</desc>
+  <title id="title">WhiteTree</title>
+  <desc id="desc">A hollow white line-art study of the White Tree of Gondor with a thick tapering trunk, two heavy primary limbs, curling sub-branches, and ornamental roots.</desc>
   <defs>
     <style><![CDATA[
-      .mono {{ font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }}
-      .title {{ font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }}
-      .sub {{ font-size: 12px; letter-spacing: 1.6px; }}
-      .tree-fill {{ fill: #f3f7fa; }}
-      .tree-heavy {{ fill: none; stroke: #f3f7fa; stroke-width: 15; stroke-linecap: round; stroke-linejoin: round; }}
-      .tree-medium {{ fill: none; stroke: #f3f7fa; stroke-width: 8.5; stroke-linecap: round; stroke-linejoin: round; }}
-      .tree-thin {{ fill: none; stroke: #f3f7fa; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }}
-      .tree-root {{ fill: none; stroke: #f3f7fa; stroke-width: 4.0; stroke-linecap: round; stroke-linejoin: round; }}
-      .star-label {{ fill: #aeb9c7; font-size: 9px; font-weight: 800; letter-spacing: .8px; }}
-      .star-value {{ fill: #f3f7fa; font-size: 19px; font-weight: 900; }}
-      .star-detail {{ fill: #8996a7; font-size: 8px; font-weight: 700; }}
+      .tree-art {{ fill: none; stroke: #f3f7fa; stroke-linecap: round; stroke-linejoin: round; }}
+      .hollow-major {{ fill: #11151d; stroke: #f3f7fa; stroke-width: 4.2; }}
+      .hollow-primary {{ fill: #11151d; stroke: #f3f7fa; stroke-width: 4.0; }}
+      .hollow-secondary {{ fill: #11151d; stroke: #f3f7fa; stroke-width: 3.6; }}
+      .twig {{ fill: none; stroke: #f3f7fa; stroke-width: 3.0; }}
+      .root {{ fill: none; stroke: #f3f7fa; stroke-width: 3.6; }}
     ]]></style>
-    <filter id="glow" x="-220%" y="-220%" width="440%" height="440%">
-      <feGaussianBlur stdDeviation="4.2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
   </defs>
 
   <rect width="{WIDTH}" height="{HEIGHT}" rx="18" fill="#11151d"/>
   <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
 
-  <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
-  <text x="42" y="75" class="mono sub" fill="#718096">WHITE TREE → CORE   STARS → CONTRIBUTION STATS</text>
-
-  <!-- seven heraldic star rosettes -->
-  <g>{"".join(stars)}</g>
-
-  <!-- White Tree of Gondor artwork only: no month/day indicators -->
-  <g>{tree_art()}</g>
+  {TREE_MARKUP}
 </svg>'''
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -265,10 +159,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
 
 def main() -> None:
-    render(
-        github_calendar(os.environ["GITHUB_USER"], os.environ["GITHUB_TOKEN"]),
-        Path("assets/whitetree-activity.svg"),
-    )
+    render(Path("assets/whitetree-activity.svg"))
 
 
 if __name__ == "__main__":
