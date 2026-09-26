@@ -11,7 +11,7 @@
       .root-sub { font-size: 10px; }
       .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; }
       .stat-value { font-size: 22px; font-weight: 800; }
-      .canopy-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; }
+      .canopy-label { font-size: 14px; font-weight: 900; letter-spacing: .8px; }
       .canopy-value { font-size: 43px; font-weight: 900; }
       .tiny { font-size: 9px; letter-spacing: .6px; }
       .month-branch { fill: none; stroke: #d9e0e8; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }
@@ -52,9 +52,10 @@
 
   <!-- total contributions highlighted inside the trunk canopy -->
   <g class="mono" text-anchor="middle">
-    <text x="620" y="154" class="canopy-label" fill="#44505e">TOTAL CONTRIBUTIONS</text>
-    <text x="620" y="195" class="canopy-value" fill="#11151d">539</text>
-    <text x="620" y="214" class="tiny" fill="#5f6c7a">ROLLING 365 DAYS</text>
+    <rect x="526" y="134" width="188" height="29" rx="14.5" fill="#1b2430" stroke="#364252" stroke-width="1"/>
+    <text x="620" y="154" class="canopy-label" fill="#f7fafc">TOTAL CONTRIBUTIONS</text>
+    <text x="620" y="199" class="canopy-value" fill="#11151d">539</text>
+    <text x="620" y="218" class="tiny" fill="#5f6c7a">ROLLING 365 DAYS</text>
   </g>
 
   <!-- Mind / Work roots -->
