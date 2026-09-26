@@ -346,7 +346,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
       .root-sub {{ font-size: 10px; }}
       .stat-label {{ font-size: 14px; font-weight: 900; letter-spacing: .55px; }}
       .stat-value {{ font-size: 22px; font-weight: 800; }}
-      .peak-date {{ font-size: 15px; font-weight: 800; letter-spacing: .2px; }}
+      .peak-date {{ font-size: 18px; font-weight: 900; letter-spacing: .15px; }}
       .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
       .canopy-value {{ font-size: 43px; font-weight: 900; }}
       .tiny {{ font-size: 9px; letter-spacing: .6px; }}
@@ -388,10 +388,8 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
 
   <!-- total contributions highlighted inside the trunk canopy -->
   <g class="mono" text-anchor="middle">
-    <rect x="526" y="134" width="188" height="29" rx="14.5" fill="#1b2430" stroke="#364252" stroke-width="1"/>
-    <text x="620" y="154" class="canopy-label" fill="#f7fafc">TOTAL CONTRIBUTIONS</text>
-    <text x="620" y="199" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
-    <text x="620" y="218" class="tiny" fill="#5f6c7a">ROLLING 365 DAYS</text>
+    <text x="620" y="156" class="canopy-label" fill="#11151d">TOTAL CONTRIBUTIONS</text>
+    <text x="620" y="204" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
   </g>
 
   <!-- Mind / Work roots -->
@@ -423,26 +421,26 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
   <g class="mono">
     <g transform="translate(72 675)">
       <!-- lit flame: current streak -->
-      <g transform="translate(0 -13)" filter="url(#glow)">
+      <g transform="translate(-2 -20) scale(1.45)" filter="url(#glow)">
         <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
-              fill="#f7fafc"/>
+              fill="#ffffff"/>
       </g>
-      <text x="28" class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
-      <text x="28" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
+      <text x="36" class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
+      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
     </g>
     <g transform="translate(455 675)">
       <!-- dormant flame: longest streak -->
-      <g transform="translate(0 -13)">
+      <g transform="translate(-2 -20) scale(1.45)">
         <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
-              fill="none" stroke="#596675" stroke-width="1.8" stroke-linejoin="round"/>
+              fill="#242e3a" stroke="#718096" stroke-width="1.9" stroke-linejoin="round"/>
       </g>
-      <text x="28" class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
-      <text x="28" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
+      <text x="36" class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
+      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
     </g>
     <g transform="translate(835 675)">
       <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
       <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
-      <text x="72" y="38" class="peak-date" fill="#d5dde7">{peak_day:%b %d, %Y}</text>
+      <text x="68" y="38" class="peak-date" fill="#f1f5f9">{peak_day:%b %d, %Y}</text>
     </g>
   </g>
 </svg>'''
