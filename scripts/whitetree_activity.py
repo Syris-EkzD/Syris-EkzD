@@ -326,11 +326,23 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
     )
 
     canopy_shapes = (
-        (620, 165, 116, 62),
-        (552, 174, 72, 48),
-        (688, 174, 72, 48),
-        (620, 124, 76, 45),
-        (620, 202, 92, 42),
+        # Dense, irregular white crown. The smaller overlapping lobes make the
+        # canopy read as a bushy cluster rather than one smooth oval.
+        (620, 164, 112, 58),
+        (548, 166, 78, 48),
+        (694, 166, 80, 49),
+        (505, 172, 50, 38),
+        (736, 173, 52, 39),
+        (579, 126, 64, 43),
+        (641, 116, 70, 46),
+        (696, 129, 58, 41),
+        (536, 132, 48, 36),
+        (586, 202, 72, 38),
+        (653, 205, 76, 39),
+        (719, 199, 50, 33),
+        (520, 202, 46, 32),
+        (613, 91, 43, 31),
+        (657, 91, 40, 29),
     )
 
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
