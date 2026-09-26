@@ -344,7 +344,7 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
       .month-label {{ font-size: 11px; font-weight: 800; letter-spacing: 1px; fill: #8592a3; }}
       .root-title {{ font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }}
       .root-sub {{ font-size: 10px; }}
-      .stat-label {{ font-size: 10px; font-weight: 700; letter-spacing: 1.2px; }}
+      .stat-label {{ font-size: 14px; font-weight: 900; letter-spacing: .55px; }}
       .stat-value {{ font-size: 22px; font-weight: 800; }}
       .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
       .canopy-value {{ font-size: 43px; font-weight: 900; }}
@@ -421,17 +421,17 @@ def render(calendar: dict[date, int], out_path: Path) -> None:
   <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
   <g class="mono">
     <g transform="translate(72 675)">
-      <text class="stat-label" fill="#7f8c9d">CURRENT STREAK</text>
-      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
+      <text class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
+      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
     </g>
     <g transform="translate(455 675)">
-      <text class="stat-label" fill="#7f8c9d">LONGEST STREAK</text>
-      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
+      <text class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
+      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
     </g>
     <g transform="translate(835 675)">
-      <text class="stat-label" fill="#7f8c9d">MOST CONTRIBUTIONS IN A DAY</text>
-      <text y="35" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
-      <text x="72" y="35" class="tiny" fill="#93a0b0">{peak_day:%b %d, %Y}</text>
+      <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
+      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
+      <text x="72" y="38" class="tiny" fill="#93a0b0">{peak_day:%b %d, %Y}</text>
     </g>
   </g>
 </svg>'''
