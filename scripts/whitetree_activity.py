@@ -1,33 +1,471 @@
-"""Render the current WhiteTree artwork for the GitHub profile.
+"""Generate the WhiteTree GitHub contribution visualization.
 
-This pass uses the user's newer White Tree reference: a cleaner, more solid
-silhouette with a long tapering trunk, upward crown, curling side branches,
-and a flared root base. Stars and activity/statistics remain intentionally
-omitted while the core tree design is being finalized.
+Mapping:
+- one long trunk feeds a compact leaf cloud that highlights the 365-day total,
+- each month is one major branch,
+- every day is a small sub-branch/twig,
+- active days end in brighter contribution buds,
+- the animated contribution orb travels to the most recent active day.
+
+The leaf cloud intentionally stays around the top of the trunk instead of
+covering the month branches.
 """
+from __future__ import annotations
+
+from datetime import date, timedelta
+import html
+import json
+import math
+import os
 from pathlib import Path
+from urllib.request import Request, urlopen
+
+QUERY = """query($login: String!) {
+  user(login: $login) {
+    contributionsCollection {
+      contributionCalendar {
+        weeks { contributionDays { date contributionCount } }
+      }
+    }
+  }
+}"""
 
 WIDTH = 1240
 HEIGHT = 760
-TREE_PATH = r"""M182.0,0.0 L180.0,6.0 L177.0,13.0 L173.0,20.0 L169.0,25.0 L165.0,29.0 L163.0,31.0 L160.0,27.0 L157.0,22.0 L154.0,16.0 L151.0,8.0 L149.0,1.0 L147.0,7.0 L146.0,15.0 L147.0,23.0 L150.0,31.0 L155.0,38.0 L159.0,44.0 L160.0,52.0 L160.0,82.0 L153.0,72.0 L146.0,62.0 L140.0,50.0 L137.0,42.0 L136.0,34.0 L132.0,39.0 L130.0,46.0 L130.0,54.0 L132.0,63.0 L137.0,74.0 L143.0,83.0 L153.0,95.0 L159.0,102.0 L159.0,125.0 L153.0,115.0 L146.0,106.0 L138.0,101.0 L131.0,101.0 L126.0,104.0 L123.0,110.0 L122.0,117.0 L124.0,124.0 L128.0,130.0 L133.0,133.0 L137.0,133.0 L136.0,129.0 L133.0,125.0 L132.0,120.0 L134.0,116.0 L138.0,114.0 L142.0,115.0 L147.0,120.0 L152.0,129.0 L156.0,139.0 L158.0,148.0 L158.0,168.0 L150.0,157.0 L141.0,147.0 L131.0,138.0 L122.0,132.0 L115.0,129.0 L108.0,129.0 L103.0,132.0 L100.0,137.0 L99.0,144.0 L101.0,151.0 L106.0,158.0 L113.0,161.0 L118.0,161.0 L116.0,157.0 L111.0,154.0 L109.0,150.0 L109.0,145.0 L112.0,141.0 L117.0,140.0 L123.0,142.0 L130.0,148.0 L137.0,156.0 L145.0,168.0 L151.0,179.0 L154.0,188.0 L154.0,202.0 L146.0,192.0 L137.0,184.0 L128.0,179.0 L118.0,178.0 L111.0,181.0 L105.0,187.0 L103.0,193.0 L104.0,200.0 L108.0,206.0 L115.0,211.0 L124.0,212.0 L130.0,210.0 L128.0,207.0 L123.0,204.0 L120.0,200.0 L120.0,195.0 L123.0,191.0 L128.0,190.0 L134.0,192.0 L141.0,198.0 L148.0,207.0 L153.0,218.0 L155.0,227.0 L155.0,245.0 L146.0,237.0 L136.0,230.0 L125.0,226.0 L114.0,225.0 L104.0,228.0 L97.0,234.0 L93.0,241.0 L92.0,250.0 L95.0,258.0 L101.0,265.0 L110.0,269.0 L119.0,269.0 L126.0,267.0 L124.0,264.0 L118.0,261.0 L114.0,257.0 L113.0,252.0 L116.0,247.0 L122.0,245.0 L129.0,247.0 L137.0,252.0 L145.0,261.0 L151.0,271.0 L155.0,281.0 L155.0,294.0 L145.0,286.0 L135.0,280.0 L124.0,277.0 L114.0,277.0 L104.0,280.0 L95.0,286.0 L88.0,293.0 L83.0,300.0 L79.0,305.0 L73.0,309.0 L66.0,310.0 L61.0,307.0 L59.0,301.0 L60.0,295.0 L64.0,291.0 L69.0,289.0 L73.0,290.0 L71.0,286.0 L66.0,283.0 L60.0,284.0 L55.0,288.0 L52.0,294.0 L51.0,301.0 L53.0,309.0 L57.0,315.0 L63.0,319.0 L71.0,321.0 L80.0,319.0 L89.0,315.0 L99.0,308.0 L108.0,301.0 L118.0,296.0 L128.0,294.0 L138.0,295.0 L147.0,299.0 L154.0,306.0 L156.0,315.0 L156.0,330.0 L146.0,323.0 L136.0,318.0 L126.0,317.0 L116.0,319.0 L108.0,324.0 L102.0,331.0 L99.0,339.0 L98.0,347.0 L100.0,355.0 L104.0,361.0 L110.0,365.0 L116.0,365.0 L120.0,363.0 L118.0,360.0 L113.0,358.0 L110.0,354.0 L109.0,350.0 L111.0,345.0 L115.0,343.0 L120.0,344.0 L126.0,348.0 L132.0,355.0 L138.0,364.0 L143.0,373.0 L147.0,381.0 L149.0,389.0 L149.0,445.0 L148.0,480.0 L145.0,498.0 L140.0,513.0 L133.0,525.0 L124.0,533.0 L113.0,539.0 L102.0,542.0 L90.0,543.0 L80.0,545.0 L72.0,549.0 L67.0,554.0 L66.0,558.0 L69.0,560.0 L73.0,558.0 L76.0,555.0 L82.0,553.0 L88.0,554.0 L93.0,557.0 L96.0,561.0 L96.0,565.0 L94.0,568.0 L91.0,569.0 L90.0,572.0 L92.0,574.0 L96.0,574.0 L99.0,571.0 L101.0,568.0 L105.0,566.0 L110.0,566.0 L114.0,569.0 L116.0,573.0 L116.0,576.0 L114.0,579.0 L112.0,580.0 L112.0,583.0 L114.0,585.0 L118.0,584.0 L121.0,581.0 L123.0,577.0 L127.0,575.0 L132.0,575.0 L136.0,577.0 L139.0,581.0 L140.0,585.0 L139.0,588.0 L136.0,590.0 L136.0,592.0 L139.0,594.0 L143.0,593.0 L146.0,590.0 L149.0,586.0 L153.0,584.0 L158.0,584.0 L162.0,586.0 L165.0,590.0 L166.0,594.0 L165.0,597.0 L162.0,600.0 L160.0,600.0 L160.0,603.0 L163.0,605.0 L167.0,604.0 L171.0,601.0 L174.0,597.0 L178.0,595.0 L182.0,595.0 L186.0,597.0 L189.0,601.0 L193.0,604.0 L197.0,605.0 L200.0,603.0 L200.0,600.0 L198.0,600.0 L195.0,597.0 L194.0,594.0 L195.0,590.0 L198.0,586.0 L202.0,584.0 L207.0,584.0 L211.0,586.0 L214.0,590.0 L217.0,593.0 L221.0,594.0 L224.0,592.0 L224.0,590.0 L221.0,588.0 L220.0,585.0 L221.0,581.0 L224.0,577.0 L228.0,575.0 L233.0,575.0 L237.0,577.0 L239.0,581.0 L242.0,584.0 L246.0,585.0 L248.0,583.0 L248.0,580.0 L246.0,579.0 L244.0,576.0 L244.0,573.0 L246.0,569.0 L250.0,566.0 L255.0,566.0 L259.0,568.0 L261.0,571.0 L264.0,574.0 L268.0,574.0 L270.0,572.0 L269.0,569.0 L266.0,568.0 L264.0,565.0 L264.0,561.0 L267.0,557.0 L272.0,554.0 L278.0,553.0 L284.0,555.0 L287.0,558.0 L291.0,560.0 L294.0,558.0 L293.0,554.0 L288.0,549.0 L280.0,545.0 L270.0,543.0 L258.0,542.0 L247.0,539.0 L236.0,533.0 L227.0,525.0 L220.0,513.0 L215.0,498.0 L212.0,480.0 L211.0,445.0 L211.0,389.0 L213.0,381.0 L217.0,373.0 L222.0,364.0 L228.0,355.0 L234.0,348.0 L240.0,344.0 L245.0,343.0 L249.0,345.0 L251.0,350.0 L250.0,354.0 L247.0,358.0 L242.0,360.0 L240.0,363.0 L244.0,365.0 L250.0,365.0 L256.0,361.0 L260.0,355.0 L262.0,347.0 L261.0,339.0 L258.0,331.0 L252.0,324.0 L244.0,319.0 L234.0,317.0 L224.0,318.0 L214.0,323.0 L204.0,330.0 L204.0,315.0 L206.0,306.0 L213.0,299.0 L222.0,295.0 L232.0,294.0 L242.0,296.0 L252.0,301.0 L261.0,308.0 L271.0,315.0 L280.0,319.0 L289.0,321.0 L297.0,319.0 L303.0,315.0 L307.0,309.0 L309.0,301.0 L308.0,294.0 L305.0,288.0 L300.0,284.0 L294.0,283.0 L289.0,286.0 L287.0,290.0 L291.0,289.0 L296.0,291.0 L300.0,295.0 L301.0,301.0 L299.0,307.0 L294.0,310.0 L287.0,309.0 L281.0,305.0 L277.0,300.0 L270.0,293.0 L261.0,286.0 L251.0,280.0 L241.0,277.0 L231.0,277.0 L220.0,280.0 L210.0,286.0 L200.0,294.0 L200.0,281.0 L204.0,271.0 L210.0,261.0 L218.0,252.0 L226.0,247.0 L233.0,245.0 L239.0,247.0 L242.0,252.0 L241.0,257.0 L237.0,261.0 L231.0,264.0 L229.0,267.0 L236.0,269.0 L245.0,269.0 L254.0,265.0 L260.0,258.0 L263.0,250.0 L262.0,241.0 L258.0,234.0 L251.0,228.0 L241.0,225.0 L230.0,226.0 L219.0,230.0 L209.0,237.0 L200.0,245.0 L200.0,227.0 L202.0,218.0 L207.0,207.0 L214.0,198.0 L221.0,192.0 L227.0,190.0 L232.0,191.0 L235.0,195.0 L235.0,200.0 L232.0,204.0 L227.0,207.0 L225.0,210.0 L231.0,212.0 L240.0,211.0 L247.0,206.0 L251.0,200.0 L252.0,193.0 L250.0,187.0 L244.0,181.0 L237.0,178.0 L227.0,179.0 L218.0,184.0 L209.0,192.0 L201.0,202.0 L201.0,188.0 L204.0,179.0 L210.0,168.0 L218.0,156.0 L225.0,148.0 L232.0,142.0 L238.0,140.0 L243.0,141.0 L246.0,145.0 L246.0,150.0 L243.0,154.0 L238.0,157.0 L236.0,161.0 L241.0,161.0 L248.0,158.0 L253.0,151.0 L255.0,144.0 L254.0,137.0 L251.0,132.0 L246.0,129.0 L239.0,129.0 L232.0,132.0 L223.0,138.0 L213.0,147.0 L204.0,157.0 L196.0,168.0 L196.0,148.0 L198.0,139.0 L202.0,129.0 L207.0,120.0 L212.0,115.0 L216.0,114.0 L220.0,116.0 L222.0,120.0 L221.0,125.0 L218.0,129.0 L217.0,133.0 L221.0,133.0 L226.0,130.0 L230.0,124.0 L232.0,117.0 L231.0,110.0 L228.0,104.0 L223.0,101.0 L216.0,101.0 L208.0,106.0 L201.0,115.0 L195.0,125.0 L195.0,102.0 L201.0,95.0 L211.0,83.0 L217.0,74.0 L222.0,63.0 L224.0,54.0 L224.0,46.0 L222.0,39.0 L218.0,34.0 L217.0,42.0 L214.0,50.0 L208.0,62.0 L201.0,72.0 L194.0,82.0 L194.0,52.0 L195.0,44.0 L199.0,38.0 L204.0,31.0 L207.0,23.0 L208.0,15.0 L207.0,7.0 L205.0,1.0 L203.0,8.0 L200.0,16.0 L197.0,22.0 L194.0,27.0 L191.0,31.0 L189.0,29.0 L185.0,25.0 L181.0,20.0 L177.0,13.0 L174.0,6.0 L172.0,0.0 Z"""
+DAYS = 365
+MONTH_NAMES = ("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
+
+# start, quadratic control, end. Jan-Jun grow left; Jul-Dec grow right.
+MONTH_BRANCHES = {
+    1: ((620.0, 470.0), (470.0, 490.0), (250.0, 505.0)),
+    2: ((620.0, 435.0), (450.0, 420.0), (190.0, 455.0)),
+    3: ((620.0, 400.0), (440.0, 385.0), (150.0, 395.0)),
+    4: ((620.0, 365.0), (440.0, 335.0), (170.0, 330.0)),
+    5: ((620.0, 330.0), (455.0, 290.0), (225.0, 270.0)),
+    6: ((620.0, 295.0), (485.0, 245.0), (330.0, 220.0)),
+    7: ((620.0, 295.0), (755.0, 245.0), (910.0, 220.0)),
+    8: ((620.0, 330.0), (785.0, 290.0), (1015.0, 270.0)),
+    9: ((620.0, 365.0), (800.0, 335.0), (1070.0, 330.0)),
+    10: ((620.0, 400.0), (800.0, 385.0), (1090.0, 395.0)),
+    11: ((620.0, 435.0), (790.0, 420.0), (1050.0, 455.0)),
+    12: ((620.0, 470.0), (770.0, 490.0), (990.0, 505.0)),
+}
 
 
-def render(out_path: Path) -> None:
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
-  <title id="title">WhiteTree</title>
-  <desc id="desc">A clean solid vector adaptation of the newly supplied White Tree reference, with a tall tapering trunk, branching crown, curling tips, and flared roots.</desc>
+def fetch_calendar(login: str, token: str) -> dict[date, int]:
+    request = Request(
+        "https://api.github.com/graphql",
+        data=json.dumps({"query": QUERY, "variables": {"login": login}}).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json",
+            "User-Agent": "whitetree-profile-renderer",
+        },
+        method="POST",
+    )
+    with urlopen(request, timeout=35) as response:
+        payload = json.load(response)
+    if payload.get("errors"):
+        raise RuntimeError(f"GitHub GraphQL returned errors: {payload['errors']}")
+    account = (payload.get("data") or {}).get("user")
+    if account is None:
+        raise RuntimeError(f"GitHub user not found: {login!r}")
+
+    weeks = account["contributionsCollection"]["contributionCalendar"]["weeks"]
+    raw = {
+        date.fromisoformat(day["date"]): int(day["contributionCount"])
+        for week in weeks
+        for day in week["contributionDays"]
+    }
+    if not raw:
+        raise RuntimeError("GitHub returned an empty contribution calendar")
+
+    last_day = max(raw)
+    first_day = last_day - timedelta(days=DAYS - 1)
+    return {
+        first_day + timedelta(days=offset): raw.get(first_day + timedelta(days=offset), 0)
+        for offset in range(DAYS)
+    }
+
+
+def qpoint(start: tuple[float, float], control: tuple[float, float], end: tuple[float, float], t: float) -> tuple[float, float]:
+    u = 1.0 - t
+    return (
+        u * u * start[0] + 2 * u * t * control[0] + t * t * end[0],
+        u * u * start[1] + 2 * u * t * control[1] + t * t * end[1],
+    )
+
+
+def qderivative(start: tuple[float, float], control: tuple[float, float], end: tuple[float, float], t: float) -> tuple[float, float]:
+    return (
+        2 * (1 - t) * (control[0] - start[0]) + 2 * t * (end[0] - control[0]),
+        2 * (1 - t) * (control[1] - start[1]) + 2 * t * (end[1] - control[1]),
+    )
+
+
+def organic_point(
+    month: int,
+    start: tuple[float, float],
+    control: tuple[float, float],
+    end: tuple[float, float],
+    t: float,
+) -> tuple[float, float]:
+    """Bend a month branch naturally without changing its overall route."""
+    x, y = qpoint(start, control, end, t)
+    dx, dy = qderivative(start, control, end, t)
+    length = math.hypot(dx, dy) or 1.0
+    nx, ny = -dy / length, dx / length
+
+    # Deterministic layered waves keep the same shape on every refresh.
+    phase = month * 0.73
+    envelope = math.sin(math.pi * t)  # zero offset where branch meets trunk/tip
+    offset = envelope * (
+        (6.0 + (month % 3) * 1.4) * math.sin(2.35 * math.pi * t + phase)
+        + 3.4 * math.sin(5.2 * math.pi * t + phase * 0.61)
+    )
+    return x + nx * offset, y + ny * offset
+
+
+def organic_derivative(
+    month: int,
+    start: tuple[float, float],
+    control: tuple[float, float],
+    end: tuple[float, float],
+    t: float,
+) -> tuple[float, float]:
+    epsilon = 0.002
+    left = max(0.0, t - epsilon)
+    right = min(1.0, t + epsilon)
+    ax, ay = organic_point(month, start, control, end, left)
+    bx, by = organic_point(month, start, control, end, right)
+    return bx - ax, by - ay
+
+
+def organic_path(
+    month: int,
+    start: tuple[float, float],
+    control: tuple[float, float],
+    end: tuple[float, float],
+    *,
+    end_t: float = 1.0,
+    steps: int = 12,
+) -> str:
+    """Return a smooth Catmull-Rom-derived SVG path through organic samples."""
+    end_t = max(0.0, min(1.0, end_t))
+    count = max(2, int(steps * end_t) + 1)
+    points = [
+        organic_point(month, start, control, end, end_t * i / (count - 1))
+        for i in range(count)
+    ]
+
+    commands = [f"M{points[0][0]:.1f} {points[0][1]:.1f}"]
+    for i in range(len(points) - 1):
+        p0 = points[i - 1] if i > 0 else points[i]
+        p1 = points[i]
+        p2 = points[i + 1]
+        p3 = points[i + 2] if i + 2 < len(points) else p2
+        c1 = (p1[0] + (p2[0] - p0[0]) / 6.0, p1[1] + (p2[1] - p0[1]) / 6.0)
+        c2 = (p2[0] - (p3[0] - p1[0]) / 6.0, p2[1] - (p3[1] - p1[1]) / 6.0)
+        commands.append(
+            f"C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} {p2[0]:.1f} {p2[1]:.1f}"
+        )
+    return " ".join(commands)
+
+
+def intensity_class(count: int) -> str:
+    if count >= 25:
+        return "bud5"
+    if count >= 13:
+        return "bud4"
+    if count >= 6:
+        return "bud3"
+    if count >= 3:
+        return "bud2"
+    if count >= 1:
+        return "bud1"
+    return "bud0"
+
+
+def bud_radius(count: int) -> float:
+    if count >= 25:
+        return 7.0
+    if count >= 13:
+        return 6.0
+    if count >= 6:
+        return 5.0
+    if count >= 3:
+        return 4.2
+    if count >= 1:
+        return 3.4
+    return 1.8
+
+
+def current_streak(calendar: dict[date, int]) -> int:
+    """Count consecutive active days ending on the latest calendar day."""
+    streak = 0
+    cursor = max(calendar)
+    while calendar.get(cursor, 0) > 0:
+        streak += 1
+        cursor -= timedelta(days=1)
+    return streak
+
+
+def longest_streak(calendar: dict[date, int]) -> int:
+    """Return the longest consecutive run of active contribution days."""
+    longest = 0
+    running = 0
+    for day in sorted(calendar):
+        if calendar[day] > 0:
+            running += 1
+            longest = max(longest, running)
+        else:
+            running = 0
+    return longest
+
+
+def render(calendar: dict[date, int], out_path: Path) -> None:
+    if not calendar:
+        raise ValueError("Cannot render an empty contribution calendar")
+
+    total_contributions = sum(calendar.values())
+    latest_active = max((day for day, count in calendar.items() if count > 0), default=max(calendar))
+    first_day = min(calendar)
+    last_day = max(calendar)
+    current_streak_days = current_streak(calendar)
+    longest_streak_days = longest_streak(calendar)
+    peak_day, peak_count = max(calendar.items(), key=lambda item: item[1])
+
+    branch_parts: list[str] = []
+    twig_parts: list[str] = []
+    label_parts: list[str] = []
+    latest_target: tuple[float, float] | None = None
+    latest_branch_point: tuple[float, float] | None = None
+    latest_geometry: tuple[tuple[float, float], tuple[float, float], tuple[float, float]] | None = None
+    latest_month: int | None = None
+    latest_t: float | None = None
+
+    for month in range(1, 13):
+        start, control, end = MONTH_BRANCHES[month]
+        side = -1 if month <= 6 else 1
+        branch_parts.append(
+            f'<path d="{organic_path(month, start, control, end)}" class="month-branch"/>'
+        )
+
+        label_x = end[0] + (-12 if side < 0 else 12)
+        anchor = "end" if side < 0 else "start"
+        label_parts.append(
+            f'<text x="{label_x:.1f}" y="{end[1]-8:.1f}" text-anchor="{anchor}" class="mono month-label">{MONTH_NAMES[month-1]}</text>'
+        )
+
+        # Every real day in the rolling 365-day window is a twig. Inactive
+        # days stay faint; active days receive a brighter, larger bud.
+        month_days = sorted(day for day in calendar if day.month == month)
+        for day in month_days:
+            count = calendar[day]
+            t = 0.10 + 0.80 * ((day.day - 1) / 30.0)
+            t = max(0.08, min(0.92, t))
+            px, py = organic_point(month, start, control, end, t)
+            dx, dy = organic_derivative(month, start, control, end, t)
+            length = math.hypot(dx, dy) or 1.0
+            nx, ny = -dy / length, dx / length
+
+            # Alternating outward directions create the intentionally messy,
+            # natural branch silhouette without breaking the date mapping.
+            direction = 1 if day.toordinal() % 2 == 0 else -1
+            twig_len = 9.0 if count == 0 else 11.0 + min(10.0, math.log2(count + 1) * 2.0)
+            tx = px + nx * twig_len * direction
+            ty = py + ny * twig_len * direction
+
+            inactive = " inactive" if count == 0 else ""
+            twig_parts.append(
+                f'<path d="M{px:.1f} {py:.1f} Q{(px+tx)/2:.1f} {(py+ty)/2:.1f} {tx:.1f} {ty:.1f}" class="day-twig{inactive}"/>'
+            )
+            twig_parts.append(
+                f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{bud_radius(count):.1f}" class="{intensity_class(count)}">'
+                f'<title>{html.escape(day.isoformat())}: {count} contribution{"s" if count != 1 else ""}</title></circle>'
+            )
+
+            if day == latest_active:
+                latest_target = (tx, ty)
+                latest_branch_point = (px, py)
+                latest_geometry = (start, control, end)
+                latest_month = month
+                latest_t = t
+
+    if (
+        latest_target is None
+        or latest_branch_point is None
+        or latest_geometry is None
+        or latest_month is None
+        or latest_t is None
+    ):
+        latest_target = (620.0, 365.0)
+        latest_branch_point = latest_target
+        latest_geometry = MONTH_BRANCHES[9]
+        latest_month = 9
+        latest_t = 0.0
+
+    latest_start, latest_control, latest_end = latest_geometry
+    branch_motion = organic_path(
+        latest_month,
+        latest_start,
+        latest_control,
+        latest_end,
+        end_t=latest_t,
+        steps=12,
+    )
+    # Continue from the trunk into the exact same organic month path used by
+    # the visible branch, then finish on the latest day's twig.
+    first_curve = branch_motion.find("C")
+    branch_motion_suffix = branch_motion[first_curve:] if first_curve >= 0 else ""
+    orb_path = (
+        f"M620 580 C620 520 620 460 620 {latest_start[1]:.1f} "
+        f"{branch_motion_suffix} "
+        f"L{latest_target[0]:.1f} {latest_target[1]:.1f}"
+    )
+
+    canopy_shapes = (
+        # Dense, irregular white crown. The smaller overlapping lobes make the
+        # canopy read as a bushy cluster rather than one smooth oval.
+        (620, 164, 112, 58),
+        (548, 166, 78, 48),
+        (694, 166, 80, 49),
+        (505, 172, 50, 38),
+        (736, 173, 52, 39),
+        (579, 126, 64, 43),
+        (641, 116, 70, 46),
+        (696, 129, 58, 41),
+        (536, 132, 48, 36),
+        (586, 202, 72, 38),
+        (653, 205, 76, 39),
+        (719, 199, 50, 33),
+        (520, 202, 46, 32),
+        (613, 91, 43, 31),
+        (657, 91, 40, 29),
+    )
+
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
+  <title id="title">WhiteTree Activity Core</title>
+  <desc id="desc">A long WhiteTree trunk leads into a compact leaf cloud showing the rolling 365-day contribution total. Each month is a major branch, each day is a twig, and an animated contribution orb travels to the most recent active day.</desc>
+  <defs>
+    <style><![CDATA[
+      .mono {{ font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }}
+      .title {{ font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }}
+      .sub {{ font-size: 12px; letter-spacing: 2px; }}
+      .month-label {{ font-size: 11px; font-weight: 800; letter-spacing: 1px; fill: #8592a3; }}
+      .root-title {{ font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }}
+      .root-sub {{ font-size: 10px; }}
+      .stat-label {{ font-size: 14px; font-weight: 900; letter-spacing: .55px; }}
+      .stat-value {{ font-size: 22px; font-weight: 800; }}
+      .peak-date {{ font-size: 18px; font-weight: 900; letter-spacing: .15px; }}
+      .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
+      .canopy-value {{ font-size: 43px; font-weight: 900; }}
+      .tiny {{ font-size: 9px; letter-spacing: .6px; }}
+      .month-branch {{ fill: none; stroke: #d9e0e8; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }}
+      .day-twig {{ fill: none; stroke: #aeb9c7; stroke-width: 1.25; stroke-linecap: round; opacity: .9; }}
+      .day-twig.inactive {{ stroke: #445061; opacity: .43; }}
+      .bud0 {{ fill: #303947; opacity: .75; }}
+      .bud1 {{ fill: #53677b; }} .bud2 {{ fill: #7393a5; }} .bud3 {{ fill: #91bdc5; }}
+      .bud4 {{ fill: #b8e1d1; }} .bud5 {{ fill: #f3f7fa; }}
+    ]]></style>
+    <filter id="glow" x="-220%" y="-220%" width="440%" height="440%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#6e7f93"/><stop offset=".62" stop-color="#c7d0da"/><stop offset="1" stop-color="#f5f8fb"/>
+    </linearGradient>
+  </defs>
+
   <rect width="{WIDTH}" height="{HEIGHT}" rx="18" fill="#11151d"/>
   <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
-  <g transform="translate(409 88) scale(1.17)">
-    <path d="{TREE_PATH}" fill="#f3f7fa"/>
+
+  <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
+  <text x="42" y="75" class="mono sub" fill="#718096">MONTH → BRANCH   DAY → TWIG   ORB → LATEST CONTRIBUTION</text>
+
+  <!-- one long trunk -->
+  <path d="M620 580 C616 520 620 462 620 405 C620 340 620 276 620 205"
+        fill="none" stroke="url(#trunk)" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- compact leaf cloud: only caps the trunk -->
+  <g opacity=".95">
+    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#f3f7fa"/>' for cx,cy,rx,ry in canopy_shapes)}
   </g>
-</svg>"""
+
+  <!-- month branches stay outside the leaf cloud -->
+  <g>{''.join(branch_parts)}</g>
+  <g>{''.join(twig_parts)}</g>
+  <g>{''.join(label_parts)}</g>
+
+  <!-- total contributions highlighted inside the trunk canopy -->
+  <g class="mono" text-anchor="middle">
+    <text x="620" y="156" class="canopy-label" fill="#11151d">TOTAL CONTRIBUTIONS</text>
+    <text x="620" y="204" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
+  </g>
+
+  <!-- Mind / Work roots -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M620 580 C574 580 532 585 494 600 C465 611 438 614 406 614" stroke="#7ca8b8" stroke-width="5.2"/>
+    <path d="M620 580 C666 580 708 585 746 600 C775 611 802 614 834 614" stroke="#91b98f" stroke-width="5.2"/>
+  </g>
+  <g class="mono">
+    <rect x="284" y="588" width="216" height="52" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="303" y="610" class="root-title" fill="#9ccfd8">MIND</text>
+    <text x="303" y="628" class="root-sub" fill="#718096">notes · plans · knowledge</text>
+    <rect x="740" y="588" width="216" height="52" rx="9" fill="#171d27" stroke="#354154"/>
+    <text x="759" y="610" class="root-title" fill="#a6e3a1">WORK</text>
+    <text x="759" y="628" class="root-sub" fill="#718096">code · repos · shipping</text>
+  </g>
+
+  <!-- contribution orb: trunk -> latest month branch -> latest active day -->
+  <circle r="6" fill="#ffffff" filter="url(#glow)">
+    <animateMotion path="{orb_path}" dur="5.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;.95;.95;0" keyTimes="0;.08;.9;1" dur="5.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="{latest_target[0]:.1f}" cy="{latest_target[1]:.1f}" r="10" fill="none" stroke="#f3f7fa" opacity=".28">
+    <animate attributeName="r" values="8;14;8" dur="2.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".15;.5;.15" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- focused contribution statistics -->
+  <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
+  <g class="mono">
+    <g transform="translate(72 675)">
+      <!-- lit flame: current streak -->
+      <g transform="translate(-2 -20) scale(1.45)" filter="url(#glow)">
+        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
+              fill="#ffffff"/>
+      </g>
+      <text x="36" class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
+      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
+    </g>
+    <g transform="translate(455 675)">
+      <!-- dormant flame: longest streak -->
+      <g transform="translate(-2 -20) scale(1.45)">
+        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
+              fill="#242e3a" stroke="#718096" stroke-width="1.9" stroke-linejoin="round"/>
+      </g>
+      <text x="36" class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
+      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
+    </g>
+    <g transform="translate(835 675)">
+      <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
+      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
+      <text x="68" y="38" class="peak-date" fill="#f1f5f9">{peak_day:%b %d, %Y}</text>
+    </g>
+  </g>
+</svg>'''
+
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(svg, encoding="utf-8")
 
 
 def main() -> None:
-    render(Path("assets/whitetree-activity.svg"))
+    render(
+        fetch_calendar(os.environ["GITHUB_USER"], os.environ["GITHUB_TOKEN"]),
+        Path("assets/whitetree-activity.svg"),
+    )
 
 
 if __name__ == "__main__":
