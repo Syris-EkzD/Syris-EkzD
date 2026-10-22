@@ -1,28 +1,31 @@
-"""Generate the WhiteTree GitHub contribution visualization.
+"""Render the animated WhiteTree from GitHub's current-year contribution calendar.
 
-Mapping:
-- one long trunk feeds a compact leaf cloud that highlights the 365-day total,
-- each month is one major branch,
-- every day is a small sub-branch/twig,
-- active days end in brighter contribution buds,
-- the animated contribution orb travels to the most recent active day.
-
-The leaf cloud intentionally stays around the top of the trunk instead of
-covering the month branches.
+The tree's white vector geometry is preserved in assets/whitetree-template.svg.
+Only contributed dates grow leaves and energize their connecting twigs/branches.
+Runs from the existing profile activity workflow (no browser-side JavaScript).
 """
 from __future__ import annotations
 
-from datetime import date, timedelta
-import html
+from collections import defaultdict
+from datetime import date, datetime, time, timezone
 import json
 import math
 import os
 from pathlib import Path
+import re
 from urllib.request import Request, urlopen
+from zoneinfo import ZoneInfo
 
-QUERY = """query($login: String!) {
+from lxml import etree
+
+ROOT = Path(__file__).resolve().parents[1]
+TEMPLATE = ROOT / "assets/whitetree-template.svg"
+OUTPUT = ROOT / "assets/whitetree-activity.svg"
+S = "{http://www.w3.org/2000/svg}"
+
+QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!) {
   user(login: $login) {
-    contributionsCollection {
+    contributionsCollection(from: $from, to: $to) {
       contributionCalendar {
         weeks { contributionDays { date contributionCount } }
       }
@@ -30,443 +33,266 @@ QUERY = """query($login: String!) {
   }
 }"""
 
-WIDTH = 1240
-HEIGHT = 760
-DAYS = 365
-MONTH_NAMES = ("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
 
-# start, quadratic control, end. Jan-Jun grow left; Jul-Dec grow right.
-MONTH_BRANCHES = {
-    1: ((620.0, 470.0), (470.0, 490.0), (250.0, 505.0)),
-    2: ((620.0, 435.0), (450.0, 420.0), (190.0, 455.0)),
-    3: ((620.0, 400.0), (440.0, 385.0), (150.0, 395.0)),
-    4: ((620.0, 365.0), (440.0, 335.0), (170.0, 330.0)),
-    5: ((620.0, 330.0), (455.0, 290.0), (225.0, 270.0)),
-    6: ((620.0, 295.0), (485.0, 245.0), (330.0, 220.0)),
-    7: ((620.0, 295.0), (755.0, 245.0), (910.0, 220.0)),
-    8: ((620.0, 330.0), (785.0, 290.0), (1015.0, 270.0)),
-    9: ((620.0, 365.0), (800.0, 335.0), (1070.0, 330.0)),
-    10: ((620.0, 400.0), (800.0, 385.0), (1090.0, 395.0)),
-    11: ((620.0, 435.0), (790.0, 420.0), (1050.0, 455.0)),
-    12: ((620.0, 470.0), (770.0, 490.0), (990.0, 505.0)),
-}
-
-
-def fetch_calendar(login: str, token: str) -> dict[date, int]:
-    request = Request(
-        "https://api.github.com/graphql",
-        data=json.dumps({"query": QUERY, "variables": {"login": login}}).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Accept": "application/vnd.github+json",
-            "Content-Type": "application/json",
-            "User-Agent": "whitetree-profile-renderer",
-        },
-        method="POST",
-    )
-    with urlopen(request, timeout=35) as response:
+def fetch_calendar(login: str, token: str, today: date) -> dict[date, int]:
+    start = f"{today.year}-01-01T00:00:00Z"
+    # The requested window ends tomorrow so today's contributions are included.
+    tomorrow = date.fromordinal(today.toordinal() + 1)
+    finish = f"{tomorrow.isoformat()}T00:00:00Z"
+    data = json.dumps({"query": QUERY, "variables": {"login": login, "from": start, "to": finish}}).encode()
+    req = Request("https://api.github.com/graphql", data=data, headers={
+        "Authorization": f"Bearer {token}", "Content-Type": "application/json",
+        "Accept": "application/vnd.github+json", "User-Agent": "WhiteTree-activity-generator",
+    }, method="POST")
+    with urlopen(req, timeout=35) as response:
         payload = json.load(response)
     if payload.get("errors"):
-        raise RuntimeError(f"GitHub GraphQL returned errors: {payload['errors']}")
-    account = (payload.get("data") or {}).get("user")
-    if account is None:
-        raise RuntimeError(f"GitHub user not found: {login!r}")
-
-    weeks = account["contributionsCollection"]["contributionCalendar"]["weeks"]
-    raw = {
-        date.fromisoformat(day["date"]): int(day["contributionCount"])
-        for week in weeks
-        for day in week["contributionDays"]
-    }
-    if not raw:
-        raise RuntimeError("GitHub returned an empty contribution calendar")
-
-    last_day = max(raw)
-    first_day = last_day - timedelta(days=DAYS - 1)
-    return {
-        first_day + timedelta(days=offset): raw.get(first_day + timedelta(days=offset), 0)
-        for offset in range(DAYS)
-    }
+        raise RuntimeError(f"GitHub GraphQL error: {payload['errors']}")
+    user = (payload.get("data") or {}).get("user")
+    if not user:
+        raise RuntimeError("Could not retrieve contribution data")
+    days = user["contributionsCollection"]["contributionCalendar"]["weeks"]
+    calendar = {date.fromisoformat(d["date"]): int(d["contributionCount"])
+                for week in days for d in week["contributionDays"]}
+    if not calendar:
+        raise RuntimeError("Empty contribution calendar; refusing to erase profile data")
+    return {d: n for d, n in calendar.items() if d.year == today.year and d <= today}
 
 
-def qpoint(start: tuple[float, float], control: tuple[float, float], end: tuple[float, float], t: float) -> tuple[float, float]:
-    u = 1.0 - t
-    return (
-        u * u * start[0] + 2 * u * t * control[0] + t * t * end[0],
-        u * u * start[1] + 2 * u * t * control[1] + t * t * end[1],
-    )
-
-
-def qderivative(start: tuple[float, float], control: tuple[float, float], end: tuple[float, float], t: float) -> tuple[float, float]:
-    return (
-        2 * (1 - t) * (control[0] - start[0]) + 2 * t * (end[0] - control[0]),
-        2 * (1 - t) * (control[1] - start[1]) + 2 * t * (end[1] - control[1]),
-    )
-
-
-def organic_point(
-    month: int,
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    t: float,
-) -> tuple[float, float]:
-    """Bend a month branch naturally without changing its overall route."""
-    x, y = qpoint(start, control, end, t)
-    dx, dy = qderivative(start, control, end, t)
-    length = math.hypot(dx, dy) or 1.0
-    nx, ny = -dy / length, dx / length
-
-    # Deterministic layered waves keep the same shape on every refresh.
-    phase = month * 0.73
-    envelope = math.sin(math.pi * t)  # zero offset where branch meets trunk/tip
-    offset = envelope * (
-        (6.0 + (month % 3) * 1.4) * math.sin(2.35 * math.pi * t + phase)
-        + 3.4 * math.sin(5.2 * math.pi * t + phase * 0.61)
-    )
-    return x + nx * offset, y + ny * offset
-
-
-def organic_derivative(
-    month: int,
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    t: float,
-) -> tuple[float, float]:
-    epsilon = 0.002
-    left = max(0.0, t - epsilon)
-    right = min(1.0, t + epsilon)
-    ax, ay = organic_point(month, start, control, end, left)
-    bx, by = organic_point(month, start, control, end, right)
-    return bx - ax, by - ay
-
-
-def organic_path(
-    month: int,
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    *,
-    end_t: float = 1.0,
-    steps: int = 12,
-) -> str:
-    """Return a smooth Catmull-Rom-derived SVG path through organic samples."""
-    end_t = max(0.0, min(1.0, end_t))
-    count = max(2, int(steps * end_t) + 1)
-    points = [
-        organic_point(month, start, control, end, end_t * i / (count - 1))
-        for i in range(count)
-    ]
-
-    commands = [f"M{points[0][0]:.1f} {points[0][1]:.1f}"]
-    for i in range(len(points) - 1):
-        p0 = points[i - 1] if i > 0 else points[i]
-        p1 = points[i]
-        p2 = points[i + 1]
-        p3 = points[i + 2] if i + 2 < len(points) else p2
-        c1 = (p1[0] + (p2[0] - p0[0]) / 6.0, p1[1] + (p2[1] - p0[1]) / 6.0)
-        c2 = (p2[0] - (p3[0] - p1[0]) / 6.0, p2[1] - (p3[1] - p1[1]) / 6.0)
-        commands.append(
-            f"C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} {p2[0]:.1f} {p2[1]:.1f}"
-        )
-    return " ".join(commands)
-
-
-def intensity_class(count: int) -> str:
-    if count >= 25:
-        return "bud5"
-    if count >= 13:
-        return "bud4"
-    if count >= 6:
-        return "bud3"
-    if count >= 3:
-        return "bud2"
-    if count >= 1:
-        return "bud1"
-    return "bud0"
-
-
-def bud_radius(count: int) -> float:
-    if count >= 25:
-        return 7.0
-    if count >= 13:
-        return 6.0
-    if count >= 6:
-        return 5.0
-    if count >= 3:
-        return 4.2
-    if count >= 1:
-        return 3.4
-    return 1.8
-
-
-def current_streak(calendar: dict[date, int]) -> int:
-    """Count consecutive active days ending on the latest calendar day."""
+def current_streak(calendar: dict[date, int], today: date) -> int:
+    cursor = today
+    # Unfinished days do not interrupt an otherwise active streak.
+    if calendar.get(cursor, 0) == 0:
+        cursor = date.fromordinal(cursor.toordinal() - 1)
     streak = 0
-    cursor = max(calendar)
-    while calendar.get(cursor, 0) > 0:
+    while cursor.year == today.year and calendar.get(cursor, 0) > 0:
         streak += 1
-        cursor -= timedelta(days=1)
+        cursor = date.fromordinal(cursor.toordinal() - 1)
     return streak
 
 
 def longest_streak(calendar: dict[date, int]) -> int:
-    """Return the longest consecutive run of active contribution days."""
-    longest = 0
-    running = 0
+    longest = running = 0
+    previous = None
     for day in sorted(calendar):
-        if calendar[day] > 0:
-            running += 1
-            longest = max(longest, running)
-        else:
+        if calendar[day] <= 0:
             running = 0
+        else:
+            running = running + 1 if previous and day.toordinal() - previous.toordinal() == 1 else 1
+            longest = max(longest, running)
+        previous = day
     return longest
 
 
-def render(calendar: dict[date, int], out_path: Path) -> None:
+def centerline(path: etree._Element) -> list[tuple[float, float]]:
+    p = [tuple(map(float, pair)) for pair in re.findall(r'[ML]\s*([-\d.]+)[, ]\s*([-\d.]+)', path.get('d'))]
+    if len(p) != 90:
+        raise ValueError('WhiteTree template branch geometry has changed')
+    return [((p[i][0]+p[-1-i][0])/2, (p[i][1]+p[-1-i][1])/2) for i in range(45)]
+
+
+def d_path(points: list[tuple[float, float]]) -> str:
+    return 'M ' + ' L '.join(f'{x:.2f},{y:.2f}' for x,y in points)
+
+
+def nearest(pt: tuple[float, float], points: list[tuple[float, float]]) -> tuple[float,int]:
+    return min((math.dist(pt, p), i) for i,p in enumerate(points))
+
+
+def twig_geometry(twig: etree._Element) -> tuple[tuple[float,float],tuple[float,float],tuple[float,float]]:
+    match = re.fullmatch(r'M\s*([-\d.]+)\s+([-\d.]+)\s+Q\s*([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)\s+([-\d.]+)',twig.get('d'))
+    if not match:
+        raise ValueError('Unexpected twig path in WhiteTree template')
+    vals = list(map(float, match.groups()))
+    return (vals[0],vals[1]),(vals[2],vals[3]),(vals[4],vals[5])
+
+
+def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
+           template: Path = TEMPLATE) -> None:
     if not calendar:
-        raise ValueError("Cannot render an empty contribution calendar")
+        raise ValueError('Empty calendar; refusing to render')
+    tree = etree.parse(str(template), etree.XMLParser(remove_blank_text=False))
+    root = tree.getroot()
+    defs = root.find(S+'defs')
+    for node in list(root):
+        # Existing flow is replaced with paths derived from current contributions.
+        if node.get('id') == 'activity-flow' or (node.tag == S+'g' and 'rotate(' in node.get('transform','')):
+            root.remove(node)
+    branches = [e for e in root if e.tag == S+'path'][:81]
+    if len(branches) != 81:
+        raise ValueError('Unexpected WhiteTree branch structure')
+    center = {i: centerline(branches[i]) for i in range(1,81)}
+    # Structure: twelve monthly limbs plus fine offshoots.
+    major = [5 + 6*i for i in range(12)]
+    # Parental branches are determined from fixed geometry; a top-level limb
+    # attaches into the trunk even when its parent is a differently named limb.
+    def parent_of(i: int) -> tuple[int,int]:
+        if i in major:
+            if i in (23,): return (1, nearest(center[i][0],center[1])[1])
+            if i in (47,53): return (2,nearest(center[i][0],center[2])[1])
+            if i in (29,35): return (3,nearest(center[i][0],center[3])[1])
+            if i == 41: return (4,nearest(center[i][0],center[4])[1])
+            return (0,0)
+        if i <= 4:
+            return (0,0)
+        main = 5+6*((i-5)//6)
+        return (main, nearest(center[i][0],center[main])[1])
 
-    total_contributions = sum(calendar.values())
-    latest_active = max((day for day, count in calendar.items() if count > 0), default=max(calendar))
-    first_day = min(calendar)
-    last_day = max(calendar)
-    current_streak_days = current_streak(calendar)
-    longest_streak_days = longest_streak(calendar)
-    peak_day, peak_count = max(calendar.items(), key=lambda item: item[1])
+    parent = {i: parent_of(i) for i in range(1,77)}
+    by_mmdd = {}
+    for node in root:
+        if node.get('data-date'):
+            mmdd=node.get('data-date')[5:]
+            if mmdd in by_mmdd:
+                raise ValueError(f'Duplicate template day {mmdd}')
+            by_mmdd[mmdd]=node
+    active = []
+    # Tweak day groups and draw leaves only for actual contributions.
+    leaves = etree.Element(S+'g',id='contribution-leaves')
+    for mmdd, node in sorted(by_mmdd.items()):
+        try:
+            day = date.fromisoformat(f'{today.year}-{mmdd}')
+        except ValueError:
+            node.set('display','none')
+            continue
+        count = calendar.get(day,0) if day <= today else 0
+        node.set('data-date',day.isoformat())
+        node.set('data-count',str(count))
+        title = node.find(S+'title')
+        title.text = f'{day.isoformat()}: {count} contribution' + ('s' if count != 1 else '')
+        twig=node.find(S+'path')
+        twig.set('opacity','.95' if count else '.65')
+        if count == 0: continue
+        start,control,end = twig_geometry(twig)
+        candidates=sorted((nearest(start,center[i])[0],i,nearest(start,center[i])[1]) for i in range(1,77))
+        distance, branch, index = candidates[0]
+        if distance > 3:
+            raise ValueError(f'Twig {mmdd} not connected to tree ({distance:.2f}px)')
+        active.append((day,count,branch,index,start,control,end,twig))
+        angle=math.degrees(math.atan2(end[1]-control[1],end[0]-control[0]))
+        scale=0.8+min(0.85, math.log2(count+1)*0.15)
+        size=13*scale
+        color='#eff9df' if count>=25 else '#c9e9ca' if count>=10 else '#acd9bf' if count>=3 else '#91c5b2'
+        leaf=etree.SubElement(leaves,S+'g',transform=f'translate({end[0]:.2f} {end[1]:.2f}) rotate({angle:.2f})')
+        etree.SubElement(leaf,S+'title').text=f'{day.isoformat()}: {count} contributions'
+        etree.SubElement(leaf,S+'path',d=f'M0 0 Q{size*.3:.2f} {-size*.45:.2f} {size:.2f} 0 Q{size*.42:.2f} {size*.42:.2f} 0 0Z',fill=color)
+        etree.SubElement(leaf,S+'path',d=f'M1 0 L{size*.75:.2f} 0',stroke='#406054',attrib={'stroke-opacity':'.30','stroke-width':'.7'})
+    # Draw leaf blades above twig silhouettes but below energy veins.
+    insert_at=next(i for i,e in enumerate(root) if e.tag==S+'path' and e.get('d','').startswith('M618.01,568.03'))
+    root.insert(insert_at,leaves)
 
-    branch_parts: list[str] = []
-    twig_parts: list[str] = []
-    label_parts: list[str] = []
-    latest_target: tuple[float, float] | None = None
-    latest_branch_point: tuple[float, float] | None = None
-    latest_geometry: tuple[tuple[float, float], tuple[float, float], tuple[float, float]] | None = None
-    latest_month: int | None = None
-    latest_t: float | None = None
+    flow=etree.Element(S+'g',id='activity-flow')
+    paths=[]
+    if active:
+        roots=[list(reversed(center[i])) for i in (77,78,79,80)]
+        trunk=[(620,573),(618.6,555),(617,535),(616.8,516),(617.5,498),(618,480),(619,461),(620,445)]
+        paths += [d_path(r) for r in roots] + [d_path(trunk)]
+        reaches=defaultdict(int)
+        for day,count,branch,index,start,control,end,twig in active:
+            reaches[branch]=max(reaches[branch],index)
+            cur=branch
+            while parent[cur][0]:
+                p,attach=parent[cur]
+                reaches[p]=max(reaches[p],attach)
+                cur=p
+        # Bridge the small geometric gaps between the trunk and boughs,
+        # and between each bough and its offshoot. Flow is a single network.
+        for b, idx in sorted(reaches.items()):
+            if idx <= 0: continue
+            p, attach = parent[b]
+            origin = center[p][attach] if p else trunk[-1]
+            if math.dist(origin,center[b][0]) > 0.15:
+                paths.append(d_path([origin,center[b][0]]))
+        paths += [d_path(center[b][:idx+1]) for b,idx in sorted(reaches.items()) if idx>0]
+        paths += [item[-1].get('d') for item in active]
+        for cls in ('flow-source','flow-bed','flow-thread'):
+            layer=etree.SubElement(flow,S+'g',attrib={'class':cls})
+            for p in paths: etree.SubElement(layer,S+'path',d=p)
+        pulses=etree.SubElement(flow,S+'g',attrib={'class':'flow-motion'})
+        for p in paths:
+            path=etree.SubElement(pulses,S+'path',d=p,attrib={'class':'flow-current'})
+            etree.SubElement(path,S+'animate',attributeName='stroke-dashoffset',values='0;-60',dur='4.4s',repeatCount='indefinite')
+        # Add pulses only along actual active contributions; the inactive
+        # November/December branches remain white until they receive commits.
+        for side in roots:
+            x,y=side[0]
+            dot=etree.SubElement(flow,S+'circle',cx=f'{x:.2f}',cy=f'{y:.2f}',r='2.7',fill='#ceffe7')
+            etree.SubElement(dot,S+'animate',attributeName='opacity',values='.4;1;.4',dur='4s',repeatCount='indefinite')
+        for day,count,branch,index,start,control,end,twig in active:
+            etree.SubElement(flow,S+'circle',cx=f'{end[0]:.2f}',cy=f'{end[1]:.2f}',r='1.6',fill='#e3ffeb',opacity='.6')
+        # Orbs travel continuously, from root into the shared trunk, across
+        # the geometrically joined parent branches, and to contributed leaves.
+        for k,item in enumerate(sorted(active,reverse=True)[:4]):
+            day,count,branch,index,start,control,end,twig=item
+            chain=[(branch,index)]
+            cur=branch
+            while parent[cur][0]:
+                p,idx=parent[cur];chain.append((p,idx));cur=p
+            points=roots[k%4]+trunk
+            for b,idx in reversed(chain):
+                points += [center[b][0]]+center[b][1:idx+1]
+            bead=etree.SubElement(flow,S+'circle',r='2.45',opacity='0',attrib={'class':'flow-particle'})
+            path=d_path(points)+f' L{start[0]:.2f},{start[1]:.2f} Q{control[0]:.2f},{control[1]:.2f} {end[0]:.2f},{end[1]:.2f}'
+            etree.SubElement(bead,S+'animateMotion',path=path,dur=f'{8+k*1.3:.1f}s',begin=f'-{k*2:.1f}s',repeatCount='indefinite')
+            etree.SubElement(bead,S+'animate',attributeName='opacity',values='0;1;1;0',keyTimes='0;.1;.9;1',dur=f'{8+k*1.3:.1f}s',begin=f'-{k*2:.1f}s',repeatCount='indefinite')
+    root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
 
-    for month in range(1, 13):
-        start, control, end = MONTH_BRANCHES[month]
-        side = -1 if month <= 6 else 1
-        branch_parts.append(
-            f'<path d="{organic_path(month, start, control, end)}" class="month-branch"/>'
-        )
+    # Patch white silhouette pinholes (not the intended open gaps between limbs).
+    patch=etree.Element(S+'g',id='trunk-junction-repair',fill='#e8f0ed')
+    for x,y,rx,ry in [(620,391,2.0,2.0),(621,441,3.2,3.2),(628,438,1.8,1.8)]:
+        etree.SubElement(patch,S+'ellipse',cx=str(x),cy=str(y),rx=str(rx),ry=str(ry))
+    root.insert(6,patch)
 
-        label_x = end[0] + (-12 if side < 0 else 12)
-        anchor = "end" if side < 0 else "start"
-        label_parts.append(
-            f'<text x="{label_x:.1f}" y="{end[1]-8:.1f}" text-anchor="{anchor}" class="mono month-label">{MONTH_NAMES[month-1]}</text>'
-        )
-
-        # Every real day in the rolling 365-day window is a twig. Inactive
-        # days stay faint; active days receive a brighter, larger bud.
-        month_days = sorted(day for day in calendar if day.month == month)
-        for day in month_days:
-            count = calendar[day]
-            t = 0.10 + 0.80 * ((day.day - 1) / 30.0)
-            t = max(0.08, min(0.92, t))
-            px, py = organic_point(month, start, control, end, t)
-            dx, dy = organic_derivative(month, start, control, end, t)
-            length = math.hypot(dx, dy) or 1.0
-            nx, ny = -dy / length, dx / length
-
-            # Alternating outward directions create the intentionally messy,
-            # natural branch silhouette without breaking the date mapping.
-            direction = 1 if day.toordinal() % 2 == 0 else -1
-            twig_len = 9.0 if count == 0 else 11.0 + min(10.0, math.log2(count + 1) * 2.0)
-            tx = px + nx * twig_len * direction
-            ty = py + ny * twig_len * direction
-
-            inactive = " inactive" if count == 0 else ""
-            twig_parts.append(
-                f'<path d="M{px:.1f} {py:.1f} Q{(px+tx)/2:.1f} {(py+ty)/2:.1f} {tx:.1f} {ty:.1f}" class="day-twig{inactive}"/>'
-            )
-            twig_parts.append(
-                f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="{bud_radius(count):.1f}" class="{intensity_class(count)}">'
-                f'<title>{html.escape(day.isoformat())}: {count} contribution{"s" if count != 1 else ""}</title></circle>'
-            )
-
-            if day == latest_active:
-                latest_target = (tx, ty)
-                latest_branch_point = (px, py)
-                latest_geometry = (start, control, end)
-                latest_month = month
-                latest_t = t
-
-    if (
-        latest_target is None
-        or latest_branch_point is None
-        or latest_geometry is None
-        or latest_month is None
-        or latest_t is None
-    ):
-        latest_target = (620.0, 365.0)
-        latest_branch_point = latest_target
-        latest_geometry = MONTH_BRANCHES[9]
-        latest_month = 9
-        latest_t = 0.0
-
-    latest_start, latest_control, latest_end = latest_geometry
-    branch_motion = organic_path(
-        latest_month,
-        latest_start,
-        latest_control,
-        latest_end,
-        end_t=latest_t,
-        steps=12,
-    )
-    # Continue from the trunk into the exact same organic month path used by
-    # the visible branch, then finish on the latest day's twig.
-    first_curve = branch_motion.find("C")
-    branch_motion_suffix = branch_motion[first_curve:] if first_curve >= 0 else ""
-    orb_path = (
-        f"M620 580 C620 520 620 460 620 {latest_start[1]:.1f} "
-        f"{branch_motion_suffix} "
-        f"L{latest_target[0]:.1f} {latest_target[1]:.1f}"
-    )
-
-    canopy_shapes = (
-        # Dense, irregular white crown. The smaller overlapping lobes make the
-        # canopy read as a bushy cluster rather than one smooth oval.
-        (620, 164, 112, 58),
-        (548, 166, 78, 48),
-        (694, 166, 80, 49),
-        (505, 172, 50, 38),
-        (736, 173, 52, 39),
-        (579, 126, 64, 43),
-        (641, 116, 70, 46),
-        (696, 129, 58, 41),
-        (536, 132, 48, 36),
-        (586, 202, 72, 38),
-        (653, 205, 76, 39),
-        (719, 199, 50, 33),
-        (520, 202, 46, 32),
-        (613, 91, 43, 31),
-        (657, 91, 40, 29),
-    )
-
-    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" aria-labelledby="title desc">
-  <title id="title">WhiteTree Activity Core</title>
-  <desc id="desc">A long WhiteTree trunk leads into a compact leaf cloud showing the rolling 365-day contribution total. Each month is a major branch, each day is a twig, and an animated contribution orb travels to the most recent active day.</desc>
-  <defs>
-    <style><![CDATA[
-      .mono {{ font-family: "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace; }}
-      .title {{ font-size: 30px; font-weight: 800; letter-spacing: 1.5px; }}
-      .sub {{ font-size: 12px; letter-spacing: 2px; }}
-      .month-label {{ font-size: 11px; font-weight: 800; letter-spacing: 1px; fill: #8592a3; }}
-      .root-title {{ font-size: 14px; font-weight: 800; letter-spacing: 1.4px; }}
-      .root-sub {{ font-size: 10px; }}
-      .stat-label {{ font-size: 14px; font-weight: 900; letter-spacing: .55px; }}
-      .stat-value {{ font-size: 22px; font-weight: 800; }}
-      .peak-date {{ font-size: 18px; font-weight: 900; letter-spacing: .15px; }}
-      .canopy-label {{ font-size: 14px; font-weight: 900; letter-spacing: .8px; }}
-      .canopy-value {{ font-size: 43px; font-weight: 900; }}
-      .tiny {{ font-size: 9px; letter-spacing: .6px; }}
-      .month-branch {{ fill: none; stroke: #d9e0e8; stroke-width: 4.3; stroke-linecap: round; stroke-linejoin: round; }}
-      .day-twig {{ fill: none; stroke: #aeb9c7; stroke-width: 1.25; stroke-linecap: round; opacity: .9; }}
-      .day-twig.inactive {{ stroke: #445061; opacity: .43; }}
-      .bud0 {{ fill: #303947; opacity: .75; }}
-      .bud1 {{ fill: #53677b; }} .bud2 {{ fill: #7393a5; }} .bud3 {{ fill: #91bdc5; }}
-      .bud4 {{ fill: #b8e1d1; }} .bud5 {{ fill: #f3f7fa; }}
-    ]]></style>
-    <filter id="glow" x="-220%" y="-220%" width="440%" height="440%">
-      <feGaussianBlur stdDeviation="5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stop-color="#6e7f93"/><stop offset=".62" stop-color="#c7d0da"/><stop offset="1" stop-color="#f5f8fb"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="{WIDTH}" height="{HEIGHT}" rx="18" fill="#11151d"/>
-  <rect x="10" y="10" width="1220" height="740" rx="14" fill="none" stroke="#2b3442" stroke-width="2"/>
-
-  <text x="40" y="50" class="mono title" fill="#f1f5f9">WHITETREE // ACTIVITY CORE</text>
-  <text x="42" y="75" class="mono sub" fill="#718096">MONTH → BRANCH   DAY → TWIG   ORB → LATEST CONTRIBUTION</text>
-
-  <!-- one long trunk -->
-  <path d="M620 580 C616 520 620 462 620 405 C620 340 620 276 620 205"
-        fill="none" stroke="url(#trunk)" stroke-width="22" stroke-linecap="round"/>
-
-  <!-- compact leaf cloud: only caps the trunk -->
-  <g opacity=".95">
-    {''.join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#f3f7fa"/>' for cx,cy,rx,ry in canopy_shapes)}
-  </g>
-
-  <!-- month branches stay outside the leaf cloud -->
-  <g>{''.join(branch_parts)}</g>
-  <g>{''.join(twig_parts)}</g>
-  <g>{''.join(label_parts)}</g>
-
-  <!-- total contributions highlighted inside the trunk canopy -->
-  <g class="mono" text-anchor="middle">
-    <text x="620" y="156" class="canopy-label" fill="#11151d">TOTAL CONTRIBUTIONS</text>
-    <text x="620" y="204" class="canopy-value" fill="#11151d">{total_contributions:,}</text>
-  </g>
-
-  <!-- Mind / Work roots -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M620 580 C574 580 532 585 494 600 C465 611 438 614 406 614" stroke="#7ca8b8" stroke-width="5.2"/>
-    <path d="M620 580 C666 580 708 585 746 600 C775 611 802 614 834 614" stroke="#91b98f" stroke-width="5.2"/>
-  </g>
-  <g class="mono">
-    <rect x="284" y="588" width="216" height="52" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="303" y="610" class="root-title" fill="#9ccfd8">MIND</text>
-    <text x="303" y="628" class="root-sub" fill="#718096">notes · plans · knowledge</text>
-    <rect x="740" y="588" width="216" height="52" rx="9" fill="#171d27" stroke="#354154"/>
-    <text x="759" y="610" class="root-title" fill="#a6e3a1">WORK</text>
-    <text x="759" y="628" class="root-sub" fill="#718096">code · repos · shipping</text>
-  </g>
-
-  <!-- contribution orb: trunk -> latest month branch -> latest active day -->
-  <circle r="6" fill="#ffffff" filter="url(#glow)">
-    <animateMotion path="{orb_path}" dur="5.2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;.95;.95;0" keyTimes="0;.08;.9;1" dur="5.2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="{latest_target[0]:.1f}" cy="{latest_target[1]:.1f}" r="10" fill="none" stroke="#f3f7fa" opacity=".28">
-    <animate attributeName="r" values="8;14;8" dur="2.2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values=".15;.5;.15" dur="2.2s" repeatCount="indefinite"/>
-  </circle>
-
-  <!-- focused contribution statistics -->
-  <rect x="28" y="650" width="1184" height="84" rx="12" fill="#151b24" stroke="#2b3442" stroke-width="1.5"/>
-  <g class="mono">
-    <g transform="translate(72 675)">
-      <!-- lit flame: current streak -->
-      <g transform="translate(-2 -20) scale(1.45)" filter="url(#glow)">
-        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
-              fill="#ffffff"/>
-      </g>
-      <text x="36" class="stat-label" fill="#d5dde7">CURRENT STREAK</text>
-      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{current_streak_days} DAYS</text>
-    </g>
-    <g transform="translate(455 675)">
-      <!-- dormant flame: longest streak -->
-      <g transform="translate(-2 -20) scale(1.45)">
-        <path d="M10 0 C12 4 16 6 16 11 C16 16 13 19 9 19 C4 19 1 16 1 11 C1 7 4 4 7 1 C7 5 9 6 10 8 C11 5 10 3 10 0 Z"
-              fill="#242e3a" stroke="#718096" stroke-width="1.9" stroke-linejoin="round"/>
-      </g>
-      <text x="36" class="stat-label" fill="#d5dde7">LONGEST STREAK</text>
-      <text x="36" y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{longest_streak_days} DAYS</text>
-    </g>
-    <g transform="translate(835 675)">
-      <text class="stat-label" fill="#d5dde7">MOST CONTRIBUTIONS IN A DAY</text>
-      <text y="38" class="stat-value" style="font-size:30px" fill="#f1f5f9">{peak_count}</text>
-      <text x="68" y="38" class="peak-date" fill="#f1f5f9">{peak_day:%b %d, %Y}</text>
-    </g>
-  </g>
-</svg>'''
-
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(svg, encoding="utf-8")
+    # Statistics match the approved image, minus the artificial bottom gradient.
+    total=sum(calendar.values())
+    peak=max(calendar.items(),key=lambda kv:(kv[1],-kv[0].toordinal()))
+    labels={'Contributions':str(total),'Current streak':f'{current_streak(calendar,today)} day',
+            'Longest streak':f'{longest_streak(calendar)} days','Best day':str(peak[1])}
+    if current_streak(calendar,today)!=1:labels['Current streak']+='s'
+    styles=defs.find(S+'style')
+    styles.text=(styles.text or '')+'''
+.stats-panel { fill:#14222d; stroke:#334b54; stroke-width:1.2; }
+.stats-divider { stroke:#355360; stroke-width:1.3; opacity:.85; }
+.flow-source { fill:none; stroke:#72e4c7; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; opacity:.20; filter:url(#flow-haze); }
+.flow-bed { fill:none; stroke:#266c70; stroke-width:3.1; stroke-linecap:round; stroke-linejoin:round; opacity:.80; }
+.flow-thread { fill:none; stroke:#aff4d9; stroke-width:1.25; stroke-linecap:round; stroke-linejoin:round; opacity:.88; }
+.flow-current { fill:none; stroke:#e3fff0; stroke-width:1.8; stroke-linecap:round; stroke-dasharray:2 13; opacity:.84; }
+.flow-particle { fill:#f2fff0; stroke:#63e3ca; stroke-width:1; filter:url(#glow); }
+@media (prefers-reduced-motion:reduce) { .flow-motion,.flow-particle { display:none; } }
+'''
+    # Drop old single divider and use one restrained solid-color plate.
+    old_divider=next(e for e in root if e.tag==S+'path' and e.get('d')=='M60 650 H1180')
+    index=root.index(old_divider);root.remove(old_divider)
+    panel=etree.Element(S+'g',id='statistics-panel')
+    etree.SubElement(panel,S+'rect',x='28',y='645',width='1184',height='101',rx='17',attrib={'class':'stats-panel'})
+    for x in (324,620,916):
+        etree.SubElement(panel,S+'path',d=f'M{x} 664 V728',attrib={'class':'stats-divider'})
+    root.insert(index,panel)
+    # Keep text and icons from the approved SVG, update only values.
+    for text in root:
+        if text.tag!=S+'text':continue
+        if text.text in ('Contributions','Current streak','Longest streak','Best day'):
+            label=text.text
+            val=next((e for e in root if e.tag==S+'text' and e.get('class')=='value'
+                      and abs(int(e.get('x'))-int(text.get('x')))<25),None)
+            if val is not None:val.text=labels[label]
+        if text.get('y')=='741' and text.get('x')=='1050':
+            text.text=peak[0].strftime('%b %-d, %Y') if peak[1] else 'No activity yet'
+    root.find(S+'title').text='WhiteTree contributions'
+    root.find(S+'desc').text='A live-rendered calendar-year activity tree: only contributed days grow leaves. Animated mint light connects Mind and Work through the four roots, trunk, active branches, and leaves. Updated daily.'
+    out.parent.mkdir(parents=True,exist_ok=True)
+    tree.write(str(out),encoding='utf-8',xml_declaration=False)
 
 
 def main() -> None:
-    render(
-        fetch_calendar(os.environ["GITHUB_USER"], os.environ["GITHUB_TOKEN"]),
-        Path("assets/whitetree-activity.svg"),
-    )
+    today = datetime.now(ZoneInfo('Asia/Manila')).date()
+    token=os.environ.get('GITHUB_TOKEN','')
+    login=os.environ.get('GITHUB_USER','')
+    if not token or not login:
+        raise SystemExit('GITHUB_TOKEN and GITHUB_USER are required')
+    render(fetch_calendar(login,token,today),today)
+    print(f'Updated {OUTPUT} for {today.isoformat()}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
