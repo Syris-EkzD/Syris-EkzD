@@ -208,21 +208,15 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
         for cls in ('flow-source','flow-bed','flow-thread'):
             layer=etree.SubElement(flow,S+'g',attrib={'class':cls})
             for p in paths: etree.SubElement(layer,S+'path',d=p)
-        pulses=etree.SubElement(flow,S+'g',attrib={'class':'flow-motion'})
-        for p in paths:
-            path=etree.SubElement(pulses,S+'path',d=p,attrib={'class':'flow-current'})
-            etree.SubElement(path,S+'animate',attributeName='stroke-dashoffset',values='0;-60',dur='4.4s',repeatCount='indefinite')
-        # Add pulses only along actual active contributions; the inactive
-        # November/December branches remain white until they receive commits.
+        # Keep the flow animated, but avoid flicker by using only steady moving particles.
         for side in roots:
             x,y=side[0]
-            dot=etree.SubElement(flow,S+'circle',cx=f'{x:.2f}',cy=f'{y:.2f}',r='2.7',fill='#ceffe7')
-            etree.SubElement(dot,S+'animate',attributeName='opacity',values='.4;1;.4',dur='4s',repeatCount='indefinite')
+            etree.SubElement(flow,S+'circle',cx=f'{x:.2f}',cy=f'{y:.2f}',r='2.3',fill='#ceffe7',opacity='.72')
         for day,count,branch,index,start,control,end,twig in active:
-            etree.SubElement(flow,S+'circle',cx=f'{end[0]:.2f}',cy=f'{end[1]:.2f}',r='1.6',fill='#e3ffeb',opacity='.6')
+            etree.SubElement(flow,S+'circle',cx=f'{end[0]:.2f}',cy=f'{end[1]:.2f}',r='1.5',fill='#e3ffeb',opacity='.55')
         # Orbs travel continuously, from root into the shared trunk, across
         # the geometrically joined parent branches, and to contributed leaves.
-        for k,item in enumerate(sorted(active,reverse=True)[:4]):
+        for k,item in enumerate(sorted(active,reverse=True)[:3]):
             day,count,branch,index,start,control,end,twig=item
             chain=[(branch,index)]
             cur=branch
@@ -231,57 +225,59 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
             points=roots[k%4]+trunk
             for b,idx in reversed(chain):
                 points += [center[b][0]]+center[b][1:idx+1]
-            bead=etree.SubElement(flow,S+'circle',r='2.45',opacity='0',attrib={'class':'flow-particle'})
+            bead=etree.SubElement(flow,S+'circle',r='2.35',attrib={'class':'flow-particle'})
             path=d_path(points)+f' L{start[0]:.2f},{start[1]:.2f} Q{control[0]:.2f},{control[1]:.2f} {end[0]:.2f},{end[1]:.2f}'
-            etree.SubElement(bead,S+'animateMotion',path=path,dur=f'{8+k*1.3:.1f}s',begin=f'-{k*2:.1f}s',repeatCount='indefinite')
-            etree.SubElement(bead,S+'animate',attributeName='opacity',values='0;1;1;0',keyTimes='0;.1;.9;1',dur=f'{8+k*1.3:.1f}s',begin=f'-{k*2:.1f}s',repeatCount='indefinite')
+            etree.SubElement(bead,S+'animateMotion',path=path,dur=f'{10+k*1.7:.1f}s',begin=f'-{k*3.0:.1f}s',repeatCount='indefinite',rotate='auto')
     root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
 
-    # Cover enclosed pinholes at the trunk fork without painting across
-    # the intentional open space between branches. April's limb extends into
-    # the trunk in the vector template instead of ending in a dangling point.
+    # Cover actual enclosed pinholes at the trunk fork, without painting across
+    # intentional empty space between branches. The April limb itself extends
+    # into the trunk in the template (rather than ending in a dangling point).
     patch=etree.Element(S+'g',id='trunk-junction-repair',fill='#e8efec')
     for x,y,rx,ry in [(620,391,2.3,2.2),(621,441,3.2,3.2),(633.5,441.7,3.0,2.5)]:
         etree.SubElement(patch,S+'ellipse',cx=str(x),cy=str(y),rx=str(rx),ry=str(ry))
     root.insert(6,patch)
 
-    # Statistics match the approved image, minus the artificial bottom gradient.
-    total=sum(calendar.values())
-    peak=max(calendar.items(),key=lambda kv:(kv[1],-kv[0].toordinal()))
-    labels={'Contributions':str(total),'Current streak':f'{current_streak(calendar,today)} day',
-            'Longest streak':f'{longest_streak(calendar)} days','Best day':str(peak[1])}
-    if current_streak(calendar,today)!=1:labels['Current streak']+='s'
+    # Minimal WhiteTree output: no months, no statistics, only Mind and Work.
     styles=defs.find(S+'style')
     styles.text=(styles.text or '')+'''
-.stats-panel { fill:#14222d; stroke:#334b54; stroke-width:1.2; }
-.stats-divider { stroke:#355360; stroke-width:1.3; opacity:.85; }
-.flow-source { fill:none; stroke:#72e4c7; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; opacity:.20; filter:url(#flow-haze); }
-.flow-bed { fill:none; stroke:#266c70; stroke-width:3.1; stroke-linecap:round; stroke-linejoin:round; opacity:.80; }
-.flow-thread { fill:none; stroke:#aff4d9; stroke-width:1.25; stroke-linecap:round; stroke-linejoin:round; opacity:.88; }
-.flow-current { fill:none; stroke:#e3fff0; stroke-width:1.8; stroke-linecap:round; stroke-dasharray:2 13; opacity:.84; }
-.flow-particle { fill:#f2fff0; stroke:#63e3ca; stroke-width:1; filter:url(#glow); }
-@media (prefers-reduced-motion:reduce) { .flow-motion,.flow-particle { display:none; } }
+.flow-source { fill:none; stroke:#72e4c7; stroke-width:6.2; stroke-linecap:round; stroke-linejoin:round; opacity:.14; filter:url(#flow-haze); }
+.flow-bed { fill:none; stroke:#1f5d61; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; opacity:.72; }
+.flow-thread { fill:none; stroke:#b5f6df; stroke-width:1.15; stroke-linecap:round; stroke-linejoin:round; opacity:.82; }
+.flow-particle { fill:#eefff6; stroke:none; opacity:.78; }
+@media (prefers-reduced-motion:reduce) { .flow-particle { display:none; } }
 '''
-    # Drop old single divider and use one restrained solid-color plate.
-    old_divider=next(e for e in root if e.tag==S+'path' and e.get('d')=='M60 650 H1180')
-    index=root.index(old_divider);root.remove(old_divider)
-    panel=etree.Element(S+'g',id='statistics-panel')
-    etree.SubElement(panel,S+'rect',x='28',y='645',width='1184',height='101',rx='17',attrib={'class':'stats-panel'})
-    for x in (324,620,916):
-        etree.SubElement(panel,S+'path',d=f'M{x} 664 V728',attrib={'class':'stats-divider'})
-    root.insert(index,panel)
-    # Keep text and icons from the approved SVG, update only values.
-    for text in root:
-        if text.tag!=S+'text':continue
-        if text.text in ('Contributions','Current streak','Longest streak','Best day'):
-            label=text.text
-            val=next((e for e in root if e.tag==S+'text' and e.get('class')=='value'
-                      and abs(int(e.get('x'))-int(text.get('x')))<25),None)
-            if val is not None:val.text=labels[label]
-        if text.get('y')=='741' and text.get('x')=='1050':
-            text.text=peak[0].strftime('%b %-d, %Y') if peak[1] else 'No activity yet'
+
+    # Make the SVG visually blend into GitHub's default dark background.
+    bg_rects=[e for e in root if e.tag==S+'rect']
+    if bg_rects:
+        bg_rects[0].set('fill','#0d1117')
+        bg_rects[0].set('rx','0')
+        if len(bg_rects) > 1:
+            root.remove(bg_rects[1])
+
+    # Remove month labels and every visible statistics artifact. Keep only Mind/Work.
+    for node in list(root):
+        if node.tag == S+'text' and (node.text or '').strip() not in ('Mind','Work'):
+            root.remove(node)
+        elif node.get('class') in {'label','value','month','stat-icon'}:
+            root.remove(node)
+        elif node.tag == S+'g' and node.get('id') == 'statistics-panel':
+            root.remove(node)
+        elif node.tag == S+'path' and node.get('d') == 'M60 650 H1180':
+            root.remove(node)
+    # Remove any stray bottom icons/labels that survive as non-text top-level nodes.
+    for node in list(root):
+        y = node.get('y')
+        cy = node.get('cy')
+        if node.tag in {S+'path', S+'circle', S+'rect', S+'g'}:
+            if y and float(y) >= 640:
+                root.remove(node)
+            elif cy and float(cy) >= 640:
+                root.remove(node)
+
     root.find(S+'title').text='WhiteTree contributions'
-    root.find(S+'desc').text='A live-rendered calendar-year activity tree: only contributed days grow leaves. Animated mint light connects Mind and Work through the four roots, trunk, active branches, and leaves. Updated daily.'
+    root.find(S+'desc').text='A live-rendered calendar-year activity tree on a GitHub-dark background. Only contributed days grow leaves, and gentle mint flow moves from Mind and Work through the roots, trunk, active branches, and leaves.'
     out.parent.mkdir(parents=True,exist_ok=True)
     tree.write(str(out),encoding='utf-8',xml_declaration=False)
 

@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/whitetree-activity.svg" width="100%" alt="Animated WhiteTree contributions: Mind and Work feed four illuminated roots; mint flow follows contributed days through the trunk and branches to growing leaves, with refreshed activity statistics." />
+  <img src="./assets/whitetree-activity.svg" width="100%" alt="Animated WhiteTree: Mind and Work feed glowing roots, a white branching tree, and contribution-driven leaves with gentle mint flow." />
 </div>
 
 ---
