@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/whitetree-stats.svg" width="100%" alt="Animated WhiteTree GitHub statistics for this year: total contributions, current streak, and longest streak, with subtle white vines and leaves." />
+  <img src="./assets/whitetree-stats.svg" width="88%" alt="Animated WhiteTree GitHub statistics for the last 12 months: total contributions, current streak, and longest streak, with subtle white vines and leaves." />
   <img src="./assets/whitetree-activity.svg" width="100%" alt="Animated WhiteTree: a single mint orb travels from Mind or Work to the most recent GitHub contribution leaf." />
 </div>
 
