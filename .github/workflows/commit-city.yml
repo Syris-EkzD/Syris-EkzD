@@ -9,6 +9,7 @@ on:
       - "scripts/commit_city.py"
       - "scripts/whitetree_activity.py"
       - "assets/whitetree-template.svg"
+      - "assets/whitetree-stats.svg"
       - ".github/workflows/commit-city.yml"
 
 permissions:
@@ -38,7 +39,7 @@ jobs:
 
       - name: Commit generated activity assets
         run: |
-          git add -- assets/commit-city.png assets/whitetree-activity.svg
+          git add -- assets/commit-city.png assets/whitetree-activity.svg assets/whitetree-stats.svg
           if git diff --cached --quiet; then
             echo "Profile activity assets are already up to date."
             exit 0
