@@ -21,6 +21,7 @@ from lxml import etree
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "assets/whitetree-template.svg"
 OUTPUT = ROOT / "assets/whitetree-activity.svg"
+STATS_OUTPUT = ROOT / "assets/whitetree-stats.svg"
 S = "{http://www.w3.org/2000/svg}"
 
 QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!) {
@@ -82,6 +83,61 @@ def longest_streak(calendar: dict[date, int]) -> int:
             longest = max(longest, running)
         previous = day
     return longest
+
+
+
+def render_stats(calendar: dict[date, int], today: date, out: Path = STATS_OUTPUT) -> None:
+    """Refresh the approved stats SVG from the same year-to-date calendar as the tree."""
+    if not calendar:
+        raise ValueError('Empty calendar; refusing to render contribution statistics')
+    dates = {day: count for day, count in calendar.items() if day.year == today.year and day <= today}
+    if not dates:
+        raise ValueError('No dates in the current-year contribution calendar')
+
+    total = sum(dates.values())
+    current = current_streak(dates, today)
+    longest = longest_streak(dates)
+
+    # Display the most recent run when multiple longest streaks are tied.
+    running = 0
+    previous = None
+    longest_end = None
+    for day in sorted(dates):
+        running = (running + 1 if previous and (day - previous).days == 1 else 1) if dates[day] else 0
+        if running and running >= longest:
+            longest_end = day
+        previous = day
+
+    def short(day: date) -> str:
+        return f'{day:%b} {day.day}'
+
+    def span(start: date, end: date) -> str:
+        return short(start) if start == end else f'{short(start)} – {short(end)}'
+
+    current_end = today if dates.get(today, 0) else date.fromordinal(today.toordinal() - 1)
+    current_range = span(date.fromordinal(current_end.toordinal() - current + 1), current_end) if current else 'No active streak'
+    longest_range = span(date.fromordinal(longest_end.toordinal() - longest + 1), longest_end) if longest_end else 'No active streak'
+
+    labels = {
+        'stat-total': f'{total:,}',
+        'stat-total-range': f'Jan 1 – {short(today)}, {today.year}',
+        'stat-current': str(current),
+        'stat-current-range': current_range,
+        'stat-longest': str(longest),
+        'stat-longest-range': longest_range,
+    }
+    svg = etree.parse(str(out), etree.XMLParser(remove_blank_text=False))
+    for identifier, value in labels.items():
+        matches = svg.xpath('.//*[@id=$identifier]', identifier=identifier)
+        if len(matches) != 1:
+            raise ValueError(f'Missing or duplicate WhiteTree stat field: {identifier}')
+        matches[0].text = value
+    svg.getroot().find(S + 'desc').text = (
+        f'GitHub contributions for {today.year} through {today.isoformat()}: '
+        f'{total} contributions, {current}-day current streak, '
+        f'{longest}-day longest streak. Subtle vines frame an animated statistics panel.'
+    )
+    svg.write(str(out), encoding='utf-8', xml_declaration=False)
 
 
 def centerline(path: etree._Element) -> list[tuple[float, float]]:
@@ -287,8 +343,10 @@ def main() -> None:
     login=os.environ.get('GITHUB_USER','')
     if not token or not login:
         raise SystemExit('GITHUB_TOKEN and GITHUB_USER are required')
-    render(fetch_calendar(login,token,today),today)
-    print(f'Updated {OUTPUT} for {today.isoformat()}')
+    calendar = fetch_calendar(login,token,today)
+    render(calendar,today)
+    render_stats(calendar,today)
+    print(f'Updated {OUTPUT} and {STATS_OUTPUT} for {today.isoformat()}')
 
 
 if __name__ == '__main__':
