@@ -185,7 +185,7 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
     paths=[]
     if active:
         roots=[list(reversed(center[i])) for i in (77,78,79,80)]
-        trunk=[(620,573),(618.6,555),(617,535),(616.8,516),(617.5,498),(618,480),(619,461),(620,445)]
+        trunk=[(620,573),(618.6,555),(617,535),(616.8,516),(617.5,498),(618,480),(619,461),center[1][0]]
         paths += [d_path(r) for r in roots] + [d_path(trunk)]
         reaches=defaultdict(int)
         for day,count,branch,index,start,control,end,twig in active:
@@ -237,9 +237,11 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
             etree.SubElement(bead,S+'animate',attributeName='opacity',values='0;1;1;0',keyTimes='0;.1;.9;1',dur=f'{8+k*1.3:.1f}s',begin=f'-{k*2:.1f}s',repeatCount='indefinite')
     root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
 
-    # Patch white silhouette pinholes (not the intended open gaps between limbs).
-    patch=etree.Element(S+'g',id='trunk-junction-repair',fill='#e8f0ed')
-    for x,y,rx,ry in [(620,391,2.0,2.0),(621,441,3.2,3.2),(628,438,1.8,1.8)]:
+    # Cover enclosed pinholes at the trunk fork without painting across
+    # the intentional open space between branches. April's limb extends into
+    # the trunk in the vector template instead of ending in a dangling point.
+    patch=etree.Element(S+'g',id='trunk-junction-repair',fill='#e8efec')
+    for x,y,rx,ry in [(620,391,2.3,2.2),(621,441,3.2,3.2),(633.5,441.7,3.0,2.5)]:
         etree.SubElement(patch,S+'ellipse',cx=str(x),cy=str(y),rx=str(rx),ry=str(ry))
     root.insert(6,patch)
 
