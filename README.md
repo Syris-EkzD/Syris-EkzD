@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/whitetree-activity.svg" width="100%" alt="Animated WhiteTree: Mind and Work feed glowing roots, a white branching tree, and contribution-driven leaves with gentle mint flow." />
+  <img src="./assets/whitetree-activity.svg" width="100%" alt="Animated WhiteTree: a single mint orb travels from Mind or Work to the most recent GitHub contribution leaf." />
 </div>
 
 ---

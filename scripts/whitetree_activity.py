@@ -1,7 +1,7 @@
 """Render the animated WhiteTree from GitHub's current-year contribution calendar.
 
 The tree's white vector geometry is preserved in assets/whitetree-template.svg.
-Only contributed dates grow leaves and energize their connecting twigs/branches.
+Only contributed dates grow leaves; one animated orb travels to the latest active leaf.
 Runs from the existing profile activity workflow (no browser-side JavaScript).
 """
 from __future__ import annotations
@@ -186,50 +186,50 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
     insert_at=next(i for i,e in enumerate(root) if e.tag==S+'path' and e.get('d','').startswith('M618.01,568.03'))
     root.insert(insert_at,leaves)
 
-    flow=etree.Element(S+'g',id='activity-flow')
-    paths=[]
+    # A single contribution orb replaces the previous ever-lit vein network.
+    # It follows the most recent contributed day's twig and is invisible at
+    # the loop boundary, so returning to a root cannot produce a visible jump.
     if active:
-        roots=[list(reversed(center[i])) for i in (77,78,79,80)]
-        trunk=[(620,573),(618.6,555),(617,535),(616.8,516),(617.5,498),(618,480),(619,461),center[1][0]]
-        paths += [d_path(r) for r in roots] + [d_path(trunk)]
-        reaches=defaultdict(int)
-        for day,count,branch,index,start,control,end,twig in active:
-            reaches[branch]=max(reaches[branch],index)
-            cur=branch
-            while parent[cur][0]:
-                p,attach=parent[cur]
-                reaches[p]=max(reaches[p],attach)
-                cur=p
-        # Bridge the small geometric gaps between the trunk and boughs,
-        # and between each bough and its offshoot. Flow is a single network.
-        for b, idx in sorted(reaches.items()):
-            if idx <= 0: continue
-            p, attach = parent[b]
-            origin = center[p][attach] if p else trunk[-1]
-            if math.dist(origin,center[b][0]) > 0.15:
-                paths.append(d_path([origin,center[b][0]]))
-        paths += [d_path(center[b][:idx+1]) for b,idx in sorted(reaches.items()) if idx>0]
-        paths += [item[-1].get('d') for item in active]
-        for cls in ('flow-source','flow-bed','flow-thread'):
-            layer=etree.SubElement(flow,S+'g',attrib={'class':cls})
-            for p in paths: etree.SubElement(layer,S+'path',d=p)
-        # Keep the flow animated, but avoid flicker by using only steady moving particles.
-        for side in roots:
-            x,y=side[0]
-            etree.SubElement(flow,S+'circle',cx=f'{x:.2f}',cy=f'{y:.2f}',r='2.3',fill='#ceffe7',opacity='.72')
-        for day,count,branch,index,start,control,end,twig in active:
-            etree.SubElement(flow,S+'circle',cx=f'{end[0]:.2f}',cy=f'{end[1]:.2f}',r='1.5',fill='#e3ffeb',opacity='.55')
-        # SMIL particles snapped to their starting positions on every repeat,
-        # showing up as flicker in GitHub's SVG image renderer. Replace them
-        # with seamless CSS movement along sustained branch/root routes.
-        # Keep the shortest twig segments steadily lit rather than blinking.
-        motion=etree.SubElement(flow,S+'g',attrib={'class':'flow-motion'})
-        for path_d in paths[:-len(active)]:
-            points=[tuple(map(float,xy)) for xy in re.findall(r'([-\d.]+),([-\d.]+)',path_d)]
-            length=sum(math.dist(a,b) for a,b in zip(points,points[1:]))
-            if length >= 28:
-                etree.SubElement(motion,S+'path',d=path_d)
-    root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
+        latest=max(active, key=lambda item: item[0])
+        day,count,branch,index,start,control,end,twig=latest
+
+        # A leaf on the left is fed by Mind, on the right by Work. This is
+        # purely a visual route choice; it does not claim a contribution type.
+        root_branch=77 if end[0]<620 else 78
+        points=list(reversed(center[root_branch]))
+        trunk=[(620,573),(618.6,555),(617,535),(616.8,516),
+               (617.5,498),(618,480),(619,461),center[1][0]]
+        points.extend(trunk)
+
+        chain=[(branch,index)]
+        cur=branch
+        while parent[cur][0]:
+            p,attach=parent[cur]
+            chain.append((p,attach))
+            cur=p
+        for b,stop in reversed(chain):
+            # Join the actual branch centerlines, then travel all the way to
+            # the latest day's twig (rather than a fixed month endpoint).
+            points.append(center[b][0])
+            points.extend(center[b][1:stop+1])
+        points.append(start)
+        path_d=d_path(points)+f' Q {control[0]:.2f},{control[1]:.2f} {end[0]:.2f},{end[1]:.2f}'
+
+        flow=etree.Element(S+'g',id='activity-orb',
+                           attrib={'data-target-date':day.isoformat(),
+                                   'data-root':'Mind' if root_branch==77 else 'Work'})
+        orb=etree.SubElement(flow,S+'g',attrib={'class':'activity-orb', 'opacity':'0'})
+        # Two concentric solid circles form one tiny orb without an expensive
+        # animated SVG blur filter, which can flicker on GitHub.
+        etree.SubElement(orb,S+'circle',r='9',fill='#8df3d1',opacity='.16')
+        etree.SubElement(orb,S+'circle',r='4.0',fill='#d5ffe9')
+        etree.SubElement(orb,S+'animateMotion',path=path_d,dur='18s',
+                         calcMode='linear',keyTimes='0;0.82;1',
+                         keyPoints='0;1;1',repeatCount='indefinite')
+        etree.SubElement(orb,S+'animate',attributeName='opacity',
+                         values='0;1;1;0;0',keyTimes='0;0.06;0.82;0.90;1',
+                         dur='18s',repeatCount='indefinite')
+        root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
 
     # Cover actual enclosed pinholes at the trunk fork, without painting across
     # intentional empty space between branches. The April limb itself extends
@@ -239,23 +239,11 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
         etree.SubElement(patch,S+'ellipse',cx=str(x),cy=str(y),rx=str(rx),ry=str(ry))
     root.insert(6,patch)
 
-    # Minimal WhiteTree output: no months, no statistics, only Mind and Work.
+    # Minimal WhiteTree output: one orb, no month labels or statistics.
     styles=defs.find(S+'style')
     styles.text=(styles.text or '')+'''
-.flow-source { fill:none; stroke:#72e4c7; stroke-width:6.2; stroke-linecap:round; stroke-linejoin:round; opacity:.14; filter:url(#flow-haze); }
-.flow-bed { fill:none; stroke:#1f5d61; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; opacity:.72; }
-.flow-thread { fill:none; stroke:#b5f6df; stroke-width:1.15; stroke-linecap:round; stroke-linejoin:round; opacity:.82; }
-/* A full dash period is 26 units (4+22); moving exactly 26 units loops
-   seamlessly. No opacity keyframes, particle teleporting, or flashing. */
-.flow-motion path { fill:none; stroke:#e1fff3; stroke-width:1.4;
-  stroke-linecap:round; stroke-dasharray:4 22; opacity:.44;
-  animation:whitetree-flow 5.2s linear infinite; }
-@keyframes whitetree-flow {
-  from { stroke-dashoffset:0; }
-  to   { stroke-dashoffset:-26; }
-}
 @media (prefers-reduced-motion:reduce) {
-  .flow-motion path { animation:none; stroke-dasharray:none; opacity:.22; }
+  .activity-orb { display:none; }
 }
 '''
 
@@ -288,7 +276,7 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
                 root.remove(node)
 
     root.find(S+'title').text='WhiteTree contributions'
-    root.find(S+'desc').text='An animated calendar-year WhiteTree. Mind and Work energize the roots, trunk and contributed branches; only contributed dates grow leaves. The glow moves smoothly without flickering.'
+    root.find(S+'desc').text='An animated calendar-year WhiteTree. A single mint orb travels from Mind or Work through the trunk to the latest contributed leaf. Leaves grow only on days with GitHub contributions.'
     out.parent.mkdir(parents=True,exist_ok=True)
     tree.write(str(out),encoding='utf-8',xml_declaration=False)
 
