@@ -17,7 +17,7 @@
 ---
 
 <div align="center">
-  <img src="./assets/whitetree-activity.svg" width="100%" alt="WhiteTree Activity Core concept: a circuit-tree visualization where Mind and Work form the roots, contribution intensity appears as illuminated branch nodes, and an animated pulse travels through the activity tree." />
+  <img src="./assets/whitetree-activity.svg" width="100%" alt="Animated WhiteTree contributions: Mind and Work feed four illuminated roots; mint flow follows contributed days through the trunk and branches to growing leaves, with refreshed activity statistics." />
 </div>
 
 ---
