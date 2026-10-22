@@ -1,74 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="990" height="390" viewBox="0 0 495 195" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="990" height="175" viewBox="0 0 495 87.5" role="img" aria-labelledby="title desc">
 <title id="title">WhiteTree contribution statistics</title>
-<desc id="desc">GitHub contributions for 2026 through 2026-10-23: 709 contributions, 3-day current streak, 8-day longest streak. Subtle vines frame an animated statistics panel.</desc>
+<desc id="desc">GitHub contributions in the last year through 2026-10-23: 710 contributions, 3-day current streak, 8-day longest streak. Subtle vines frame an animated statistics panel.</desc>
 <defs>
- <style>
-  text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
-  .panel { fill:#0d1117; stroke:#3a454a; stroke-width:1; }
-  .divider { stroke:#37434a; stroke-width:1; }
-  .value { fill:#eef4f1; font-size:28px; font-weight:600; text-anchor:middle; }
-  .label { fill:#c7d1d2; font-size:12.5px; text-anchor:middle; }
-  .range { fill:#8d9da4; font-size:10.5px; text-anchor:middle; }
-  .center-label { fill:#e1e9e5; font-size:12.5px; font-weight:600; text-anchor:middle; }
-  .vine { stroke:#b7c6bf; stroke-width:1.35; stroke-linecap:round; stroke-linejoin:round; fill:none; }
-  .offshoot { stroke:#90a49b; stroke-width:.8; fill:none; stroke-linecap:round; }
-  .leaf { fill:#e8efec; }
-  .stone { stroke:#63716f; stroke-width:.65; stroke-linecap:round; fill:none; opacity:.45; }
-  .delayed { opacity:0; animation:fade-up .45s ease-out forwards; }
-  .grow { stroke-dasharray:100; stroke-dashoffset:100; animation:draw .8s ease-out forwards; }
-  .d0 { animation-delay:.10s; } .d1 { animation-delay:.35s; }
-  .d2 { animation-delay:.48s; } .d3 { animation-delay:.62s; }
-  .d4 { animation-delay:.78s; } .d5 { animation-delay:.94s; }
-  .d6 { animation-delay:1.10s; } .d7 { animation-delay:1.20s; }
-  .d8 { animation-delay:1.32s; }
-  .streak { transform-box:fill-box; transform-origin:center; animation:streak-in .62s cubic-bezier(.18,.9,.32,1) both; animation-delay:.55s; }
-  @keyframes fade-up { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes draw { to { stroke-dashoffset:0; } }
-  @keyframes streak-in { from { opacity:0; transform:scale(.86); } 75% { opacity:1; transform:scale(1.05); } to { opacity:1; transform:scale(1); } }
-  @media (prefers-reduced-motion:reduce) {
-   .delayed,.grow,.streak { animation:none!important; opacity:1!important; stroke-dashoffset:0!important; transform:none!important; }
-  }
- </style>
+<style>
+text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
+.panel { fill:#0d1117; stroke:#3a454a; stroke-width:.65; }
+.divider { stroke:#37434a; stroke-width:.7; }
+.value { fill:#eef4f1; font-size:23px; font-weight:600; text-anchor:middle; }
+.label { fill:#c7d1d2; font-size:9.2px; text-anchor:middle; }
+.range { fill:#8d9da4; font-size:7.5px; text-anchor:middle; }
+.center-label { fill:#e1e9e5; font-size:9.2px; font-weight:600; text-anchor:middle; }
+.vine { stroke:#b7c6bf; stroke-width:1; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.offshoot { stroke:#90a49b; stroke-width:.6; fill:none; stroke-linecap:round; }
+.leaf { fill:#e8efec; }
+.stone { stroke:#63716f; stroke-width:.5; stroke-linecap:round; fill:none; opacity:.45; }
+.delayed { opacity:0; animation:fade-up .45s ease-out forwards; }
+.grow { stroke-dasharray:100; stroke-dashoffset:100; animation:draw .8s ease-out forwards; }
+.d0 { animation-delay:.10s; } .d1 { animation-delay:.35s; }
+.d2 { animation-delay:.48s; } .d3 { animation-delay:.62s; }
+.d4 { animation-delay:.78s; } .d5 { animation-delay:.94s; }
+.d6 { animation-delay:1.10s; } .d7 { animation-delay:1.20s; }
+.d8 { animation-delay:1.32s; }
+.streak { transform-box:fill-box; transform-origin:center; animation:streak-in .62s cubic-bezier(.18,.9,.32,1) both; animation-delay:.55s; }
+@keyframes fade-up { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
+@keyframes draw { to { stroke-dashoffset:0; } }
+@keyframes streak-in { from { opacity:0; transform:scale(.86); } 75% { opacity:1; transform:scale(1.05); } to { opacity:1; transform:scale(1); } }
+@media (prefers-reduced-motion:reduce) { .delayed,.grow,.streak { animation:none!important; opacity:1!important; stroke-dashoffset:0!important; transform:none!important; } }
+</style>
 </defs>
-<rect x="0" y="0" width="495" height="195" fill="#0d1117"/>
-<rect class="panel" x="7.5" y="7.5" rx="12" width="480" height="180"/>
-<path class="divider" d="M165 28V168 M330 28V168"/>
-
-<!-- These four cracks imply aged stone, without photographic texture. -->
-<path class="stone" d="M61 7.5l4 5-2 4 M475 7.5l-3 6 2 4 M7.5 156l4-3 2 5 M449 187.5l-4-5 3-3"/>
-
-<!-- Two modest corner vines: no panel-spanning ornament or tree illustration. -->
-<g class="vine" pathLength="100">
- <path class="grow d0" pathLength="100" d="M8 58 Q5 36 15 23 Q24 11 48 8"/>
- <path class="grow d0" pathLength="100" d="M488 127 Q491 156 474 174 Q457 186 436 187"/>
+<rect width="495" height="87.5" fill="#0d1117"/>
+<rect class="panel" x="4" y="4" rx="7" width="487" height="79.5"/>
+<path class="divider" d="M165 14V73 M330 14V73"/>
+<path class="stone" d="M41 4l3 3-1 3 M476 4l-2 4 2 3 M4 71l3-2 2 3"/>
+<g class="vine">
+<path class="grow d0" pathLength="100" d="M4 28 Q2 14 12 8 Q19 4 32 4"/>
+<path class="grow d0" pathLength="100" d="M491 60 Q492 75 479 80 Q470 84 459 84"/>
 </g>
 <g class="offshoot">
- <path d="M13 28 Q19 28 21 23 M28 12 Q28 18 34 20 M478 170 Q474 163 467 160 M454 183 Q454 178 448 174"/>
+<path d="M10 10 Q13 13 17 10 M23 5 Q24 8 28 9 M481 80 Q477 76 472 77 M465 84 Q463 80 459 79"/>
 </g>
 <g class="leaf">
- <path d="M21 23 Q23 16 30 17 Q28 24 21 23Z"/>
- <path d="M34 20 Q36 13 42 14 Q40 21 34 20Z"/>
- <path d="M467 160 Q469 155 475 155 Q473 162 467 160Z"/>
- <path d="M448 174 Q441 172 440 165 Q447 166 448 174Z"/>
+<path d="M17 10 Q18 5 23 6 Q21 11 17 10Z"/>
+<path d="M28 9 Q29 5 33 5 Q32 10 28 9Z"/>
+<path d="M472 77 Q473 73 477 73 Q476 78 472 77Z"/>
+<path d="M459 79 Q454 79 453 74 Q458 75 459 79Z"/>
 </g>
-
-<!-- Left metric: layout and stagger closely match the supplied original SVG. -->
-<g class="delayed d2"><text id="stat-total" class="value" x="82.5" y="80">709</text></g>
-<g class="delayed d3"><text class="label" x="82.5" y="115">Total Contributions</text></g>
-<g class="delayed d4"><text id="stat-total-range" class="range" x="82.5" y="145">Jan 1 – Oct 23, 2026</text></g>
-
-<!-- Center metric: the original circle remains, replacing the flame with one leaf. -->
+<g class="delayed d2"><text id="stat-total" class="value" x="82.5" y="43">710</text></g>
+<g class="delayed d3"><text class="label" x="82.5" y="62">Total Contributions</text></g>
+<g class="delayed d4"><text id="stat-total-range" class="range" x="82.5" y="75">Last 12 months</text></g>
 <g class="delayed d1">
- <circle cx="247.5" cy="71" r="39" fill="none" stroke="#cad7d0" stroke-width="2.2"/>
- <path d="M247.5 30 Q238 22 244 16 Q251 20 247.5 30Z" fill="#e8efec"/>
- <path d="M247.5 30 Q257 22 251 16 Q244 20 247.5 30Z" fill="#a8bdb3"/>
+<circle cx="247.5" cy="36" r="26" fill="none" stroke="#cad7d0" stroke-width="1.4"/>
+<path d="M247.5 10 Q241 5 245 1 Q250 4 247.5 10Z" fill="#e8efec"/>
+<path d="M247.5 10 Q254 5 250 1 Q246 4 247.5 10Z" fill="#a8bdb3"/>
 </g>
-<text id="stat-current" class="value streak" x="247.5" y="80">3</text>
-<g class="delayed d5"><text class="center-label" x="247.5" y="139">Current Streak</text></g>
-<g class="delayed d6"><text id="stat-current-range" class="range" x="247.5" y="165">Oct 21 – Oct 23</text></g>
-
-<!-- Right metric. -->
-<g class="delayed d6"><text id="stat-longest" class="value" x="412.5" y="80">8</text></g>
-<g class="delayed d7"><text class="label" x="412.5" y="115">Longest Streak</text></g>
-<g class="delayed d8"><text id="stat-longest-range" class="range" x="412.5" y="145">Sep 12 – Sep 19</text></g>
+<text id="stat-current" class="value streak" x="247.5" y="44">3</text>
+<g class="delayed d5"><text class="center-label" x="247.5" y="69">Current Streak</text></g>
+<g class="delayed d6"><text id="stat-current-range" class="range" x="247.5" y="79">Oct 21 – Oct 23</text></g>
+<g class="delayed d6"><text id="stat-longest" class="value" x="412.5" y="43">8</text></g>
+<g class="delayed d7"><text class="label" x="412.5" y="62">Longest Streak</text></g>
+<g class="delayed d8"><text id="stat-longest-range" class="range" x="412.5" y="75">Sep 12 – Sep 19</text></g>
 </svg>
