@@ -113,6 +113,11 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
         raise ValueError('Empty calendar; refusing to render')
     tree = etree.parse(str(template), etree.XMLParser(remove_blank_text=False))
     root = tree.getroot()
+    # The README already displays this SVG at 100% width. Cropping the old
+    # 1240x760 artboard is what makes the tree itself larger, without CSS hacks.
+    root.set('width', '850')
+    root.set('height', '630')
+    root.set('viewBox', '200 10 850 630')
     defs = root.find(S+'defs')
     for node in list(root):
         # Existing flow is replaced with paths derived from current contributions.
@@ -214,20 +219,16 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
             etree.SubElement(flow,S+'circle',cx=f'{x:.2f}',cy=f'{y:.2f}',r='2.3',fill='#ceffe7',opacity='.72')
         for day,count,branch,index,start,control,end,twig in active:
             etree.SubElement(flow,S+'circle',cx=f'{end[0]:.2f}',cy=f'{end[1]:.2f}',r='1.5',fill='#e3ffeb',opacity='.55')
-        # Orbs travel continuously, from root into the shared trunk, across
-        # the geometrically joined parent branches, and to contributed leaves.
-        for k,item in enumerate(sorted(active,reverse=True)[:3]):
-            day,count,branch,index,start,control,end,twig=item
-            chain=[(branch,index)]
-            cur=branch
-            while parent[cur][0]:
-                p,idx=parent[cur];chain.append((p,idx));cur=p
-            points=roots[k%4]+trunk
-            for b,idx in reversed(chain):
-                points += [center[b][0]]+center[b][1:idx+1]
-            bead=etree.SubElement(flow,S+'circle',r='2.35',attrib={'class':'flow-particle'})
-            path=d_path(points)+f' L{start[0]:.2f},{start[1]:.2f} Q{control[0]:.2f},{control[1]:.2f} {end[0]:.2f},{end[1]:.2f}'
-            etree.SubElement(bead,S+'animateMotion',path=path,dur=f'{10+k*1.7:.1f}s',begin=f'-{k*3.0:.1f}s',repeatCount='indefinite',rotate='auto')
+        # SMIL particles snapped to their starting positions on every repeat,
+        # showing up as flicker in GitHub's SVG image renderer. Replace them
+        # with seamless CSS movement along sustained branch/root routes.
+        # Keep the shortest twig segments steadily lit rather than blinking.
+        motion=etree.SubElement(flow,S+'g',attrib={'class':'flow-motion'})
+        for path_d in paths[:-len(active)]:
+            points=[tuple(map(float,xy)) for xy in re.findall(r'([-\d.]+),([-\d.]+)',path_d)]
+            length=sum(math.dist(a,b) for a,b in zip(points,points[1:]))
+            if length >= 28:
+                etree.SubElement(motion,S+'path',d=path_d)
     root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
 
     # Cover actual enclosed pinholes at the trunk fork, without painting across
@@ -244,8 +245,18 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
 .flow-source { fill:none; stroke:#72e4c7; stroke-width:6.2; stroke-linecap:round; stroke-linejoin:round; opacity:.14; filter:url(#flow-haze); }
 .flow-bed { fill:none; stroke:#1f5d61; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; opacity:.72; }
 .flow-thread { fill:none; stroke:#b5f6df; stroke-width:1.15; stroke-linecap:round; stroke-linejoin:round; opacity:.82; }
-.flow-particle { fill:#eefff6; stroke:none; opacity:.78; }
-@media (prefers-reduced-motion:reduce) { .flow-particle { display:none; } }
+/* A full dash period is 26 units (4+22); moving exactly 26 units loops
+   seamlessly. No opacity keyframes, particle teleporting, or flashing. */
+.flow-motion path { fill:none; stroke:#e1fff3; stroke-width:1.4;
+  stroke-linecap:round; stroke-dasharray:4 22; opacity:.44;
+  animation:whitetree-flow 5.2s linear infinite; }
+@keyframes whitetree-flow {
+  from { stroke-dashoffset:0; }
+  to   { stroke-dashoffset:-26; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .flow-motion path { animation:none; stroke-dasharray:none; opacity:.22; }
+}
 '''
 
     # Make the SVG visually blend into GitHub's default dark background.
@@ -277,7 +288,7 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
                 root.remove(node)
 
     root.find(S+'title').text='WhiteTree contributions'
-    root.find(S+'desc').text='A live-rendered calendar-year activity tree on a GitHub-dark background. Only contributed days grow leaves, and gentle mint flow moves from Mind and Work through the roots, trunk, active branches, and leaves.'
+    root.find(S+'desc').text='An animated calendar-year WhiteTree. Mind and Work energize the roots, trunk and contributed branches; only contributed dates grow leaves. The glow moves smoothly without flickering.'
     out.parent.mkdir(parents=True,exist_ok=True)
     tree.write(str(out),encoding='utf-8',xml_declaration=False)
 
