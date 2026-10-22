@@ -24,14 +24,14 @@ OUTPUT = ROOT / "assets/whitetree-activity.svg"
 STATS_OUTPUT = ROOT / "assets/whitetree-stats.svg"
 S = "{http://www.w3.org/2000/svg}"
 
-QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!) {
+QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!, $statsFrom: DateTime!) {
   user(login: $login) {
     tree: contributionsCollection(from: $from, to: $to) {
       contributionCalendar {
         weeks { contributionDays { date contributionCount } }
       }
     }
-    stats: contributionsCollection {
+    stats: contributionsCollection(from: $statsFrom, to: $to) {
       contributionCalendar {
         totalContributions
         weeks { contributionDays { date contributionCount } }
@@ -46,7 +46,13 @@ def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int]
     # The requested window ends tomorrow so today's contributions are included.
     tomorrow = date.fromordinal(today.toordinal() + 1)
     finish = f"{tomorrow.isoformat()}T00:00:00Z"
-    data = json.dumps({"query": QUERY, "variables": {"login": login, "from": start, "to": finish}}).encode()
+    # Use 365 complete calendar dates including today; an unbounded GraphQL
+    # collection can lag by one day and miss today's contributions.
+    stats_start = date.fromordinal(today.toordinal() - 364)
+    stats_from = f"{stats_start.isoformat()}T00:00:00Z"
+    data = json.dumps({"query": QUERY, "variables": {
+        "login": login, "from": start, "to": finish, "statsFrom": stats_from
+    }}).encode()
     req = Request("https://api.github.com/graphql", data=data, headers={
         "Authorization": f"Bearer {token}", "Content-Type": "application/json",
         "Accept": "application/vnd.github+json", "User-Agent": "WhiteTree-activity-generator",
@@ -64,8 +70,8 @@ def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int]
     if not calendar:
         raise RuntimeError("Empty contribution calendar; refusing to erase profile data")
 
-    # The tree depicts January onward; GitHub's profile statistics depict
-    # the rolling previous year. Use GitHub's own total instead of a YTD sum.
+    # The tree depicts January onward; the stats depict the last 365 dates.
+    # Use GitHub's own calendar total rather than a YTD sum.
     stats = user["stats"]["contributionCalendar"]
     stats_calendar = {date.fromisoformat(d["date"]): int(d["contributionCount"])
                       for week in stats["weeks"] for d in week["contributionDays"]
