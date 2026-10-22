@@ -13,6 +13,8 @@ text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
 .vine { stroke:#b7c6bf; stroke-width:1; stroke-linecap:round; stroke-linejoin:round; fill:none; }
 .offshoot { stroke:#90a49b; stroke-width:.6; fill:none; stroke-linecap:round; }
 .leaf { fill:#e8efec; }
+.leaf-renew { transform-box:fill-box; transform-origin:center; animation:leaf-renew 15s ease-in-out infinite; }
+.leaf-renew-right { animation-duration:19s; animation-delay:-9s; }
 .stone { stroke:#63716f; stroke-width:.5; stroke-linecap:round; fill:none; opacity:.45; }
 .delayed { opacity:0; animation:fade-up .45s ease-out forwards; }
 .grow { stroke-dasharray:100; stroke-dashoffset:100; animation:draw .8s ease-out forwards; }
@@ -25,7 +27,14 @@ text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
 @keyframes fade-up { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
 @keyframes draw { to { stroke-dashoffset:0; } }
 @keyframes streak-in { from { opacity:0; transform:scale(.86); } 75% { opacity:1; transform:scale(1.05); } to { opacity:1; transform:scale(1); } }
-@media (prefers-reduced-motion:reduce) { .delayed,.grow,.streak { animation:none!important; opacity:1!important; stroke-dashoffset:0!important; transform:none!important; } }
+/* A single leaf drifts away, disappears, and quietly grows back. */
+@keyframes leaf-renew {
+  0%,26%,100% { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
+  39% { opacity:0; transform:translate(3px,5px) rotate(12deg) scale(.92); }
+  45% { opacity:0; transform:translate(0,-1px) rotate(0deg) scale(.78); }
+  60% { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
+}
+@media (prefers-reduced-motion:reduce) { .delayed,.grow,.streak,.leaf-renew { animation:none!important; opacity:1!important; stroke-dashoffset:0!important; transform:none!important; } }
 </style>
 </defs>
 <rect width="495" height="135" fill="#0d1117"/>
@@ -41,9 +50,9 @@ text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
 </g>
 <g class="leaf">
 <path d="M30 20 Q31 15 36 16 Q34 21 30 20Z"/>
-<path d="M41 18.75 Q42 14.75 46 14.75 Q45 19.75 41 18.75Z"/>
+<path class="leaf-renew" d="M41 18.75 Q42 14.75 46 14.75 Q45 19.75 41 18.75Z"/>
 <path d="M460 113 Q461 109 465 109 Q464 114 460 113Z"/>
-<path d="M446 116 Q441 116 440 111 Q445 112 446 116Z"/>
+<path class="leaf-renew leaf-renew-right" d="M446 116 Q441 116 440 111 Q445 112 446 116Z"/>
 </g>
 <g class="delayed d2"><text id="stat-total" class="value" x="94" y="67.5">715</text></g>
 <g class="delayed d3"><text class="label" x="94" y="87.5">Total Contributions</text></g>

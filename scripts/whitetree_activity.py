@@ -1,4 +1,4 @@
-"""Render the current-year WhiteTree and rolling-year GitHub statistics.
+"""Render the current-year WhiteTree, rolling-year streaks, and lifetime totals.
 
 The tree's white vector geometry is preserved in assets/whitetree-template.svg.
 Only contributed dates grow leaves; one animated orb travels to the latest active leaf.
@@ -33,7 +33,6 @@ QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!, $statsFrom: 
     }
     stats: contributionsCollection(from: $statsFrom, to: $to) {
       contributionCalendar {
-        totalContributions
         weeks { contributionDays { date contributionCount } }
       }
     }
@@ -41,18 +40,24 @@ QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!, $statsFrom: 
 }"""
 
 
-def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int], dict[date, int], int]:
-    start = f"{today.year}-01-01T00:00:00Z"
-    # The requested window ends tomorrow so today's contributions are included.
-    tomorrow = date.fromordinal(today.toordinal() + 1)
-    finish = f"{tomorrow.isoformat()}T00:00:00Z"
-    # Use 365 complete calendar dates including today; an unbounded GraphQL
-    # collection can lag by one day and miss today's contributions.
-    stats_start = date.fromordinal(today.toordinal() - 364)
-    stats_from = f"{stats_start.isoformat()}T00:00:00Z"
-    data = json.dumps({"query": QUERY, "variables": {
-        "login": login, "from": start, "to": finish, "statsFrom": stats_from
-    }}).encode()
+YEARS_QUERY = """query($login: String!) {
+  user(login: $login) {
+    contributionsCollection { contributionYears }
+  }
+}"""
+
+ANNUAL_QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $login) {
+    contributionsCollection(from: $from, to: $to) {
+      contributionCalendar { totalContributions }
+    }
+  }
+}"""
+
+
+def github_user(login: str, token: str, query: str, variables: dict) -> dict:
+    """Call GitHub GraphQL and refuse partial/error responses."""
+    data = json.dumps({"query": query, "variables": {"login": login, **variables}}).encode()
     req = Request("https://api.github.com/graphql", data=data, headers={
         "Authorization": f"Bearer {token}", "Content-Type": "application/json",
         "Accept": "application/vnd.github+json", "User-Agent": "WhiteTree-activity-generator",
@@ -63,15 +68,59 @@ def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int]
         raise RuntimeError(f"GitHub GraphQL error: {payload['errors']}")
     user = (payload.get("data") or {}).get("user")
     if not user:
-        raise RuntimeError("Could not retrieve contribution data")
+        raise RuntimeError("Could not retrieve GitHub contribution data")
+    return user
+
+
+def fetch_lifetime_total(login: str, token: str, today: date) -> int:
+    """Sum disjoint calendar-year totals since the user's first contribution year.
+
+    GitHub only exposes at most one year per contributionsCollection request;
+    contributionYears identifies the historical years to inspect. Request just
+    totalContributions for each year to avoid loading full historical calendars.
+    """
+    years_data = github_user(login, token, YEARS_QUERY, {})
+    reported_years = years_data["contributionsCollection"]["contributionYears"]
+    years = sorted(set(reported_years) | {today.year})
+    if not years or any(type(y) is not int or y < 2008 or y > today.year for y in years):
+        raise RuntimeError("GitHub returned invalid contribution years")
+
+    total = 0
+    for year in years:
+        beginning = f"{year}-01-01T00:00:00Z"
+        # Complete past calendar years never overlap. The current-year window
+        # includes today's activity, matching the existing WhiteTree cutoff.
+        ending = (f"{year}-12-31T23:59:59Z" if year < today.year else
+                  f"{date.fromordinal(today.toordinal() + 1).isoformat()}T00:00:00Z")
+        user = github_user(login, token, ANNUAL_QUERY,
+                           {"from": beginning, "to": ending})
+        count = user["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+        if type(count) is not int or count < 0:
+            raise RuntimeError(f"Invalid contribution count for {year}")
+        total += count
+    return total
+
+
+def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int], dict[date, int]]:
+    start = f"{today.year}-01-01T00:00:00Z"
+    # The requested window ends tomorrow so today's contributions are included.
+    tomorrow = date.fromordinal(today.toordinal() + 1)
+    finish = f"{tomorrow.isoformat()}T00:00:00Z"
+    # Use 365 complete calendar dates including today; an unbounded GraphQL
+    # collection can lag by one day and miss today's contributions.
+    stats_start = date.fromordinal(today.toordinal() - 364)
+    stats_from = f"{stats_start.isoformat()}T00:00:00Z"
+    user = github_user(login, token, QUERY, {
+        "from": start, "to": finish, "statsFrom": stats_from
+    })
     days = user["tree"]["contributionCalendar"]["weeks"]
     calendar = {date.fromisoformat(d["date"]): int(d["contributionCount"])
                 for week in days for d in week["contributionDays"]}
     if not calendar:
         raise RuntimeError("Empty contribution calendar; refusing to erase profile data")
 
-    # The tree depicts January onward; the stats depict the last 365 dates.
-    # Use GitHub's own calendar total rather than a YTD sum.
+    # The tree depicts January onward; streaks use the last 365 dates.
+    # The separate lifetime total comes from non-overlapping yearly calendars.
     stats = user["stats"]["contributionCalendar"]
     stats_calendar = {date.fromisoformat(d["date"]): int(d["contributionCount"])
                       for week in stats["weeks"] for d in week["contributionDays"]
@@ -79,7 +128,7 @@ def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int]
     if not stats_calendar:
         raise RuntimeError("Empty rolling-year calendar; refusing to erase profile statistics")
     return ({d: n for d, n in calendar.items() if d.year == today.year and d <= today},
-            stats_calendar, int(stats["totalContributions"]))
+            stats_calendar)
 
 
 def current_streak(calendar: dict[date, int], today: date) -> int:
@@ -110,14 +159,15 @@ def longest_streak(calendar: dict[date, int]) -> int:
 
 def render_stats(calendar: dict[date, int], today: date, total: int,
                  out: Path = STATS_OUTPUT) -> None:
-    """Refresh statistics using GitHub's rolling-year contribution calendar."""
+    """Render lifetime contributions and rolling-year streaks."""
     if not calendar:
         raise ValueError('Empty calendar; refusing to render contribution statistics')
     dates = {day: count for day, count in calendar.items() if day <= today}
     if not dates:
         raise ValueError('No dates in the rolling-year contribution calendar')
 
-    total = sum(dates.values())
+    if type(total) is not int or total < 0:
+        raise ValueError("Invalid lifetime contribution total")
     current = current_streak(dates, today)
     longest = longest_streak(dates)
 
@@ -143,7 +193,7 @@ def render_stats(calendar: dict[date, int], today: date, total: int,
 
     labels = {
         'stat-total': f'{total:,}',
-        'stat-total-range': 'Last 12 months',
+        'stat-total-range': 'All-time',
         'stat-current': str(current),
         'stat-current-range': current_range,
         'stat-longest': str(longest),
@@ -156,8 +206,8 @@ def render_stats(calendar: dict[date, int], today: date, total: int,
             raise ValueError(f'Missing or duplicate WhiteTree stat field: {identifier}')
         matches[0].text = value
     svg.getroot().find(S + 'desc').text = (
-        f'GitHub contributions in the last year through {today.isoformat()}: '
-        f'{total} contributions, {current}-day current streak, '
+        f'GitHub-reported all-time contributions through {today.isoformat()}: '
+        f'{total} contributions. Last 365 days: {current}-day current streak, '
         f'{longest}-day longest streak. Subtle vines frame an animated statistics panel.'
     )
     svg.write(str(out), encoding='utf-8', xml_declaration=False)
@@ -366,9 +416,12 @@ def main() -> None:
     login=os.environ.get('GITHUB_USER','')
     if not token or not login:
         raise SystemExit('GITHUB_TOKEN and GITHUB_USER are required')
-    tree_calendar, stats_calendar, stats_total = fetch_calendar(login,token,today)
+    tree_calendar, stats_calendar = fetch_calendar(login,token,today)
+    lifetime_total = fetch_lifetime_total(login,token,today)
+    if lifetime_total < sum(tree_calendar.values()):
+        raise RuntimeError("Lifetime contributions cannot be less than current-year activity")
     render(tree_calendar,today)
-    render_stats(stats_calendar,today,stats_total)
+    render_stats(stats_calendar,today,lifetime_total)
     print(f'Updated {OUTPUT} and {STATS_OUTPUT} for {today.isoformat()}')
 
 
