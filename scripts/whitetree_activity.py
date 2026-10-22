@@ -221,14 +221,14 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
         orb=etree.SubElement(flow,S+'g',attrib={'class':'activity-orb', 'opacity':'0'})
         # Two concentric solid circles form one tiny orb without an expensive
         # animated SVG blur filter, which can flicker on GitHub.
-        etree.SubElement(orb,S+'circle',r='9',fill='#8df3d1',opacity='.16')
-        etree.SubElement(orb,S+'circle',r='4.0',fill='#d5ffe9')
-        etree.SubElement(orb,S+'animateMotion',path=path_d,dur='18s',
+        etree.SubElement(orb,S+'circle',r='9',fill='#00eec1',opacity='.16')
+        etree.SubElement(orb,S+'circle',r='4.0',fill='#24ffda')
+        etree.SubElement(orb,S+'animateMotion',path=path_d,dur='12s',
                          calcMode='linear',keyTimes='0;0.82;1',
                          keyPoints='0;1;1',repeatCount='indefinite')
         etree.SubElement(orb,S+'animate',attributeName='opacity',
                          values='0;1;1;0;0',keyTimes='0;0.06;0.82;0.90;1',
-                         dur='18s',repeatCount='indefinite')
+                         dur='12s',repeatCount='indefinite')
         root.insert(next(i for i,e in enumerate(root) if e.tag==S+'text' and e.text=='Mind'),flow)
 
     # Cover actual enclosed pinholes at the trunk fork, without painting across
