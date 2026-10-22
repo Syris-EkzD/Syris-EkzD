@@ -41,7 +41,7 @@ QUERY = """query($login: String!, $from: DateTime!, $to: DateTime!) {
 }"""
 
 
-def fetch_calendar(login: str, token: str, today: date) -> dict[date, int]:
+def fetch_calendar(login: str, token: str, today: date) -> tuple[dict[date, int], dict[date, int], int]:
     start = f"{today.year}-01-01T00:00:00Z"
     # The requested window ends tomorrow so today's contributions are included.
     tomorrow = date.fromordinal(today.toordinal() + 1)
