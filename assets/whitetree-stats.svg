@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="990" height="270" viewBox="0 0 495 135" role="img" aria-labelledby="title desc">
 <title id="title">WhiteTree contribution statistics</title>
-<desc id="desc">GitHub-reported all-time contributions through 2026-10-26: 813 contributions. Last 365 days: 6-day current streak, 8-day longest streak. Subtle vines frame an animated statistics panel.</desc>
+<desc id="desc">GitHub-reported all-time contributions through 2026-10-27: 865 contributions. Last 365 days: 6-day current streak, 8-day longest streak. Subtle vines frame an animated statistics panel.</desc>
 <defs>
 <style>
 text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
@@ -54,7 +54,7 @@ text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
 <path d="M460 113 Q461 109 465 109 Q464 114 460 113Z"/>
 <path class="leaf-renew leaf-renew-right" d="M446 116 Q441 116 440 111 Q445 112 446 116Z"/>
 </g>
-<g class="delayed d2"><text id="stat-total" class="value" x="94" y="67.5">813</text></g>
+<g class="delayed d2"><text id="stat-total" class="value" x="94" y="67.5">865</text></g>
 <g class="delayed d3"><text class="label" x="94" y="87.5">Total Contributions</text></g>
 <g class="delayed d4"><text id="stat-total-range" class="range" x="94" y="101.5">All-time</text></g>
 <g class="delayed d1">
