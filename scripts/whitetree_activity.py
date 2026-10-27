@@ -309,8 +309,10 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
         color='#eff9df' if count>=25 else '#c9e9ca' if count>=10 else '#acd9bf' if count>=3 else '#91c5b2'
         leaf=etree.SubElement(leaves,S+'g',transform=f'translate({end[0]:.2f} {end[1]:.2f}) rotate({angle:.2f})')
         etree.SubElement(leaf,S+'title').text=f'{day.isoformat()}: {count} contributions'
-        etree.SubElement(leaf,S+'path',d=f'M0 0 Q{size*.3:.2f} {-size*.45:.2f} {size:.2f} 0 Q{size*.42:.2f} {size*.42:.2f} 0 0Z',fill=color)
-        etree.SubElement(leaf,S+'path',d=f'M1 0 L{size*.75:.2f} 0',stroke='#406054',attrib={'stroke-opacity':'.30','stroke-width':'.7'})
+        # Animate only the two leaf strokes, preserving the fixed attachment point.
+        blade=etree.SubElement(leaf,S+'g',attrib={'class':f'wind-leaf phase-{day.toordinal() % 3}'})
+        etree.SubElement(blade,S+'path',d=f'M0 0 Q{size*.3:.2f} {-size*.45:.2f} {size:.2f} 0 Q{size*.42:.2f} {size*.42:.2f} 0 0Z',fill=color)
+        etree.SubElement(blade,S+'path',d=f'M1 0 L{size*.75:.2f} 0',stroke='#406054',attrib={'stroke-opacity':'.30','stroke-width':'.7'})
     # Draw leaf blades above twig silhouettes but below energy veins.
     insert_at=next(i for i,e in enumerate(root) if e.tag==S+'path' and e.get('d','').startswith('M618.01,568.03'))
     root.insert(insert_at,leaves)
@@ -371,6 +373,30 @@ def render(calendar: dict[date, int], today: date, out: Path = OUTPUT,
     # Minimal WhiteTree output: one orb, no month labels or statistics.
     styles=defs.find(S+'style')
     styles.text=(styles.text or '')+'''
+
+/* Leaf-only wind: pivot at the twig, with slightly staggered gusts. */
+#contribution-leaves .wind-leaf {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: whitetree-leaf-sway 7.2s ease-in-out infinite;
+}
+#contribution-leaves .wind-leaf.phase-1 {
+  animation-duration: 8.4s;
+  animation-delay: -1.8s;
+}
+#contribution-leaves .wind-leaf.phase-2 {
+  animation-duration: 9.3s;
+  animation-delay: -4.2s;
+}
+@keyframes whitetree-leaf-sway {
+  0%, 100% { transform: rotate(-5deg); }
+  45% { transform: rotate(6deg); }
+  72% { transform: rotate(-2deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #contribution-leaves .wind-leaf { animation: none; transform: none; }
+}
+
 @media (prefers-reduced-motion:reduce) {
   .activity-orb { display:none; }
 }
