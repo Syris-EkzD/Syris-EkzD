@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="990" height="270" viewBox="0 0 495 135" role="img" aria-labelledby="title desc">
 <title id="title">WhiteTree contribution statistics</title>
-<desc id="desc">GitHub-reported all-time contributions through 2026-10-28: 866 contributions. Last 365 days: 7-day current streak, 8-day longest streak. Subtle vines frame an animated statistics panel.</desc>
+<desc id="desc">GitHub-reported all-time contributions through 2026-10-29: 887 contributions. Last 365 days: 8-day current streak, 8-day longest streak. Subtle vines frame an animated statistics panel.</desc>
 <defs>
 <style>
 text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
@@ -54,7 +54,7 @@ text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
 <path d="M460 113 Q461 109 465 109 Q464 114 460 113Z"/>
 <path class="leaf-renew leaf-renew-right" d="M446 116 Q441 116 440 111 Q445 112 446 116Z"/>
 </g>
-<g class="delayed d2"><text id="stat-total" class="value" x="94" y="67.5">866</text></g>
+<g class="delayed d2"><text id="stat-total" class="value" x="94" y="67.5">887</text></g>
 <g class="delayed d3"><text class="label" x="94" y="87.5">Total Contributions</text></g>
 <g class="delayed d4"><text id="stat-total-range" class="range" x="94" y="101.5">All-time</text></g>
 <g class="delayed d1">
@@ -62,10 +62,10 @@ text { font-family: "Trebuchet MS", "DejaVu Sans", sans-serif; }
 <path d="M247.5 30.5 Q241 25.5 245 21.5 Q250 24.5 247.5 30.5Z" fill="#e8efec"/>
 <path d="M247.5 30.5 Q254 25.5 250 21.5 Q246 24.5 247.5 30.5Z" fill="#a8bdb3"/>
 </g>
-<text id="stat-current" class="value streak" x="247.5" y="67.5">7</text>
+<text id="stat-current" class="value streak" x="247.5" y="67.5">8</text>
 <g class="delayed d5"><text class="center-label" x="247.5" y="101.5">Current Streak</text></g>
-<g class="delayed d6"><text id="stat-current-range" class="range" x="247.5" y="113.5">Oct 21 – Oct 27</text></g>
+<g class="delayed d6"><text id="stat-current-range" class="range" x="247.5" y="113.5">Oct 21 – Oct 28</text></g>
 <g class="delayed d6"><text id="stat-longest" class="value" x="401" y="67.5">8</text></g>
 <g class="delayed d7"><text class="label" x="401" y="87.5">Longest Streak</text></g>
-<g class="delayed d8"><text id="stat-longest-range" class="range" x="401" y="101.5">Sep 12 – Sep 19</text></g>
+<g class="delayed d8"><text id="stat-longest-range" class="range" x="401" y="101.5">Oct 21 – Oct 28</text></g>
 </svg>
