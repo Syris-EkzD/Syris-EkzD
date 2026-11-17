@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220" role="img" aria-labelledby="title desc">
+<title id="title">Empty Shire game slot</title>
+<desc id="desc">A square, wooden tavern notice frame with a moss-green center, decorative leaves, and a small empty-game icon.</desc>
+<defs>
+  <linearGradient id="frame" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8c6541"/><stop offset=".48" stop-color="#573b27"/><stop offset="1" stop-color="#3c2a1e"/></linearGradient>
+  <linearGradient id="inside" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#26372b"/><stop offset="1" stop-color="#14251d"/></linearGradient>
+  <pattern id="grain" width="38" height="34" patternUnits="userSpaceOnUse"><path d="M1 9Q13 5 26 12 M12 29Q25 22 39 27" fill="none" stroke="#d2a876" stroke-opacity=".12" stroke-width="1.4"/></pattern>
+</defs>
+<rect x="3" y="3" width="214" height="214" rx="12" fill="#261c17" stroke="#33251b" stroke-width="3"/>
+<rect x="8" y="8" width="204" height="204" rx="8" fill="url(#frame)" stroke="#c4a06d" stroke-width="2"/>
+<rect x="8" y="8" width="204" height="204" rx="8" fill="url(#grain)"/>
+<rect x="23" y="23" width="174" height="174" rx="4" fill="url(#inside)" stroke="#bd9961" stroke-width="3"/>
+<rect x="31" y="31" width="158" height="158" rx="2" fill="none" stroke="#4f674b" stroke-width="2"/>
+<g fill="#d8b579" stroke="#513821" stroke-width="1.2"><circle cx="17" cy="17" r="3"/><circle cx="203" cy="17" r="3"/><circle cx="17" cy="203" r="3"/><circle cx="203" cy="203" r="3"/></g>
+<!-- Small leaf-sprig emblem -->
+<g stroke="#77956b" stroke-width="2" fill="none" stroke-linecap="round"><path d="M84 99Q110 73 137 100"/></g>
+<g fill="#98b183">
+<ellipse cx="93" cy="87" rx="6" ry="12" transform="rotate(-45 93 87)"/>
+<ellipse cx="104" cy="80" rx="5" ry="10" transform="rotate(23 104 80)"/>
+<ellipse cx="128" cy="89" rx="6" ry="11" transform="rotate(44 128 89)"/>
+</g>
+<path d="M99 111H121 M110 100V122" stroke="#ccbb96" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M62 140H158" stroke="#6e775a" stroke-width="1"/>
+<text x="110" y="159" fill="#d6c29c" text-anchor="middle" font-family="Georgia, DejaVu Serif, serif" font-size="14" font-style="italic" letter-spacing=".3">An empty shelf</text>
+</svg>
