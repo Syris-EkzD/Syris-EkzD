@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="230" viewBox="0 0 960 230" role="img" aria-labelledby="title desc">
+<title id="title">The Shire — cozy tavern sign</title>
+<desc id="desc">An original cozy fantasy tavern sign in walnut wood, moss green, brass and warm lantern light, with vines framing The Shire.</desc>
+<defs>
+  <linearGradient id="wall" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#172820"/><stop offset="1" stop-color="#101914"/></linearGradient>
+  <linearGradient id="wood" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#684a30"/><stop offset=".52" stop-color="#523723"/><stop offset="1" stop-color="#3c291e"/></linearGradient>
+  <linearGradient id="brass" x1="0" x2="1"><stop stop-color="#aa7b43"/><stop offset=".5" stop-color="#e0b976"/><stop offset="1" stop-color="#916a3e"/></linearGradient>
+  <radialGradient id="glow"><stop stop-color="#f5d69a" stop-opacity=".65"/><stop offset="1" stop-color="#efb35c" stop-opacity="0"/></radialGradient>
+  <pattern id="grain" width="58" height="18" patternUnits="userSpaceOnUse"><path d="M2 5C19 2 26 10 52 6M8 16C29 12 37 19 58 15" fill="none" stroke="#d2a572" stroke-opacity=".11" stroke-width="1"/></pattern>
+</defs>
+<rect x="3" y="3" width="954" height="224" rx="16" fill="url(#wall)" stroke="#786342" stroke-width="5"/>
+<rect x="15" y="15" width="930" height="200" rx="10" fill="none" stroke="#456047" stroke-width="2"/>
+<path d="M28 59V28H59 M901 28H932V59 M28 171V202H59 M901 202H932V171" fill="none" stroke="#947648" stroke-width="4" stroke-linecap="square"/>
+<!-- Tavern beams and lantern brackets -->
+<path d="M39 24H921 M40 205H920" stroke="#56412d" stroke-width="8" stroke-linecap="round"/>
+<path d="M112 28V79 M848 28V79" stroke="#8e7048" stroke-width="4" stroke-linecap="round"/>
+<path d="M92 63H132L127 105H97Z M828 63H868L863 105H833Z" fill="#573c27" stroke="#d3a66b" stroke-width="3"/>
+<rect x="101" y="70" width="22" height="29" rx="4" fill="#edbb71"/>
+<rect x="837" y="70" width="22" height="29" rx="4" fill="#edbb71"/>
+<circle cx="112" cy="85" r="62" fill="url(#glow)"/><circle cx="848" cy="85" r="62" fill="url(#glow)"/>
+<path d="M112 64V104 M93 84H131 M848 64V104 M829 84H867" stroke="#67472d" stroke-width="3"/>
+<path d="M90 107H134 M826 107H870" stroke="#d3a66b" stroke-width="3"/>
+<!-- Center carved wooden sign -->
+<rect x="198" y="37" width="564" height="160" rx="24" fill="#261d17" stroke="#251d17" stroke-width="5"/>
+<rect x="206" y="40" width="548" height="151" rx="19" fill="url(#wood)" stroke="url(#brass)" stroke-width="4"/>
+<rect x="217" y="51" width="526" height="128" rx="13" fill="url(#grain)" stroke="#a58250" stroke-opacity=".6" stroke-width="1.5"/>
+<path d="M230 96H731 M230 136H731" stroke="#a17b52" stroke-opacity=".18" stroke-width="2"/>
+<g fill="#dfb979" stroke="#4a3324" stroke-width="1.5"><circle cx="230" cy="66" r="5"/><circle cx="730" cy="66" r="5"/><circle cx="230" cy="164" r="5"/><circle cx="730" cy="164" r="5"/></g>
+<text x="480" y="109" fill="#f6e4c0" stroke="#2c211c" stroke-width=".65" paint-order="stroke fill" font-family="Georgia, DejaVu Serif, serif" font-size="62" font-weight="bold" text-anchor="middle" letter-spacing="2">THE SHIRE</text>
+<path d="M300 123H395 M565 123H660" stroke="#c8a269" stroke-width="2" opacity=".8"/>
+<path d="M452 122l14 -7 14 7 14 -7 14 7" fill="none" stroke="#b0c28a" stroke-width="2"/>
+<text x="480" y="157" fill="#e9cca0" font-family="Georgia, DejaVu Serif, serif" font-size="18" font-style="italic" text-anchor="middle">A cozy corner for little digital adventures</text>
+<!-- Original leafy vines at the edges -->
+<g fill="none" stroke="#6b8c60" stroke-linecap="round" stroke-width="3">
+<path d="M52 196C62 174 48 139 61 112S71 48 50 26"/>
+<path d="M908 196C898 174 912 139 899 112S889 48 910 26"/>
+</g>
+<g fill="#789a64" stroke="#466044" stroke-width="1">
+<ellipse cx="53" cy="164" rx="7" ry="15" transform="rotate(-32 53 164)"/>
+<ellipse cx="71" cy="142" rx="7" ry="15" transform="rotate(35 71 142)"/>
+<ellipse cx="52" cy="109" rx="7" ry="14" transform="rotate(-24 52 109)"/>
+<ellipse cx="70" cy="75" rx="7" ry="14" transform="rotate(35 70 75)"/>
+<ellipse cx="907" cy="164" rx="7" ry="15" transform="rotate(32 907 164)"/>
+<ellipse cx="889" cy="142" rx="7" ry="15" transform="rotate(-35 889 142)"/>
+<ellipse cx="908" cy="109" rx="7" ry="14" transform="rotate(24 908 109)"/>
+<ellipse cx="890" cy="75" rx="7" ry="14" transform="rotate(-35 890 75)"/>
+</g>
+<g fill="#a98f57"><circle cx="160" cy="115" r="3"/><circle cx="800" cy="115" r="3"/></g>
+</svg>
