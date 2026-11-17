@@ -23,9 +23,16 @@
 
 ---
 
-### 🎮 Beyond the code
+### 🕹️ The Arcade
 
-Gaming and reading are my usual downtime. I also enjoy tinkering with my Linux setup and figuring out small ways to make my workflow better.
+<div align="center">
+  <p><kbd>INSERT COIN · COMING SOON</kbd></p>
+  <sub>No playable games yet. Once they're ready, click a cover to play.</sub>
+
+  <!-- Add linked 1:1 game covers here, for example:
+  <a href="https://example.com/play"><img src="./assets/arcade/game.png" width="180" alt="Play Game Name" /></a>
+  -->
+</div>
 
 <div align="center">
   <sub>Thanks for stopping by! 🍂</sub>
