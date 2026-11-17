@@ -1,49 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="230" viewBox="0 0 960 230" role="img" aria-labelledby="title desc">
-<title id="title">The Shire — cozy tavern sign</title>
-<desc id="desc">An original cozy fantasy tavern sign in walnut wood, moss green, brass and warm lantern light, with vines framing The Shire.</desc>
+<title id="title">The Shire tavern sign</title>
+<desc id="desc">A carved inn sign hanging on a richly textured wooden wall, illuminated by warm lanterns with leafy flourishes.</desc>
 <defs>
-  <linearGradient id="wall" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#172820"/><stop offset="1" stop-color="#101914"/></linearGradient>
-  <linearGradient id="wood" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#684a30"/><stop offset=".52" stop-color="#523723"/><stop offset="1" stop-color="#3c291e"/></linearGradient>
-  <linearGradient id="brass" x1="0" x2="1"><stop stop-color="#aa7b43"/><stop offset=".5" stop-color="#e0b976"/><stop offset="1" stop-color="#916a3e"/></linearGradient>
-  <radialGradient id="glow"><stop stop-color="#f5d69a" stop-opacity=".65"/><stop offset="1" stop-color="#efb35c" stop-opacity="0"/></radialGradient>
-  <pattern id="grain" width="58" height="18" patternUnits="userSpaceOnUse"><path d="M2 5C19 2 26 10 52 6M8 16C29 12 37 19 58 15" fill="none" stroke="#d2a572" stroke-opacity=".11" stroke-width="1"/></pattern>
+  <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfae6e" stop-opacity=".24"/><stop offset=".48" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#160f0b" stop-opacity=".65"/></linearGradient>
+  <linearGradient id="signwood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#6f5035"/><stop offset=".5" stop-color="#583922"/><stop offset="1" stop-color="#39271c"/></linearGradient>
+  <radialGradient id="lantern"><stop stop-color="#ffe5a2" stop-opacity=".65"/><stop offset=".6" stop-color="#ffcb74" stop-opacity=".22"/><stop offset="1" stop-color="#ffcb74" stop-opacity="0"/></radialGradient>
+  <pattern id="signgrain" width="64" height="22" patternUnits="userSpaceOnUse"><path d="M3 7Q19 4 37 7T65 8 M0 18Q20 14 46 19" fill="none" stroke="#d4a477" stroke-opacity=".13" stroke-width="1.6"/></pattern>
 </defs>
-<rect x="3" y="3" width="954" height="224" rx="16" fill="url(#wall)" stroke="#786342" stroke-width="5"/>
-<rect x="15" y="15" width="930" height="200" rx="10" fill="none" stroke="#456047" stroke-width="2"/>
-<path d="M28 59V28H59 M901 28H932V59 M28 171V202H59 M901 202H932V171" fill="none" stroke="#947648" stroke-width="4" stroke-linecap="square"/>
-<!-- Tavern beams and lantern brackets -->
-<path d="M39 24H921 M40 205H920" stroke="#56412d" stroke-width="8" stroke-linecap="round"/>
-<path d="M112 28V79 M848 28V79" stroke="#8e7048" stroke-width="4" stroke-linecap="round"/>
-<path d="M92 63H132L127 105H97Z M828 63H868L863 105H833Z" fill="#573c27" stroke="#d3a66b" stroke-width="3"/>
-<rect x="101" y="70" width="22" height="29" rx="4" fill="#edbb71"/>
-<rect x="837" y="70" width="22" height="29" rx="4" fill="#edbb71"/>
-<circle cx="112" cy="85" r="62" fill="url(#glow)"/><circle cx="848" cy="85" r="62" fill="url(#glow)"/>
-<path d="M112 64V104 M93 84H131 M848 64V104 M829 84H867" stroke="#67472d" stroke-width="3"/>
-<path d="M90 107H134 M826 107H870" stroke="#d3a66b" stroke-width="3"/>
-<!-- Center carved wooden sign -->
-<rect x="198" y="37" width="564" height="160" rx="24" fill="#261d17" stroke="#251d17" stroke-width="5"/>
-<rect x="206" y="40" width="548" height="151" rx="19" fill="url(#wood)" stroke="url(#brass)" stroke-width="4"/>
-<rect x="217" y="51" width="526" height="128" rx="13" fill="url(#grain)" stroke="#a58250" stroke-opacity=".6" stroke-width="1.5"/>
-<path d="M230 96H731 M230 136H731" stroke="#a17b52" stroke-opacity=".18" stroke-width="2"/>
-<g fill="#dfb979" stroke="#4a3324" stroke-width="1.5"><circle cx="230" cy="66" r="5"/><circle cx="730" cy="66" r="5"/><circle cx="230" cy="164" r="5"/><circle cx="730" cy="164" r="5"/></g>
-<text x="480" y="109" fill="#f6e4c0" stroke="#2c211c" stroke-width=".65" paint-order="stroke fill" font-family="Georgia, DejaVu Serif, serif" font-size="62" font-weight="bold" text-anchor="middle" letter-spacing="2">THE SHIRE</text>
-<path d="M300 123H395 M565 123H660" stroke="#c8a269" stroke-width="2" opacity=".8"/>
-<path d="M452 122l14 -7 14 7 14 -7 14 7" fill="none" stroke="#b0c28a" stroke-width="2"/>
-<text x="480" y="157" fill="#e9cca0" font-family="Georgia, DejaVu Serif, serif" font-size="18" font-style="italic" text-anchor="middle">A cozy corner for little digital adventures</text>
-<!-- Original leafy vines at the edges -->
-<g fill="none" stroke="#6b8c60" stroke-linecap="round" stroke-width="3">
-<path d="M52 196C62 174 48 139 61 112S71 48 50 26"/>
-<path d="M908 196C898 174 912 139 899 112S889 48 910 26"/>
+<rect width="960" height="230" fill="#5a3927"/><rect x="0" y="0" width="960" height="43" fill="#704b30"/><path d="M0 42H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 2H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M15 14 Q307 9 586 14 T944 12" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M10 26 Q403 30 950 23" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="43" width="960" height="43" fill="#785238"/><path d="M0 85H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 45H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M38 57 Q307 52 586 57 T944 55" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M23 69 Q403 73 950 66" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="86" width="960" height="43" fill="#6d462e"/><path d="M0 128H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 88H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M61 100 Q307 95 586 100 T944 98" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M36 112 Q403 116 950 109" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="129" width="960" height="43" fill="#63402a"/><path d="M0 171H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 131H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M84 143 Q307 138 586 143 T944 141" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M49 155 Q403 159 950 152" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="172" width="960" height="43" fill="#725037"/><path d="M0 214H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 174H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M36 186 Q307 181 586 186 T944 184" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M62 198 Q403 202 950 195" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="215" width="960" height="43" fill="#704b30"/><path d="M0 257H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 217H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M59 229 Q307 224 586 229 T944 227" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M16 241 Q403 245 950 238" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect width="960" height="230" fill="url(#shade)" opacity=".25"/>
+<!-- Wall beams, brass pins and carved trim -->
+<rect x="0" y="0" width="960" height="14" fill="#3d2a1e"/>
+<path d="M0 13H960 M0 219H960" stroke="#bd9360" stroke-width="4" opacity=".65"/>
+<rect x="9" y="20" width="19" height="198" fill="#402b1e" stroke="#8e633d" stroke-width="2"/>
+<rect x="932" y="20" width="19" height="198" fill="#402b1e" stroke="#8e633d" stroke-width="2"/>
+<g fill="#d5ac75"><circle cx="18" cy="37" r="3"/><circle cx="941" cy="37" r="3"/><circle cx="18" cy="204" r="3"/><circle cx="941" cy="204" r="3"/></g>
+<!-- Two wall lanterns -->
+<circle cx="118" cy="93" r="81" fill="url(#lantern)"/><circle cx="842" cy="93" r="81" fill="url(#lantern)"/>
+<g stroke="#31231b" stroke-width="5" fill="none" stroke-linecap="round">
+<path d="M118 24V61 M842 24V61"/>
+<path d="M92 61H144 M816 61H868"/>
 </g>
-<g fill="#789a64" stroke="#466044" stroke-width="1">
-<ellipse cx="53" cy="164" rx="7" ry="15" transform="rotate(-32 53 164)"/>
-<ellipse cx="71" cy="142" rx="7" ry="15" transform="rotate(35 71 142)"/>
-<ellipse cx="52" cy="109" rx="7" ry="14" transform="rotate(-24 52 109)"/>
-<ellipse cx="70" cy="75" rx="7" ry="14" transform="rotate(35 70 75)"/>
-<ellipse cx="907" cy="164" rx="7" ry="15" transform="rotate(32 907 164)"/>
-<ellipse cx="889" cy="142" rx="7" ry="15" transform="rotate(-35 889 142)"/>
-<ellipse cx="908" cy="109" rx="7" ry="14" transform="rotate(24 908 109)"/>
-<ellipse cx="890" cy="75" rx="7" ry="14" transform="rotate(-35 890 75)"/>
+<g fill="#513825" stroke="#dbb97b" stroke-width="3">
+<path d="M101 61H135L141 112H95Z"/><path d="M825 61H859L865 112H819Z"/>
 </g>
-<g fill="#a98f57"><circle cx="160" cy="115" r="3"/><circle cx="800" cy="115" r="3"/></g>
+<g fill="#f7d18a" stroke="#aa703c" stroke-width="1.5">
+<rect x="104" y="74" width="28" height="32" rx="4"/><rect x="828" y="74" width="28" height="32" rx="4"/>
+</g>
+<path d="M118 72V110 M99 89H137 M842 72V110 M823 89H861" stroke="#543823" stroke-width="3.5"/>
+<!-- Main sign, inset wooden planks -->
+<path d="M236 38Q236 32 244 32H716Q724 32 724 38V181Q724 189 716 189H244Q236 189 236 181Z" fill="#291f18" stroke="#cda771" stroke-width="6"/>
+<rect x="244" y="40" width="472" height="141" rx="10" fill="url(#signwood)" stroke="#392819" stroke-width="2.5"/>
+<rect x="254" y="50" width="452" height="121" rx="6" fill="url(#signgrain)" stroke="#b28b5c" stroke-opacity=".8" stroke-width="1.8"/>
+<path d="M252 86H708 M252 132H708" stroke="#d1a475" stroke-opacity=".22" stroke-width="2"/>
+<g fill="#e0b877" stroke="#4e3524" stroke-width="1.2"><circle cx="263" cy="58" r="4"/><circle cx="697" cy="58" r="4"/><circle cx="263" cy="164" r="4"/><circle cx="697" cy="164" r="4"/></g>
+<text x="480" y="112" text-anchor="middle" fill="#f8e8c6" font-family="Georgia, DejaVu Serif, serif" font-size="60" font-weight="bold" letter-spacing="2">THE SHIRE</text>
+<path d="M299 124H393 M567 124H661" stroke="#dcbd86" stroke-width="2.1" opacity=".75"/>
+<g fill="#b7c498"><path d="M448 125Q464 110 480 124Q496 110 512 125Q496 139 480 126Q465 139 448 125"/></g>
+<text x="480" y="156" text-anchor="middle" fill="#ebcda1" font-family="Georgia, DejaVu Serif, serif" font-size="17" font-style="italic">Where little adventures gather</text>
+<!-- Climbing ivy on the tavern timber -->
+<g fill="none" stroke="#4d6f48" stroke-width="4" stroke-linecap="round">
+<path d="M37 224C70 193 52 166 72 138S71 91 57 67"/>
+<path d="M923 224C890 193 908 166 888 138S889 91 903 67"/>
+</g>
+<g fill="#8fac75" stroke="#415b3c" stroke-width="1.5">
+<ellipse cx="56" cy="191" rx="9" ry="17" transform="rotate(-32 56 191)"/>
+<ellipse cx="74" cy="161" rx="9" ry="17" transform="rotate(32 74 161)"/>
+<ellipse cx="56" cy="121" rx="9" ry="16" transform="rotate(-36 56 121)"/>
+<ellipse cx="62" cy="80" rx="9" ry="15" transform="rotate(32 62 80)"/>
+<ellipse cx="904" cy="191" rx="9" ry="17" transform="rotate(32 904 191)"/>
+<ellipse cx="886" cy="161" rx="9" ry="17" transform="rotate(-32 886 161)"/>
+<ellipse cx="904" cy="121" rx="9" ry="16" transform="rotate(36 904 121)"/>
+<ellipse cx="898" cy="80" rx="9" ry="15" transform="rotate(-32 898 80)"/>
+</g>
 </svg>

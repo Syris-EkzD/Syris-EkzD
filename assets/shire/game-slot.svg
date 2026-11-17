@@ -1,25 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220" role="img" aria-labelledby="title desc">
-<title id="title">Empty Shire game slot</title>
-<desc id="desc">A square, wooden tavern notice frame with a moss-green center, decorative leaves, and a small empty-game icon.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+<title id="title">An empty game frame on the tavern wall</title>
+<desc id="desc">Oak-plank wall with a brass-trimmed moss green square frame reserved for a future playable game.</desc>
 <defs>
-  <linearGradient id="frame" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8c6541"/><stop offset=".48" stop-color="#573b27"/><stop offset="1" stop-color="#3c2a1e"/></linearGradient>
-  <linearGradient id="inside" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#26372b"/><stop offset="1" stop-color="#14251d"/></linearGradient>
-  <pattern id="grain" width="38" height="34" patternUnits="userSpaceOnUse"><path d="M1 9Q13 5 26 12 M12 29Q25 22 39 27" fill="none" stroke="#d2a876" stroke-opacity=".12" stroke-width="1.4"/></pattern>
+  <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfae6e" stop-opacity=".24"/><stop offset=".48" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#160f0b" stop-opacity=".65"/></linearGradient>
+  <linearGradient id="signwood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#6f5035"/><stop offset=".5" stop-color="#583922"/><stop offset="1" stop-color="#39271c"/></linearGradient>
+  <radialGradient id="lantern"><stop stop-color="#ffe5a2" stop-opacity=".65"/><stop offset=".6" stop-color="#ffcb74" stop-opacity=".22"/><stop offset="1" stop-color="#ffcb74" stop-opacity="0"/></radialGradient>
+  <pattern id="signgrain" width="64" height="22" patternUnits="userSpaceOnUse"><path d="M3 7Q19 4 37 7T65 8 M0 18Q20 14 46 19" fill="none" stroke="#d4a477" stroke-opacity=".13" stroke-width="1.6"/></pattern>
 </defs>
-<rect x="3" y="3" width="214" height="214" rx="12" fill="#261c17" stroke="#33251b" stroke-width="3"/>
-<rect x="8" y="8" width="204" height="204" rx="8" fill="url(#frame)" stroke="#c4a06d" stroke-width="2"/>
-<rect x="8" y="8" width="204" height="204" rx="8" fill="url(#grain)"/>
-<rect x="23" y="23" width="174" height="174" rx="4" fill="url(#inside)" stroke="#bd9961" stroke-width="3"/>
-<rect x="31" y="31" width="158" height="158" rx="2" fill="none" stroke="#4f674b" stroke-width="2"/>
-<g fill="#d8b579" stroke="#513821" stroke-width="1.2"><circle cx="17" cy="17" r="3"/><circle cx="203" cy="17" r="3"/><circle cx="17" cy="203" r="3"/><circle cx="203" cy="203" r="3"/></g>
-<!-- Small leaf-sprig emblem -->
-<g stroke="#77956b" stroke-width="2" fill="none" stroke-linecap="round"><path d="M84 99Q110 73 137 100"/></g>
-<g fill="#98b183">
-<ellipse cx="93" cy="87" rx="6" ry="12" transform="rotate(-45 93 87)"/>
-<ellipse cx="104" cy="80" rx="5" ry="10" transform="rotate(23 104 80)"/>
-<ellipse cx="128" cy="89" rx="6" ry="11" transform="rotate(44 128 89)"/>
+<rect width="240" height="240" fill="#5a3927"/><rect x="0" y="0" width="240" height="43" fill="#6d462e"/><path d="M0 42H240" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 2H240" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M15 14 Q77 9 146 14 T224 12" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M10 26 Q101 30 230 23" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="43" width="240" height="43" fill="#63402a"/><path d="M0 85H240" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 45H240" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M38 57 Q77 52 146 57 T224 55" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M23 69 Q101 73 230 66" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="86" width="240" height="43" fill="#725037"/><path d="M0 128H240" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 88H240" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M61 100 Q77 95 146 100 T224 98" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M36 112 Q101 116 230 109" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="129" width="240" height="43" fill="#704b30"/><path d="M0 171H240" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 131H240" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M84 143 Q77 138 146 143 T224 141" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M49 155 Q101 159 230 152" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="172" width="240" height="43" fill="#785238"/><path d="M0 214H240" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 174H240" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M36 186 Q77 181 146 186 T224 184" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M62 198 Q101 202 230 195" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="215" width="240" height="43" fill="#6d462e"/><path d="M0 257H240" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 217H240" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M59 229 Q77 224 146 229 T224 227" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M16 241 Q101 245 230 238" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect width="240" height="240" fill="url(#shade)" opacity=".25"/>
+<!-- Square frame flush with continuous wooden wall -->
+<rect x="12" y="9" width="216" height="222" rx="7" fill="#34251d" stroke="#bb915e" stroke-width="4"/>
+<rect x="21" y="18" width="198" height="204" rx="4" fill="url(#signwood)" stroke="#30221b" stroke-width="3"/>
+<rect x="32" y="29" width="176" height="182" rx="2" fill="#203329" stroke="#c4a06c" stroke-width="3"/>
+<rect x="41" y="39" width="158" height="162" rx="1" fill="#294233" stroke="#557356" stroke-width="1.7"/>
+<path d="M48 186H192 M48 54H192" stroke="#8da985" stroke-opacity=".3" stroke-width="1.2"/>
+<g fill="#ddba83" stroke="#483322" stroke-width="1.3">
+<circle cx="23" cy="20" r="3"/><circle cx="217" cy="20" r="3"/><circle cx="23" cy="220" r="3"/><circle cx="217" cy="220" r="3"/>
 </g>
-<path d="M99 111H121 M110 100V122" stroke="#ccbb96" stroke-width="3.5" stroke-linecap="round"/>
-<path d="M62 140H158" stroke="#6e775a" stroke-width="1"/>
-<text x="110" y="159" fill="#d6c29c" text-anchor="middle" font-family="Georgia, DejaVu Serif, serif" font-size="14" font-style="italic" letter-spacing=".3">An empty shelf</text>
+<!-- Minimal carved emblem -->
+<path d="M120 93V134 M99 113H141" stroke="#d7c39a" stroke-width="4.5" stroke-linecap="round"/>
+<g fill="#86a978">
+<path d="M71 78Q84 66 92 85Q77 93 71 78"/>
+<path d="M169 78Q156 66 148 85Q163 93 169 78"/>
+</g>
+<text x="120" y="170" text-anchor="middle" fill="#d5c5a3" font-family="Georgia, DejaVu Serif, serif" font-size="12" font-style="italic">An empty spot</text>
 </svg>

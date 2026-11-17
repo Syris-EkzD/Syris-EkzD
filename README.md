@@ -23,28 +23,13 @@
 
 ---
 
-### 🌿 The Shire
-
 <div align="center">
-  <img src="./assets/shire/tavern-sign.svg" width="100%" alt="The Shire: a cozy tavern for little digital adventures." />
-</div>
-
-<div align="center">
-  <!-- As each browser game goes live, replace one empty-slot image with a linked
-       1:1 cover of the same width. Put the cover in assets/shire/covers/ and
-       bake a matching wooden frame into the cover artwork if desired:
-  <a href="https://YOUR-PLAYABLE-GAME-URL">
-    <img src="./assets/shire/covers/game-name.png" width="180" alt="Play Game Name" />
-  </a>
-  -->
-  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
-  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
-  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
-  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
-</div>
-
-<div align="center">
-  <img src="./assets/shire/tavern-shelf.svg" width="100%" alt="A wooden tavern shelf inviting visitors to pick a game." />
+  <!-- The README is the game gallery; games are hosted independently.
+       Replace ONE empty slot with a linked 1:1 game image when ready:
+       <a href="https://YOUR-BROWSER-GAME"><img src="./assets/shire/covers/game.png" width="25%" alt="Play Game Name" /></a>
+       Keep all display-image tags adjacent (no whitespace between them),
+       and give each cover the same wood-wall frame for continuity. -->
+  <img src="./assets/shire/tavern-sign.svg" width="100%" alt="The Shire — a cozy wooden tavern for little digital adventures." /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/tavern-shelf.svg" width="100%" alt="The Shire tavern's carved wooden shelf." />
 </div>
 
 <div align="center">

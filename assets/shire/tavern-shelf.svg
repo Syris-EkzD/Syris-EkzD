@@ -1,14 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="62" viewBox="0 0 960 62" role="img" aria-labelledby="title desc">
-<title id="title">The Shire tavern shelf</title>
-<desc id="desc">A long walnut wood shelf with gold trim and small leafy branches, matching the tavern sign.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="72" viewBox="0 0 960 72" role="img" aria-labelledby="title desc">
+<title id="title">The Shire wooden tavern shelf</title>
+<desc id="desc">A continuous wooden wall and carved oak shelf, closing the cozy game gallery.</desc>
 <defs>
-<linearGradient id="oak" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#765436"/><stop offset=".45" stop-color="#503626"/><stop offset="1" stop-color="#38261d"/></linearGradient>
+  <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfae6e" stop-opacity=".24"/><stop offset=".48" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#160f0b" stop-opacity=".65"/></linearGradient>
+  <linearGradient id="signwood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#6f5035"/><stop offset=".5" stop-color="#583922"/><stop offset="1" stop-color="#39271c"/></linearGradient>
+  <radialGradient id="lantern"><stop stop-color="#ffe5a2" stop-opacity=".65"/><stop offset=".6" stop-color="#ffcb74" stop-opacity=".22"/><stop offset="1" stop-color="#ffcb74" stop-opacity="0"/></radialGradient>
+  <pattern id="signgrain" width="64" height="22" patternUnits="userSpaceOnUse"><path d="M3 7Q19 4 37 7T65 8 M0 18Q20 14 46 19" fill="none" stroke="#d4a477" stroke-opacity=".13" stroke-width="1.6"/></pattern>
 </defs>
-<rect x="4" y="7" width="952" height="49" rx="8" fill="#201a16" stroke="#5c4430" stroke-width="3"/>
-<rect x="10" y="10" width="940" height="39" rx="6" fill="url(#oak)" stroke="#b28b57" stroke-width="2"/>
-<path d="M20 19H940 M20 40H940" stroke="#9b7146" stroke-opacity=".5" stroke-width="1"/>
-<path d="M65 30H320 M640 30H895" stroke="#ba9561" stroke-width="1.3" opacity=".65"/>
-<g fill="#d3b482"><circle cx="28" cy="29" r="3"/><circle cx="932" cy="29" r="3"/></g>
-<text x="480" y="34" text-anchor="middle" font-family="Georgia, DejaVu Serif, serif" font-size="15" font-style="italic" fill="#f0d5a6" letter-spacing="1.2">Pull up a chair. Pick a game.</text>
-<g fill="#769462"><ellipse cx="339" cy="28" rx="5" ry="9" transform="rotate(-45 339 28)"/><ellipse cx="350" cy="26" rx="5" ry="9" transform="rotate(35 350 26)"/><ellipse cx="621" cy="28" rx="5" ry="9" transform="rotate(45 621 28)"/><ellipse cx="610" cy="26" rx="5" ry="9" transform="rotate(-35 610 26)"/></g>
+<rect width="960" height="72" fill="#5a3927"/><rect x="0" y="0" width="960" height="43" fill="#63402a"/><path d="M0 42H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 2H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M15 14 Q307 9 586 14 T944 12" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M10 26 Q403 30 950 23" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect x="0" y="43" width="960" height="43" fill="#725037"/><path d="M0 85H960" stroke="#35251b" stroke-width="3" opacity=".78"/><path d="M0 45H960" stroke="#be8a58" stroke-width="1.5" opacity=".23"/><path d="M38 57 Q307 52 586 57 T944 55" fill="none" stroke="#271c16" stroke-width="1.8" opacity=".25"/><path d="M23 69 Q403 73 950 66" fill="none" stroke="#d2a16c" stroke-width="1.1" opacity=".15"/><rect width="960" height="72" fill="url(#shade)" opacity=".25"/>
+<rect x="0" y="0" width="960" height="16" fill="#3b291d" stroke="#bd9160" stroke-width="3"/>
+<rect x="0" y="17" width="960" height="47" fill="url(#signwood)" stroke="#2f211a" stroke-width="3"/>
+<path d="M6 24H954 M6 56H954" stroke="#aa8050" stroke-width="2" opacity=".8"/>
+<path d="M65 42H344 M616 42H895" stroke="#e2bd84" stroke-width="1.5" opacity=".55"/>
+<text x="480" y="47" text-anchor="middle" fill="#f3dbb5" font-family="Georgia, DejaVu Serif, serif" font-size="17" font-style="italic" letter-spacing=".6">Pull up a chair. Pick a game.</text>
+<g fill="#8eaa76">
+<ellipse cx="362" cy="40" rx="6" ry="11" transform="rotate(-40 362 40)"/><ellipse cx="376" cy="40" rx="6" ry="11" transform="rotate(35 376 40)"/>
+<ellipse cx="598" cy="40" rx="6" ry="11" transform="rotate(40 598 40)"/><ellipse cx="584" cy="40" rx="6" ry="11" transform="rotate(-35 584 40)"/>
+</g>
+<g fill="#d3b582"><circle cx="22" cy="40" r="3.2"/><circle cx="938" cy="40" r="3.2"/></g>
 </svg>
