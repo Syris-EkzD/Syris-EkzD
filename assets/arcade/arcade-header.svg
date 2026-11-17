@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="166" viewBox="0 0 960 166" role="img" aria-labelledby="title desc">
+  <title id="title">The Arcade</title>
+  <desc id="desc">A dark pixel-inspired arcade marquee, accented with muted mint-green lights.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#172525"/>
+      <stop offset="1" stop-color="#0d151b"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#88bda3" stroke-opacity=".075" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect x="2" y="2" width="956" height="162" rx="10" fill="url(#panel)" stroke="#668b7b" stroke-width="3"/>
+  <rect x="12" y="12" width="936" height="142" rx="5" fill="url(#grid)" stroke="#324e47" stroke-width="2"/>
+  <path d="M18 44V18H44 M916 18H942V44 M18 122V148H44 M916 148H942V122" fill="none" stroke="#b4ebc9" stroke-width="4"/>
+  <g fill="#a4dfc3">
+    <rect x="70" y="60" width="12" height="12"/><rect x="84" y="60" width="12" height="12"/>
+    <rect x="84" y="46" width="12" height="12"/><rect x="84" y="74" width="12" height="12"/>
+    <rect x="98" y="60" width="12" height="12"/>
+    <rect x="856" y="57" width="17" height="17" rx="4"/>
+    <rect x="883" y="81" width="13" height="13" rx="3" fill="#e2bd86"/>
+  </g>
+  <g fill="#d8f5e6" font-family="DejaVu Sans Mono, monospace" font-weight="bold" text-anchor="middle">
+    <text x="480" y="76" font-size="51" letter-spacing="4">THE ARCADE</text>
+  </g>
+  <path d="M303 92H657" stroke="#4c7568" stroke-width="2"/>
+  <text x="480" y="119" text-anchor="middle" fill="#9ecbb7" font-family="DejaVu Sans Mono, monospace" font-size="14" letter-spacing="2">PICK A COVER  /  PLAY IN YOUR BROWSER</text>
+  <g fill="#73998c"><rect x="25" y="78" width="4" height="4"/><rect x="931" y="78" width="4" height="4"/><rect x="476" y="141" width="8" height="4"/></g>
+</svg>
