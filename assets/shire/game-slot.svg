@@ -18,10 +18,10 @@
 <circle cx="23" cy="20" r="3"/><circle cx="217" cy="20" r="3"/><circle cx="23" cy="220" r="3"/><circle cx="217" cy="220" r="3"/>
 </g>
 <!-- Minimal carved emblem -->
-<path d="M120 93V134 M99 113H141" stroke="#d7c39a" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M120 106V147 M99 126H141" stroke="#d7c39a" stroke-width="4.5" stroke-linecap="round"/>
 <g fill="#86a978">
 <path d="M71 78Q84 66 92 85Q77 93 71 78"/>
 <path d="M169 78Q156 66 148 85Q163 93 169 78"/>
 </g>
-<text x="120" y="170" text-anchor="middle" fill="#d5c5a3" font-family="Georgia, DejaVu Serif, serif" font-size="12" font-style="italic">An empty spot</text>
+
 </svg>
