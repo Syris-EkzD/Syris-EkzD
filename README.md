@@ -26,12 +26,21 @@
 ### 🕹️ The Arcade
 
 <div align="center">
-  <p><kbd>INSERT COIN · COMING SOON</kbd></p>
-  <sub>No playable games yet. Once they're ready, click a cover to play.</sub>
+  <img src="./assets/arcade/arcade-header.svg" width="100%" alt="The Arcade: pick a cover and play in your browser." />
+</div>
 
-  <!-- Add linked 1:1 game covers here, for example:
-  <a href="https://example.com/play"><img src="./assets/arcade/game.png" width="180" alt="Play Game Name" /></a>
+<div align="center">
+  <!-- Replace each empty slot with a linked square game cover when the game is playable:
+  <a href="https://your-game-url"><img src="./assets/arcade/your-game-cover.png" width="180" alt="Play Game Name" /></a>
   -->
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+</div>
+
+<div align="center">
+  <img src="./assets/arcade/arcade-footer.svg" width="100%" alt="Arcade frame footer." />
 </div>
 
 <div align="center">
