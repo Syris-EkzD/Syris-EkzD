@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="44" viewBox="0 0 960 44" role="img" aria-labelledby="title">
+  <title id="title">Arcade cabinet lower frame</title>
+  <rect x="2" y="2" width="956" height="40" rx="7" fill="#101c21" stroke="#668b7b" stroke-width="3"/>
+  <path d="M16 13H944" stroke="#294940" stroke-width="1"/>
+  <path d="M16 31H944" stroke="#294940" stroke-width="1"/>
+  <g fill="#91c4aa"><rect x="31" y="19" width="7" height="7"/><rect x="43" y="19" width="7" height="7"/><rect x="910" y="19" width="7" height="7"/><rect x="922" y="19" width="7" height="7"/></g>
+  <text x="480" y="27" text-anchor="middle" fill="#789e8e" font-family="DejaVu Sans Mono, monospace" font-size="10" letter-spacing="3">EKZD  /  BROWSER GAMES</text>
+</svg>

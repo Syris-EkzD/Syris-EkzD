@@ -23,9 +23,25 @@
 
 ---
 
-### 🎮 Beyond the code
+### 🕹️ The Arcade
 
-Gaming and reading are my usual downtime. I also enjoy tinkering with my Linux setup and figuring out small ways to make my workflow better.
+<div align="center">
+  <img src="./assets/arcade/arcade-header.svg" width="100%" alt="The Arcade: pick a cover and play in your browser." />
+</div>
+
+<div align="center">
+  <!-- Replace each empty slot with a linked square game cover when the game is playable:
+  <a href="https://your-game-url"><img src="./assets/arcade/your-game-cover.png" width="180" alt="Play Game Name" /></a>
+  -->
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+</div>
+
+<div align="center">
+  <img src="./assets/arcade/arcade-footer.svg" width="100%" alt="Arcade frame footer." />
+</div>
 
 <div align="center">
   <sub>Thanks for stopping by! 🍂</sub>
