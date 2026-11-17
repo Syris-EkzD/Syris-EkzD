@@ -32,6 +32,3 @@
   <img src="./assets/shire/tavern-sign.svg" width="100%" alt="The Shire — a cozy wooden tavern for little digital adventures." /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/game-slot.svg" width="25%" alt="Empty tavern game frame" /><img src="./assets/shire/tavern-shelf.svg" width="100%" alt="The Shire tavern's carved wooden shelf." />
 </div>
 
-<div align="center">
-  <sub>Thanks for stopping by! 🍂</sub>
-</div>
