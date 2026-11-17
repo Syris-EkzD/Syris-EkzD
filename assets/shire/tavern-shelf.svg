@@ -11,8 +11,8 @@
 <rect x="0" y="0" width="960" height="16" fill="#3b291d" stroke="#bd9160" stroke-width="3"/>
 <rect x="0" y="17" width="960" height="47" fill="url(#signwood)" stroke="#2f211a" stroke-width="3"/>
 <path d="M6 24H954 M6 56H954" stroke="#aa8050" stroke-width="2" opacity=".8"/>
-<path d="M65 42H344 M616 42H895" stroke="#e2bd84" stroke-width="1.5" opacity=".55"/>
-<text x="480" y="47" text-anchor="middle" fill="#f3dbb5" font-family="Georgia, DejaVu Serif, serif" font-size="17" font-style="italic" letter-spacing=".6">Pull up a chair. Pick a game.</text>
+<path d="M65 42H344 M616 42H895 M398 42H562" stroke="#e2bd84" stroke-width="1.5" opacity=".55"/>
+
 <g fill="#8eaa76">
 <ellipse cx="362" cy="40" rx="6" ry="11" transform="rotate(-40 362 40)"/><ellipse cx="376" cy="40" rx="6" ry="11" transform="rotate(35 376 40)"/>
 <ellipse cx="598" cy="40" rx="6" ry="11" transform="rotate(40 598 40)"/><ellipse cx="584" cy="40" rx="6" ry="11" transform="rotate(-35 584 40)"/>
