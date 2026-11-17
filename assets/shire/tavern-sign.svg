@@ -33,10 +33,10 @@
 <rect x="254" y="50" width="452" height="121" rx="6" fill="url(#signgrain)" stroke="#b28b5c" stroke-opacity=".8" stroke-width="1.8"/>
 <path d="M252 86H708 M252 132H708" stroke="#d1a475" stroke-opacity=".22" stroke-width="2"/>
 <g fill="#e0b877" stroke="#4e3524" stroke-width="1.2"><circle cx="263" cy="58" r="4"/><circle cx="697" cy="58" r="4"/><circle cx="263" cy="164" r="4"/><circle cx="697" cy="164" r="4"/></g>
-<text x="480" y="112" text-anchor="middle" fill="#f8e8c6" font-family="Georgia, DejaVu Serif, serif" font-size="60" font-weight="bold" letter-spacing="2">THE SHIRE</text>
-<path d="M299 124H393 M567 124H661" stroke="#dcbd86" stroke-width="2.1" opacity=".75"/>
-<g fill="#b7c498"><path d="M448 125Q464 110 480 124Q496 110 512 125Q496 139 480 126Q465 139 448 125"/></g>
-<text x="480" y="156" text-anchor="middle" fill="#ebcda1" font-family="Georgia, DejaVu Serif, serif" font-size="17" font-style="italic">Where little adventures gather</text>
+<text x="480" y="134" text-anchor="middle" fill="#f8e8c6" font-family="Georgia, DejaVu Serif, serif" font-size="60" font-weight="bold" letter-spacing="2">THE SHIRE</text>
+<path d="M297 154H407 M553 154H663" stroke="#dcbd86" stroke-width="2.1" opacity=".75"/>
+<g fill="#b7c498"><path d="M448 154Q464 139 480 153Q496 139 512 154Q496 168 480 155Q465 168 448 154"/></g>
+
 <!-- Climbing ivy on the tavern timber -->
 <g fill="none" stroke="#4d6f48" stroke-width="4" stroke-linecap="round">
 <path d="M37 224C70 193 52 166 72 138S71 91 57 67"/>
