@@ -23,24 +23,28 @@
 
 ---
 
-### 🕹️ The Arcade
+### 🌿 The Shire
 
 <div align="center">
-  <img src="./assets/arcade/arcade-header.svg" width="100%" alt="The Arcade: pick a cover and play in your browser." />
+  <img src="./assets/shire/tavern-sign.svg" width="100%" alt="The Shire: a cozy tavern for little digital adventures." />
 </div>
 
 <div align="center">
-  <!-- Replace each empty slot with a linked square game cover when the game is playable:
-  <a href="https://your-game-url"><img src="./assets/arcade/your-game-cover.png" width="180" alt="Play Game Name" /></a>
+  <!-- As each browser game goes live, replace one empty-slot image with a linked
+       1:1 cover of the same width. Put the cover in assets/shire/covers/ and
+       bake a matching wooden frame into the cover artwork if desired:
+  <a href="https://YOUR-PLAYABLE-GAME-URL">
+    <img src="./assets/shire/covers/game-name.png" width="180" alt="Play Game Name" />
+  </a>
   -->
-  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
-  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
-  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
-  <img src="./assets/arcade/empty-slot.svg" width="180" alt="Empty game slot" />
+  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
+  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
+  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
+  <img src="./assets/shire/game-slot.svg" width="180" alt="Empty game spot" />
 </div>
 
 <div align="center">
-  <img src="./assets/arcade/arcade-footer.svg" width="100%" alt="Arcade frame footer." />
+  <img src="./assets/shire/tavern-shelf.svg" width="100%" alt="A wooden tavern shelf inviting visitors to pick a game." />
 </div>
 
 <div align="center">
